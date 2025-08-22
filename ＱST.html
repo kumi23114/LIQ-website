@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>流芯視覺 · 客製化AI影像視覺</title>
+
+  <meta name="description" content="流芯視覺 LYQD media 是一家專注於 AI 影像美學的廣告工作室，提供高效、低成本的客製化影片製作服務，包含 AI 電商換裝、專業網路廣告等。">
+  <meta name="keywords" content="流芯視覺,LYQD media,AI 影像,影片製作,AI 廣告,AI 視覺,台北,台中">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ... 保持您的 grain 和 modal styles 不變 ... */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+    }
+    
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+    
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
+  <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+      <a href="#" class="group inline-flex items-center gap-3">
+        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
+        <span class="font-semibold tracking-wide text-zinc-800">流芯視覺</span>
+      </a>
+      <nav class="hidden gap-8 md:flex">
+        <a href="#showreel" class="text-sm text-zinc-600 hover:text-zinc-800">精選作品集</a>
+        <a href="#advantages" class="text-sm text-zinc-600 hover:text-zinc-800">關於我們</a>
+        <a href="#cases" class="text-sm text-zinc-600 hover:text-zinc-800">AI應用項目</a>
+        <a href="#process" class="text-sm text-zinc-600 hover:text-zinc-800">服務流程</a>
+        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800">常見問題</a>
+        <a href="blog.html" class="text-sm text-zinc-600 hover:text-zinc-800">文章專欄</a>
+      </nav>
+      <div href="#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex" style="background-color:#193a55;color:white">預約諮詢</div>
+    </div>
+  </header>
+
+  <section class="relative isolate overflow-hidden">
+    <div class="grain pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="relative w-full">
+      <div class="relative aspect-[16/9] w-full">
+        <video class="absolute inset-0 h-full w-full object-cover" src="media/hero.mp4" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1518558400203-08fa1b3c85be?q=80&w=1600&auto=format&fit=crop"></video>
+        <div class="absolute inset-0 bg-[radial-gradient(70%_80%_at_20%_50%,rgba(255,255,255,.35),transparent_60%),linear-gradient(to_top,rgba(255,255,255,.6),transparent_35%)]"></div>
+                <div class="absolute inset-0">
+          <!-- Desktop Layout (md and up) -->
+          <div class="hidden md:flex mx-auto h-full max-w-7xl items-center px-6 lg:px-8">
+            <div class="max-w-2xl text-left">
+              <h1 class="text-balance text-white font-semibold leading-tight text-4xl lg:text-5xl xl:text-6xl leading-tight" style="text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);">AI 影像美學團隊，打造品牌完美視覺</h1>
+              <p class="mt-5 max-w-xl text-white text-lg leading-relaxed" style="text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);">告別傳統攝影製作的耗時與高成本，減少70% 的製作時間與預算。</p>
+              <div class="mt-8 flex flex-row items-center gap-3">
+                <a href="#contact" class="inline-flex min-w-[220px] items-center justify-center rounded-full px-5 py-3 text-sm font-semibold shadow-[0_0_40px_rgba(25,58,85,.35)] transition-transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#193a55]" style="background-color:#193a55;color:white">預約諮詢</a>
+                <a href="#showreel" class="inline-flex min-w-[200px] items-center justify-center rounded-full border border-black/20 px-5 py-3 text-white font-semibold hover:border-black/40">精選作品集</a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mobile Layout (below md) -->
+          <div class="md:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pb-8 pt-16">
+            <div class="mx-auto max-w-7xl px-4">
+              <div class="text-center">
+                <h1 class="text-balance text-white font-semibold leading-tight text-2xl sm:text-3xl leading-tight mb-3" style="text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);">AI 影像美學團隊，打造品牌完美視覺</h1>
+                <p class="text-white text-sm sm:text-base leading-relaxed mb-6 px-2" style="text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);">告別傳統攝影製作的耗時與高成本，<br>
+                  減少70% 的製作時間與預算。</p>
+                <div class="flex flex-row items-center justify-center gap-3">
+                  <a href="#contact" class="inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold shadow-[0_0_20px_rgba(25,58,85,.35)] transition-transform active:scale-95" style="background-color:#193a55;color:white">預約諮詢</a>
+                  <a href="#showreel" class="inline-flex items-center justify-center rounded-full border border-white/30 px-4 py-2.5 text-white text-sm font-semibold active:scale-95">精選作品集</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section id="showreel" class="border-t border-black/5 py-14 md:py-20 bg-zinc-100">
+    <div class="mx-auto max-w-7xl px-4">
+      <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>精選作品</h2>
+      <p class="mt-2 max-w-2xl text-zinc-600"> 運用電影級光影、高級色彩與節奏剪輯，打造您的品牌獨家敘事。</p>
+      <div class="mt-8 overflow-x-auto">
+        <div class="flex gap-6 pb-4" style="min-width: max-content;">
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal1')">
+            <div class="relative aspect-video w-full overflow-hidden">
+              <video class="h-full w-full object-cover opacity-80 transition group-hover:scale-[1.02]" src="media/sunscreen.mp4" autoplay muted loop playsinline></video>
+              <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
+            </div>
+          </figure>
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal2')">
+            <div class="relative aspect-video w-full overflow-hidden">
+              <video class="h-full w-full object-cover opacity-80 transition group-hover:scale-[1.02]" src="media/jewel_demo.mp4" autoplay muted loop playsinline></video>
+              <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
+            </div>
+          </figure>
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal3')">
+            <div class="relative aspect-video w-full overflow-hidden">
+              <video class="h-full w-full object-cover opacity-80 transition group-hover:scale-[1.02]" src="media/anne_michelle_16s.mp4" autoplay muted loop playsinline></video>
+              <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
+            </div>
+          </figure>
+          <!-- Additional video items for horizontal scrolling -->
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal4')">
+            <div class="relative aspect-video w-full overflow-hidden">
+              <video class="h-full w-full object-cover opacity-80 transition group-hover:scale-[1.02]" src="media/dessert1.mp4" autoplay muted loop playsinline></video>
+              <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
+            </div>
+          </figure>
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal5')">
+            <div class="relative aspect-video w-full overflow-hidden">
+              <video class="h-full w-full object-cover opacity-80 transition group-hover:scale-[1.02]" src="media/skin1.mp4" autoplay muted loop playsinline></video>
+              <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
+            </div>
+          </figure>
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal6')">
+            <div class="relative aspect-video w-full overflow-hidden">
+              <video class="h-full w-full object-cover opacity-80 transition group-hover:scale-[1.02]" src="media/XeraV_demo.mp4" autoplay muted loop playsinline></video>
+              <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="advantages" class="border-t border-black/5 py-14 md:py-20">
+    <div class="mx-auto max-w-7xl px-4">
+      <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>我們的優勢</h2>
+      <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div class="group rounded-2xl border border-black/10 bg-white p-6 transition hover:border-black/20 shadow-md">
+          <div class="flex items-center gap-3"><span class="inline-block h-2 w-8 rounded-full" style="background-color:#193a55"></span><h3 class="text-lg font-semibold text-zinc-900">AI驅動、美學核心</h3></div>
+          <p class="mt-3 text-sm text-zinc-600">人物一致、特調品牌色調與光影，由資深美術指導掌舵。</p>
+          <p class="mt-4 text-xs text-zinc-500">品牌調性維持率 95%</p>
+        </div>
+        <div class="group rounded-2xl border border-black/10 bg-white p-6 transition hover:border-black/20 shadow-md">
+          <div class="flex items-center gap-3"><span class="inline-block h-2 w-8 rounded-full" style="background-color:#193a55"></span><h3 class="text-lg font-semibold text-zinc-900">效率與成本</h3></div>
+          <p class="mt-3 text-sm text-zinc-600">最短 72 小時從需求到交付，成本較傳統拍攝降低 70%。</p>
+          <p class="mt-4 text-xs text-zinc-500">72 小時交付</p>
+        </div>
+        <div class="group rounded-2xl border border-black/10 bg-white p-6 transition hover:border-black/20 shadow-md">
+          <div class="flex items-center gap-3"><span class="inline-block h-2 w-8 rounded-full" style="background-color:#193a55"></span><h3 class="text-lg font-semibold text-zinc-900">電影驅動</h3></div>
+          <p class="mt-3 text-sm text-zinc-600">電影級燈光、高級色調、節奏感，為轉單率而生。</p>
+          <p class="mt-4 text-xs text-zinc-500">轉單率 +18–35%</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cases" class="border-t border-black/5 py-14 md:py-20 bg-zinc-100">
+    <div class="mx-auto max-w-7xl px-4">
+      <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>AI應用項目</h2>
+      <div class="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
+          <div class="relative aspect-video overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?q=80&w=1400&auto=format&fit=crop" alt="AI電商換裝" class="h-full w-full object-cover opacity-80" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+          </div>
+          <div class="space-y-2 p-6">
+            <h3 class="text-xl font-semibold text-zinc-900">AI電商換裝</h3>
+            <p class="text-sm text-zinc-600">AI驅動的虛擬試衣技術，讓顧客在購買前看到真實的穿著效果</p>
+            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40">取得報價</a>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
+          <div class="relative aspect-video overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1512203492609-8f7f06f1f3c4?q=80&w=1400&auto=format&fit=crop" alt="專業網路廣告" class="h-full w-full object-cover opacity-80" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+          </div>
+          <div class="space-y-2 p-6">
+            <h3 class="text-xl font-semibold text-zinc-900">專業網路廣告</h3>
+            <p class="text-sm text-zinc-600">針對不同平台優化的廣告內容，提升轉換率與品牌曝光</p>
+            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40">取得報價</a>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
+          <div class="relative aspect-video overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1400&auto=format&fit=crop" alt="電商產品圖製作" class="h-full w-full object-cover opacity-80" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+          </div>
+          <div class="space-y-2 p-6">
+            <h3 class="text-xl font-semibold text-zinc-900">電商產品圖製作</h3>
+            <p class="text-sm text-zinc-600">高品質產品攝影與後製，突出產品特色與質感</p>
+            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40">取得報價</a>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
+          <div class="relative aspect-video overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?q=80&w=1400&auto=format&fit=crop" alt="電商海報設計" class="h-full w-full object-cover opacity-80" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
+          </div>
+          <div class="space-y-2 p-6">
+            <h3 class="text-xl font-semibold text-zinc-900">電商海報設計</h3>
+            <p class="text-sm text-zinc-600">吸引眼球的促銷海報與橫幅設計，提升點擊率</p>
+            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40">取得報價</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="border-t border-black/5 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.04),transparent)] py-14 md:py-20">
+    <div class="mx-auto max-w-7xl px-4">
+      <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>四個場景完成製作</h2>
+      <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-4">
+        <div class="relative overflow-hidden rounded-2xl border border-black/10 bg-white p-6 shadow-md"><div class="absolute -left-6 -top-6 rotate-[-12deg] text-[72px] font-black text-black/5">1</div><h4 class="text-lg font-semibold text-zinc-900">場景一・需求討論</h4><p class="mt-3 text-sm text-zinc-600">LINE專人快速確認訴求、受眾、參考範例。</p></div>
+        <div class="relative overflow-hidden rounded-2xl border border-black/10 bg-white p-6 shadow-md"><div class="absolute -left-6 -top-6 rotate-[-12deg] text-[72px] font-black text-black/5">2</div><h4 class="text-lg font-semibold text-zinc-900">場景二・方案建議與報價</h4><p class="mt-3 text-sm text-zinc-600">了解品牌調性、產品賣點、核心訊息後提供建議及報價。</p></div>
+        <div class="relative overflow-hidden rounded-2xl border border-black/10 bg-white p-6 shadow-md"><div class="absolute -left-6 -top-6 rotate-[-12deg] text-[72px] font-black text-black/5">3</div><h4 class="text-lg font-semibold text-zinc-900">場景三・分鏡視覺確認</h4><p class="mt-3 text-sm text-zinc-600">影像生成、專業後製、配音選擇。</p></div>
+        <div class="relative overflow-hidden rounded-2xl border border-black/10 bg-white p-6 shadow-md"><div class="absolute -left-6 -top-6 rotate-[-12deg] text-[72px] font-black text-black/5">4</div><h4 class="text-lg font-semibold text-zinc-900">場景四・交付</h4><p class="mt-3 text-sm text-zinc-600">輸出廣告與社群格式。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="border-t border-black/5 py-14 md:py-20 bg-zinc-100">
+    <div class="mx-auto max-w-4xl px-4">
+      <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>常見問題</h2>
+      <div class="mt-6 divide-y divide-black/10 rounded-2xl border border-black/10 bg-white shadow-md">
+        <details class="group">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left hover:bg-black/5">
+            <span class="font-medium text-zinc-900">作一支影片要多少費用？</span>
+            <span class="shrink-0" style="color:#193a55">＋</span>
+          </summary>
+          <div class="px-5 pb-5 text-zinc-600">
+            <p>為確保提供符合您需求與預算的精準報價，可透過以下方式提供資訊：</p>
+            <ul class="mt-4 space-y-4 list-disc list-inside">
+              <li>
+                <span class="font-semibold text-zinc-900">提供具體需求：</span>
+                請說明您的影片專案，包含：要拍攝的產品/服務、預計影片長度（例如 20-30 秒、1 分鐘等）、期望完成日期、是否有腳本想法、主要目的（例如介紹產品使用方式、品牌宣傳）、期望的質感或風格，以及影片會在哪裡播放及預計廣告投放時間。
+              </li>
+              <li>
+                <span class="font-semibold text-zinc-900">提供參考範例：</span>
+                如果有喜歡的影片風格、競品廣告或任何視覺參考範例（例如 YouTube/Vimeo 連結），直接提供給我們，能幫助我們快速理解您的期待。
+              </li>
+              <li>
+                <span class="font-semibold text-zinc-900">告知預算範圍：</span>
+                若您有初步的預算範圍，請直接告知。我們可以為您量身打造最適合的方案，並提供不同價位的作品參考。
+              </li>
+              <li>
+                <span class="font-semibold text-zinc-900">由我們提供建議：</span>
+                如果您不確定預算或影片呈現方式，可以先說明您的主要目的和期望，由我們專業團隊為您提供初步的創意建議和方案選項。
+              </li>
+            </ul>
+            <p class="mt-4">提供越詳細的資訊，我們就能越精準地為您準備客製化提案。</p>
+          </div>
+          <div class="h-px bg-black/10"></div>
+        </details>
+        <details class="group">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left hover:bg-black/5"><span class="font-medium text-zinc-900">有方案價格嗎？</span><span class="shrink-0" style="color:#193a55">＋</span></summary>
+          <div class="px-5 pb-5 text-zinc-600">有：入門／標準方案，歡迎聯絡估價。</div>
+          <div class="h-px bg-black/10"></div>
+        </details>
+        <details class="group">
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-5 text-left hover:bg-black/5"><span class="font-medium text-zinc-900">製作時間需要多久？</span><span class="shrink-0" style="color:#193a55">＋</span></summary>
+          <div class="px-5 pb-5 text-zinc-600">標準專案從需求確認到交付約需72小時，緊急專案可加急處理。複雜專案可能需要更長時間，我們會在專案開始前與您確認時程。</div>
+        </details>
+      </div>
+      <div class="mt-8 text-center">
+        <a href="faq.html" class="inline-flex items-center justify-center rounded-full border border-black/20 px-6 py-3 text-sm font-semibold hover:border-black/40 transition-colors">
+          更多問題
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="relative isolate overflow-hidden border-t border-black/5 py-16 md:py-24 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.04),transparent)]">
+    <div class="grain pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="mx-auto max-w-3xl px-4 text-center">
+      <h2 class="text-pretty text-3xl font-semibold md:text-5xl text-zinc-900">準備好嘗試AI視覺行銷了嗎？</h2>
+      <p class="mx-auto mt-4 max-w-2xl text-zinc-700">預約專屬諮詢，開啟您的訂製影片專案。</p>
+      
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-6">
+        <a href="https://instagram.com/lyqd_media" target="_blank" class="inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-sm font-semibold hover:border-black/40 transition-colors">
+          📸 Instagram
+        </a>
+        <a href="mailto:lyqdmedia@outlook.com" class="inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-sm font-semibold hover:border-black/40 transition-colors">
+          ✉️ Email
+        </a>
+        <a href="https://lin.ee/0eBvgAV" target="_blank" class="inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-sm font-semibold hover:border-black/40 transition-colors">
+          💬 LINE官方帳號
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="border-t border-black/5 py-16 md:py-24 bg-zinc-100">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>聯絡表單</h2>
+      <p class="mt-2 max-w-2xl text-zinc-600">留下資訊，我們將在 24 小時內回覆。</p>
+      <form class="mt-8 space-y-4 rounded-2xl border border-black/10 bg-white p-6 shadow-md" action="mailto:lyqdmedia@outlook.com" method="post" enctype="text/plain">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <label class="block">
+            <span class="mb-1 block text-sm text-zinc-600">姓名</span>
+            <input type="text" name="Name" required class="w-full rounded-xl border border-black/10 bg-white/40 px-3 py-2 outline-none ring-0 placeholder:text-zinc-500 focus:border-black/30" placeholder="您的姓名" />
+          </label>
+          <label class="block">
+            <span class="mb-1 block text-sm text-zinc-600">Email</span>
+            <input type="email" name="Email" required class="w-full rounded-xl border border-black/10 bg-white/40 px-3 py-2 outline-none ring-0 placeholder:text-zinc-500 focus:border-black/30" placeholder="you@company.com" />
+          </label>
+        </div>
+        <label class="block">
+          <span class="mb-1 block text-sm text-zinc-600">需求 / 留言</span>
+          <textarea name="Message" required rows="5" class="w-full rounded-xl border border-black/10 bg-white/40 px-3 py-2 outline-none ring-0 placeholder:text-zinc-500 focus:border-black/30" placeholder="簡述您的專案內容、時程與預算區間。"></textarea>
+        </label>
+        <div class="flex flex-wrap items-center gap-3">
+          <button type="submit" class="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-semibold shadow-[0_0_40px_rgba(25,58,85,.35)] focus:outline-none focus:ring-2 focus:ring-[#193a55]" style="background-color:#193a55;color:white">送出</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="border-t border-black/5 py-10">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-zinc-600 md:flex-row">
+      <p>LYQD Media · 電影級 AI 製作</p>
+      <div class="flex items-center gap-6">
+        <a href="#showreel" class="hover:text-zinc-800">精選作品</a>
+        <a href="#cases" class="hover:text-zinc-800">AI應用項目</a>
+        <a href="#contact" class="hover:text-zinc-800">聯絡我們</a>
+        <a href="blog.html" class="hover:text-zinc-800">文章專欄</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="fixed inset-x-0 bottom-0 z-40 bg-white/80 backdrop-blur md:hidden">
+    <div class="mx-auto grid max-w-7xl grid-cols-2 gap-2 px-4 py-3">
+      <a href="#contact" class="inline-flex items-center justify-center rounded-full px-4 py-3 text-sm font-semibold" style="background-color:#193a55;color:white">預約諮詢</a>
+      <a href="#showreel" class="inline-flex items-center justify-center rounded-full border border-black/20 px-4 py-3 text-sm font-semibold text-zinc-800 hover:border-black/40">精選作品集</a>
+    </div>
+  </div>
+
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal1')">&times;</span>
+      <video class="w-full h-auto" src="media/sunscreen.mp4" controls autoplay muted loop></video>
+    </div>
+  </div>
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal2')">&times;</span>
+      <video class="w-full h-auto" src="media/jewel_demo.mp4" controls autoplay muted loop></video>
+    </div>
+  </div>
+  <div id="modal3" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal3')">&times;</span>
+      <video class="w-full h-auto" src="media/anne_michelle_16s.mp4" controls autoplay muted loop></video>
+    </div>
+  </div>
+  <div id="modal4" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal4')">&times;</span>
+      <video class="w-full h-auto" src="media/dessert1.mp4" controls autoplay muted loop></video>
+    </div>
+  </div>
+  <div id="modal5" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal5')">&times;</span>
+      <video class="w-full h-auto" src="media/skin1.mp4" controls autoplay muted loop></video>
+    </div>
+  </div>
+  <div id="modal6" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('modal6')">&times;</span>
+      <video class="w-full h-auto" src="media/XeraV_demo.mp4" controls autoplay muted loop></video>
+    </div>
+  </div>
+
+  <script>
+    // Modal functions
+    function openModal(modalId) {
+      document.getElementById(modalId).style.display = "block";
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = "none";
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

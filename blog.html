@@ -25,6 +25,47 @@
     @keyframes fadeIn {
       to { opacity: 1; }
     }
+
+    /* Mobile navigation styles */
+    .mobile-nav-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    .mobile-nav-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .mobile-nav-scroll::-webkit-scrollbar-thumb {
+      background: rgba(25, 58, 85, 0.3);
+      border-radius: 2px;
+    }
+    
+    .mobile-nav-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(25, 58, 85, 0.5);
+    }
+
+    /* Mobile navigation gradient hint */
+    .mobile-nav-container {
+      position: relative;
+    }
+
+    .mobile-nav-container::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.08), transparent);
+      pointer-events: none;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-nav-container.show-gradient::after {
+      opacity: 1;
+    }
   </style>
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
@@ -46,6 +87,34 @@
       <a href="index.html#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex" style="background-color:#193a55;color:white">預約諮詢</a>
     </div>
   </header>
+
+  <!-- Mobile Navigation Bar -->
+  <div class="md:hidden border-b border-black/10 bg-white shadow-sm mobile-nav-container">
+    <!-- Scroll hint for mobile navigation -->
+    <div class="px-4 py-2 text-center">
+      <div class="inline-flex items-center gap-2 text-xs text-zinc-500 bg-zinc-100 px-3 py-1.5 rounded-full">
+        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+        </svg>
+        <span>左右滑動瀏覽選單</span>
+        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto mobile-nav-scroll">
+      <div class="flex gap-6 pl-4 pr-8 py-3" style="min-width: max-content;">
+        <a href="index.html#top" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">首頁</a>
+        <a href="index.html#showreel" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">精選作品集</a>
+        <a href="index.html#advantages" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">關於我們</a>
+        <a href="index.html#cases" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">AI應用項目</a>
+        <a href="index.html#process" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">服務流程</a>
+        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">常見問題</a>
+        <a href="blog.html" class="text-sm text-[#193a55] font-semibold border-b-2 whitespace-nowrap px-2 py-1 rounded-md bg-[#193a55]/10" style="border-color:#193a55">文章專欄</a>
+      </div>
+    </div>
+  </div>
 
   <!-- HERO SECTION -->
   <section class="relative isolate overflow-hidden py-16 md:py-24">
@@ -292,6 +361,39 @@
       alert('感謝您的訂閱！我們會定期發送最新文章給您。');
       event.target.reset();
     }
+
+    // Mobile navigation gradient control
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileNav = document.querySelector('.mobile-nav-container');
+      const mobileNavScroll = document.querySelector('.mobile-nav-scroll');
+      
+      if (mobileNav && mobileNavScroll) {
+        // Check if content is scrollable
+        function checkScrollable() {
+          if (mobileNavScroll.scrollWidth > mobileNavScroll.clientWidth) {
+            mobileNav.classList.add('show-gradient');
+          } else {
+            mobileNav.classList.remove('show-gradient');
+          }
+        }
+        
+        // Initial check
+        checkScrollable();
+        
+        // Check on scroll
+        mobileNavScroll.addEventListener('scroll', function() {
+          const isAtEnd = mobileNavScroll.scrollLeft + mobileNavScroll.clientWidth >= mobileNavScroll.scrollWidth;
+          if (isAtEnd) {
+            mobileNav.classList.remove('show-gradient');
+          } else {
+            mobileNav.classList.add('show-gradient');
+          }
+        });
+        
+        // Check on window resize
+        window.addEventListener('resize', checkScrollable);
+      }
+    });
   </script>
 </body>
 </html>

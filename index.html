@@ -136,6 +136,68 @@
     @keyframes fadeIn {
       to { opacity: 1; }
     }
+
+    /* Custom scrollbar for showreel section */
+    .showreel-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    .showreel-scroll::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+    
+    .showreel-scroll::-webkit-scrollbar-thumb {
+      background: rgba(25, 58, 85, 0.6);
+      border-radius: 4px;
+      transition: background 0.3s ease;
+    }
+    
+    .showreel-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(25, 58, 85, 0.8);
+    }
+    
+    /* Hide scrollbar on mobile but keep functionality */
+    @media (max-width: 768px) {
+      .showreel-scroll::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    /* Mobile navigation styles */
+    .mobile-nav-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+    
+    .mobile-nav-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .mobile-nav-scroll::-webkit-scrollbar-thumb {
+      background: rgba(25, 58, 85, 0.3);
+      border-radius: 2px;
+    }
+    
+    .mobile-nav-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(25, 58, 85, 0.5);
+    }
+
+    /* Mobile navigation gradient hint */
+    .mobile-nav-container {
+      position: relative;
+    }
+
+    .mobile-nav-container::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.08), transparent);
+      pointer-events: none;
+      z-index: 10;
+    }
   </style>
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
@@ -156,6 +218,34 @@
       <a href="#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200" style="background-color:#193a55;color:white">預約諮詢</a>
     </div>
   </header>
+
+  <!-- Mobile Navigation Bar -->
+  <div class="md:hidden border-b border-black/10 bg-white shadow-sm mobile-nav-container">
+    <!-- Scroll hint for mobile navigation -->
+    <div class="px-4 py-2 text-center">
+      <div class="inline-flex items-center gap-2 text-xs text-zinc-500 bg-zinc-100 px-3 py-1.5 rounded-full">
+        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+        </svg>
+        <span>左右滑動瀏覽選單</span>
+        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+        </svg>
+      </div>
+    </div>
+    
+    <div class="overflow-x-auto mobile-nav-scroll">
+      <div class="flex gap-6 pl-4 pr-8 py-3" style="min-width: max-content;">
+        <a href="#top" class="text-sm text-[#193a55] font-semibold border-b-2 whitespace-nowrap px-2 py-1 rounded-md bg-[#193a55]/10" style="border-color:#193a55">首頁</a>
+        <a href="#showreel" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">精選作品集</a>
+        <a href="#advantages" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">關於我們</a>
+        <a href="#cases" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">AI應用項目</a>
+        <a href="#process" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">服務流程</a>
+        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">常見問題</a>
+        <a href="blog.html" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">文章專欄</a>
+      </div>
+    </div>
+  </div>
 
   <section class="relative isolate overflow-hidden">
     <div class="grain pointer-events-none absolute inset-0" aria-hidden="true"></div>
@@ -213,7 +303,46 @@
     <div class="mx-auto max-w-7xl px-4">
       <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>精選作品</h2>
       <p class="mt-2 max-w-2xl text-zinc-600"> 運用電影級光影、高級色彩與節奏剪輯，打造您的品牌獨家敘事。</p>
-      <div class="mt-8 overflow-x-auto">
+      
+      <!-- Scroll hint for mobile users -->
+      <div class="mt-4 flex items-center justify-center md:hidden">
+        <div class="inline-flex items-center gap-2 rounded-full bg-black/10 px-4 py-2 text-sm text-zinc-600 animate-pulse">
+          <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+          </svg>
+          <span>左右滑動瀏覽更多作品</span>
+          <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </div>
+      </div>
+      
+      <div class="mt-8 overflow-x-auto relative showreel-scroll">
+        <!-- Desktop scroll hint -->
+        <div class="hidden md:block absolute top-2 right-4 z-10">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-3 py-1.5 text-xs text-zinc-600 shadow-sm border border-black/10">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+            </svg>
+            <span>滾動查看更多</span>
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </div>
+        </div>
+        
+        <!-- Scroll indicator dots -->
+        <div class="hidden md:flex justify-center mt-4 mb-2">
+          <div class="flex gap-2">
+            <div class="w-2 h-2 rounded-full bg-[#193a55] opacity-100"></div>
+            <div class="w-2 h-2 rounded-full bg-[#193a55] opacity-60"></div>
+            <div class="w-2 h-2 rounded-full bg-[#193a55] opacity-60"></div>
+            <div class="w-2 h-2 rounded-full bg-[#193a55] opacity-60"></div>
+            <div class="w-2 h-2 rounded-full bg-[#193a55] opacity-60"></div>
+            <div class="w-2 h-2 rounded-full bg-[#193a55] opacity-60"></div>
+          </div>
+        </div>
+        
         <div class="flex gap-6 pb-4" style="min-width: max-content;">
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal1')">
             <div class="relative aspect-video w-full overflow-hidden">
@@ -600,6 +729,39 @@
       if (heroVideo) {
         // Ensure pointer events are disabled
         heroVideo.style.pointerEvents = 'none';
+      }
+    });
+
+    // Mobile navigation gradient control
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileNav = document.querySelector('.mobile-nav-container');
+      const mobileNavScroll = document.querySelector('.mobile-nav-scroll');
+      
+      if (mobileNav && mobileNavScroll) {
+        // Check if content is scrollable
+        function checkScrollable() {
+          if (mobileNavScroll.scrollWidth > mobileNavScroll.clientWidth) {
+            mobileNav.classList.add('show-gradient');
+          } else {
+            mobileNav.classList.remove('show-gradient');
+          }
+        }
+        
+        // Initial check
+        checkScrollable();
+        
+        // Check on scroll
+        mobileNavScroll.addEventListener('scroll', function() {
+          const isAtEnd = mobileNavScroll.scrollLeft + mobileNavScroll.clientWidth >= mobileNavScroll.scrollWidth;
+          if (isAtEnd) {
+            mobileNav.classList.remove('show-gradient');
+          } else {
+            mobileNav.classList.add('show-gradient');
+          }
+        });
+        
+        // Check on window resize
+        window.addEventListener('resize', checkScrollable);
       }
     });
   </script>

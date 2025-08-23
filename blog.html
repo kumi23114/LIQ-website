@@ -257,7 +257,7 @@
 
       <!-- Load More Button -->
       <div class="mt-16 text-center">
-        <button class="inline-flex items-center justify-center rounded-full border border-black/20 px-8 py-3 text-sm font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-zinc-800">
+        <button id="load-more-btn" onclick="loadMorePosts()" class="inline-flex items-center justify-center rounded-full border border-black/20 px-8 py-3 text-sm font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-zinc-800">
           載入更多文章
         </button>
       </div>
@@ -308,7 +308,7 @@
     }
 
     // Contentful API 相關函數
-    async function fetchBlogPosts() {
+    async function fetchBlogPosts(limit = 6, skip = 0) {
       try {
         // 檢查配置是否已設置
         if (CONTENTFUL_CONFIG.SPACE_ID === 'YOUR_SPACE_ID_HERE' || 
@@ -316,7 +316,7 @@
           throw new Error('請先設置 Contentful API 配置');
         }
 
-        const response = await fetch(`${CONTENTFUL_API_URL}?content_type=${CONTENTFUL_CONFIG.CONTENT_TYPE}&order=-sys.createdAt`, {
+        const response = await fetch(`${CONTENTFUL_API_URL}?content_type=${CONTENTFUL_CONFIG.CONTENT_TYPE}&order=-sys.createdAt&limit=${limit}&skip=${skip}`, {
           headers: {
             'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
           }
@@ -327,7 +327,11 @@
         }
 
         const data = await response.json();
-        return data.items || [];
+        console.log('Contentful API Response:', data); // 調試信息
+        return {
+          items: data.items || [],
+          total: data.total || 0
+        };
       } catch (error) {
         console.error('Error fetching blog posts:', error);
         throw error;
@@ -338,10 +342,18 @@
     function renderBlogPost(article) {
       const fields = article.fields;
       
-      // 處理圖片
+      // 處理圖片 - 支援多種圖片欄位名稱
       let imageUrl = 'https://images.unsplash.com/photo-1518558400203-08fa1b3c85be?q=80&w=800&auto=format&fit=crop'; // 預設圖片
+      
+      // 嘗試多種可能的圖片欄位名稱
       if (fields.featuredImage && fields.featuredImage.fields && fields.featuredImage.fields.file) {
         imageUrl = `https:${fields.featuredImage.fields.file.url}`;
+      } else if (fields.image && fields.image.fields && fields.image.fields.file) {
+        imageUrl = `https:${fields.image.fields.file.url}`;
+      } else if (fields.heroImage && fields.heroImage.fields && fields.heroImage.fields.file) {
+        imageUrl = `https:${fields.heroImage.fields.file.url}`;
+      } else if (fields.thumbnail && fields.thumbnail.fields && fields.thumbnail.fields.file) {
+        imageUrl = `https:${fields.thumbnail.fields.file.url}`;
       }
       
       // 處理日期
@@ -351,15 +363,26 @@
       }) : '近期';
       
       // 處理分類
-      const category = fields.category || '未分類';
+      const category = fields.category || fields.tags?.[0] || '未分類';
       
       // 處理摘要
-      const excerpt = fields.excerpt || fields.content?.content?.[0]?.content?.[0]?.value?.substring(0, 100) + '...' || '點擊閱讀更多...';
+      let excerpt = '點擊閱讀更多...';
+      if (fields.excerpt) {
+        excerpt = fields.excerpt;
+      } else if (fields.description) {
+        excerpt = fields.description;
+      } else if (fields.content && fields.content.content && fields.content.content[0] && fields.content.content[0].content && fields.content.content[0].content[0] && fields.content.content[0].content[0].value) {
+        excerpt = fields.content.content[0].content[0].value.substring(0, 100) + '...';
+      }
+      
+      // 生成文章連結 - 使用 slug 或 ID
+      const articleSlug = fields.slug || article.sys.id;
+      const articleUrl = `article.html?id=${articleSlug}`;
       
       return `
         <article class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md hover:border-black/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div class="relative aspect-video overflow-hidden">
-            <img src="${imageUrl}" alt="${fields.title || '文章圖片'}" class="h-full w-full object-cover transition group-hover:scale-105" />
+            <img src="${imageUrl}" alt="${fields.title || '文章圖片'}" class="h-full w-full object-cover transition group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1518558400203-08fa1b3c85be?q=80&w=800&auto=format&fit=crop'" />
             <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60"></div>
           </div>
           <div class="p-6">
@@ -374,7 +397,7 @@
             <p class="text-sm text-zinc-600 mb-4 line-clamp-3">
               ${excerpt}
             </p>
-            <a href="#" class="text-sm font-medium text-[#193a55] hover:text-[#0d1a2a] hover:underline transition-all duration-200">閱讀更多</a>
+            <a href="${articleUrl}" class="text-sm font-medium text-[#193a55] hover:text-[#0d1a2a] hover:underline transition-all duration-200">閱讀更多</a>
           </div>
         </article>
       `;
@@ -395,35 +418,115 @@
         articlesContainer.innerHTML = '';
         
         // 獲取文章
-        const articles = await fetchBlogPosts();
+        const result = await fetchBlogPosts(6, 0);
         
         // 隱藏載入狀態
         loadingState.classList.add('hidden');
         
-        if (articles.length === 0) {
+        if (result.items.length === 0) {
           // 顯示無文章狀態
           noArticlesState.classList.remove('hidden');
         } else {
           // 渲染文章
-          const articlesHTML = articles.map(renderBlogPost).join('');
+          const articlesHTML = result.items.map(renderBlogPost).join('');
           articlesContainer.innerHTML = articlesHTML;
-        }
-      } catch (error) {
-        console.error('Error loading blog posts:', error);
-        
-        // 隱藏載入狀態
-        loadingState.classList.add('hidden');
-        
-        // 顯示錯誤狀態
-        errorState.classList.remove('hidden');
-        
-        // 在錯誤狀態中顯示具體錯誤信息
-        const errorMessage = errorState.querySelector('p:last-of-type');
-        if (errorMessage) {
-          errorMessage.textContent = `錯誤詳情: ${error.message}`;
-        }
+          
+                  // 更新載入更多按鈕狀態
+        updateLoadMoreButton(result.total, result.items.length);
+      }
+    } catch (error) {
+      console.error('Error loading blog posts:', error);
+      
+      // 隱藏載入狀態
+      loadingState.classList.add('hidden');
+      
+      // 顯示錯誤狀態
+      errorState.classList.remove('hidden');
+      
+      // 在錯誤狀態中顯示具體錯誤信息
+      const errorMessage = errorState.querySelector('p:last-of-type');
+      if (errorMessage) {
+        errorMessage.textContent = `錯誤詳情: ${error.message}`;
       }
     }
+  }
+
+  // 調試函數：檢查 Contentful 內容類型
+  async function debugContentTypes() {
+    try {
+      const response = await fetch(`${CONTENTFUL_API_URL}?limit=1`, {
+        headers: {
+          'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Available content types:', data.items?.map(item => item.sys.contentType.sys.id) || []);
+        console.log('Sample entry fields:', data.items?.[0]?.fields || {});
+      }
+    } catch (error) {
+      console.error('Debug error:', error);
+    }
+  }
+
+  // 載入更多文章
+  let currentSkip = 6;
+  async function loadMorePosts() {
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const articlesContainer = document.getElementById('articles-container');
+    
+    try {
+      // 顯示載入狀態
+      loadMoreBtn.innerHTML = `
+        <div class="inline-flex items-center gap-2">
+          <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
+          載入中...
+        </div>
+      `;
+      loadMoreBtn.disabled = true;
+      
+      // 獲取更多文章
+      const result = await fetchBlogPosts(6, currentSkip);
+      
+      if (result.items.length > 0) {
+        // 添加新文章到現有容器
+        const newArticlesHTML = result.items.map(renderBlogPost).join('');
+        articlesContainer.insertAdjacentHTML('beforeend', newArticlesHTML);
+        
+        // 更新計數器
+        currentSkip += result.items.length;
+        
+        // 更新載入更多按鈕狀態
+        updateLoadMoreButton(result.total, currentSkip);
+      } else {
+        // 沒有更多文章
+        loadMoreBtn.style.display = 'none';
+      }
+    } catch (error) {
+      console.error('Error loading more posts:', error);
+      alert('載入更多文章時發生錯誤，請稍後再試');
+      
+      // 恢復按鈕狀態
+      loadMoreBtn.innerHTML = '載入更多文章';
+      loadMoreBtn.disabled = false;
+    }
+  }
+
+  // 更新載入更多按鈕狀態
+  function updateLoadMoreButton(total, current) {
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    
+    if (current >= total) {
+      // 已載入所有文章
+      loadMoreBtn.style.display = 'none';
+    } else {
+      // 還有更多文章可以載入
+      loadMoreBtn.style.display = 'inline-flex';
+      loadMoreBtn.innerHTML = '載入更多文章';
+      loadMoreBtn.disabled = false;
+    }
+  }
 
     // 頁面載入完成後自動載入文章
     document.addEventListener('DOMContentLoaded', function() {
@@ -455,6 +558,9 @@
         document.getElementById('loading-state')?.classList.add('hidden');
         return;
       }
+      
+      // 調試：檢查可用的內容類型
+      debugContentTypes();
       
       // 載入文章
       loadBlogPosts();

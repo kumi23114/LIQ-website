@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>文章詳情 · 流芯視覺</title>
+
+  <meta name="description" content="流芯視覺 LYQD media 文章詳情頁面">
+  <meta name="keywords" content="流芯視覺,LYQD media,文章,AI 影像,數位行銷,視覺設計">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Contentful API Configuration -->
+  <script>
+    // Contentful API 配置
+    const CONTENTFUL_CONFIG = {
+      SPACE_ID: 'id4y90f1h82c',
+      ACCESS_TOKEN: 'vxnpypRajiFP97o7gEfMoavejunX98K8undinDWuVbY',
+      ENVIRONMENT: 'master',
+      CONTENT_TYPE: 'pageBlogPost'
+    };
+    
+    const CONTENTFUL_API_URL = `https://cdn.contentful.com/spaces/${CONTENTFUL_CONFIG.SPACE_ID}/environments/${CONTENTFUL_CONFIG.ENVIRONMENT}/entries`;
+  </script>
+  
+  <style>
+    /* Grain effect for background */
+    .grain {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.015;
+    }
+
+    /* Page fade-in animation */
+    body {
+      opacity: 0;
+      animation: fadeIn 0.8s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Article content styles */
+    .article-content h2 {
+      @apply text-2xl font-semibold mt-8 mb-4 text-zinc-900;
+    }
+    
+    .article-content h3 {
+      @apply text-xl font-semibold mt-6 mb-3 text-zinc-900;
+    }
+    
+    .article-content p {
+      @apply text-zinc-700 leading-relaxed mb-4;
+    }
+    
+    .article-content ul, .article-content ol {
+      @apply mb-4 pl-6;
+    }
+    
+    .article-content li {
+      @apply text-zinc-700 mb-2;
+    }
+    
+    .article-content blockquote {
+      @apply border-l-4 border-[#193a55] pl-4 py-2 my-6 bg-zinc-50 italic text-zinc-700;
+    }
+    
+    .article-content img {
+      @apply rounded-lg shadow-md my-6 max-w-full h-auto;
+    }
+  </style>
+</head>
+<body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
+  <!-- NAV -->
+  <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+      <a href="index.html#top" class="group inline-flex items-center gap-3">
+        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
+        <span class="font-semibold tracking-wide text-zinc-800">流芯視覺</span>
+      </a>
+      <nav class="hidden gap-8 md:flex">
+        <a href="index.html#showreel" class="text-sm text-zinc-600 hover:text-zinc-800">精選作品集</a>
+        <a href="index.html#advantages" class="text-sm text-zinc-600 hover:text-zinc-800">關於我們</a>
+        <a href="index.html#cases" class="text-sm text-zinc-600 hover:text-zinc-800">AI應用項目</a>
+        <a href="index.html#process" class="text-sm text-zinc-600 hover:text-zinc-800">服務流程</a>
+        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800">常見問題</a>
+        <a href="blog.html" class="text-sm text-zinc-600 hover:text-zinc-800">文章專欄</a>
+      </nav>
+      <a href="index.html#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex" style="background-color:#193a55;color:white">預約諮詢</a>
+    </div>
+  </header>
+
+  <!-- ARTICLE CONTENT -->
+  <main class="py-8 md:py-16">
+    <div class="mx-auto max-w-4xl px-4">
+      <!-- Loading State -->
+      <div id="loading-state" class="text-center py-12">
+        <div class="inline-flex items-center gap-3 text-zinc-600">
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#193a55]"></div>
+          <span class="text-lg">正在載入文章...</span>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="error-state" class="hidden text-center py-12">
+        <div class="text-zinc-600">
+          <svg class="mx-auto h-16 w-16 text-zinc-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+          </svg>
+          <p class="text-xl font-medium mb-2">載入文章時發生錯誤</p>
+          <p class="text-sm mb-4">請檢查您的網路連線或稍後再試</p>
+          <button onclick="loadArticle()" class="inline-flex items-center justify-center rounded-full border border-black/20 px-6 py-2 text-sm font-medium hover:border-black/40 hover:bg-black/5 transition-all duration-200 text-zinc-800">
+            重新載入
+          </button>
+        </div>
+      </div>
+
+      <!-- Article Container -->
+      <div id="article-container" class="hidden">
+        <!-- Article will be loaded here -->
+      </div>
+
+      <!-- Back to Blog Button -->
+      <div class="mt-12 text-center">
+        <a href="blog.html" class="inline-flex items-center gap-2 text-sm font-medium text-[#193a55] hover:text-[#0d1a2a] hover:underline transition-all duration-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          返回文章列表
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-black/5 py-10">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-zinc-600 md:flex-row">
+      <p>LYQD Media · 電影級 AI 製作</p>
+      <div class="flex items-center gap-6">
+        <a href="index.html#showreel" class="hover:text-zinc-800">精選作品集</a>
+        <a href="index.html#cases" class="hover:text-zinc-800">AI應用項目</a>
+        <a href="index.html#contact" class="hover:text-zinc-800">聯絡我們</a>
+        <a href="blog.html" class="hover:text-zinc-800">文章專欄</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 從 URL 參數獲取文章 ID
+    function getArticleId() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('id');
+    }
+
+    // 獲取文章內容
+    async function fetchArticle(articleId) {
+      try {
+        const response = await fetch(`${CONTENTFUL_API_URL}?sys.id=${articleId}`, {
+          headers: {
+            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data.items?.[0] || null;
+      } catch (error) {
+        console.error('Error fetching article:', error);
+        throw error;
+      }
+    }
+
+    // 渲染文章內容
+    function renderArticle(article) {
+      const fields = article.fields;
+      
+      // 處理特色圖片
+      let heroImage = '';
+      if (fields.featuredImage && fields.featuredImage.fields && fields.featuredImage.fields.file) {
+        const imageUrl = `https:${fields.featuredImage.fields.file.url}`;
+        heroImage = `
+          <div class="mb-8">
+            <img src="${imageUrl}" alt="${fields.title || '文章特色圖片'}" class="w-full h-64 md:h-96 object-cover rounded-2xl shadow-lg" />
+          </div>
+        `;
+      }
+
+      // 處理發布日期
+      const publishDate = fields.publishDate ? new Date(fields.publishDate).toLocaleDateString('zh-TW', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }) : '近期';
+
+      // 處理分類
+      const category = fields.category || fields.tags?.[0] || '未分類';
+
+      // 處理文章內容
+      let content = '<p>文章內容載入中...</p>';
+      if (fields.content && fields.content.content) {
+        content = renderRichText(fields.content);
+      } else if (fields.body) {
+        content = renderRichText(fields.body);
+      }
+
+      return `
+        <article>
+          ${heroImage}
+          
+          <header class="mb-8">
+            <div class="flex items-center gap-3 text-sm text-zinc-500 mb-4">
+              <span class="px-3 py-1 bg-zinc-100 rounded-full">${category}</span>
+              <span>•</span>
+              <span>${publishDate}</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">${fields.title || '無標題'}</h1>
+            ${fields.excerpt ? `<p class="text-lg text-zinc-600 leading-relaxed">${fields.excerpt}</p>` : ''}
+          </header>
+
+          <div class="article-content prose prose-lg max-w-none">
+            ${content}
+          </div>
+        </article>
+      `;
+    }
+
+    // 渲染富文本內容
+    function renderRichText(richText) {
+      if (!richText || !richText.content) return '<p>內容載入中...</p>';
+
+      let html = '';
+      
+      richText.content.forEach(node => {
+        if (node.nodeType === 'paragraph') {
+          html += '<p>';
+          if (node.content) {
+            node.content.forEach(textNode => {
+              let text = textNode.value || '';
+              if (textNode.marks) {
+                textNode.marks.forEach(mark => {
+                  if (mark.type === 'bold') {
+                    text = `<strong>${text}</strong>`;
+                  } else if (mark.type === 'italic') {
+                    text = `<em>${text}</em>`;
+                  } else if (mark.type === 'underline') {
+                    text = `<u>${text}</u>`;
+                  }
+                });
+              }
+              html += text;
+            });
+          }
+          html += '</p>';
+        } else if (node.nodeType === 'heading-1') {
+          html += `<h1>${node.content?.[0]?.value || ''}</h1>`;
+        } else if (node.nodeType === 'heading-2') {
+          html += `<h2>${node.content?.[0]?.value || ''}</h2>`;
+        } else if (node.nodeType === 'heading-3') {
+          html += `<h3>${node.content?.[0]?.value || ''}</h3>`;
+        } else if (node.nodeType === 'unordered-list') {
+          html += '<ul>';
+          if (node.content) {
+            node.content.forEach(listItem => {
+              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+            });
+          }
+          html += '</ul>';
+        } else if (node.nodeType === 'ordered-list') {
+          html += '<ol>';
+          if (node.content) {
+            node.content.forEach(listItem => {
+              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+            });
+          }
+          html += '</ol>';
+        }
+      });
+
+      return html || '<p>內容載入中...</p>';
+    }
+
+    // 載入文章
+    async function loadArticle() {
+      const articleId = getArticleId();
+      const loadingState = document.getElementById('loading-state');
+      const errorState = document.getElementById('error-state');
+      const articleContainer = document.getElementById('article-container');
+
+      if (!articleId) {
+        // 沒有文章 ID，顯示錯誤
+        loadingState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+        errorState.querySelector('p:last-of-type').textContent = '錯誤詳情: 缺少文章 ID 參數';
+        return;
+      }
+
+      try {
+        // 顯示載入狀態
+        loadingState.classList.remove('hidden');
+        errorState.classList.add('hidden');
+        articleContainer.classList.add('hidden');
+
+        // 獲取文章
+        const article = await fetchArticle(articleId);
+
+        if (!article) {
+          throw new Error('找不到指定的文章');
+        }
+
+        // 隱藏載入狀態
+        loadingState.classList.add('hidden');
+
+        // 渲染文章
+        const articleHTML = renderArticle(article);
+        articleContainer.innerHTML = articleHTML;
+        articleContainer.classList.remove('hidden');
+
+        // 更新頁面標題
+        const title = article.fields.title || '文章詳情';
+        document.title = `${title} · 流芯視覺`;
+
+      } catch (error) {
+        console.error('Error loading article:', error);
+        
+        // 隱藏載入狀態
+        loadingState.classList.add('hidden');
+        
+        // 顯示錯誤狀態
+        errorState.classList.remove('hidden');
+        errorState.querySelector('p:last-of-type').textContent = `錯誤詳情: ${error.message}`;
+      }
+    }
+
+    // 頁面載入完成後自動載入文章
+    document.addEventListener('DOMContentLoaded', function() {
+      loadArticle();
+    });
+  </script>
+</body>
+</html>

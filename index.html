@@ -8,6 +8,24 @@
   <meta name="description" content="流芯視覺 LYQD media 是一家專注於 AI 影像美學的廣告工作室，提供高效、低成本的客製化影片製作服務，包含 AI 電商換裝、專業網路廣告等。">
   <meta name="keywords" content="流芯視覺,LYQD media,AI 影像,影片製作,AI 廣告,AI 視覺,台北,台中">
   
+  <!-- Video Preload Optimization -->
+  <!-- Hero video preload for immediate display -->
+  <link rel="preload" as="video" href="https://iframe.mediadelivery.net/embed/484739/0fa9a53c-e39d-4c6f-b75f-23be41782997?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=false&title=false">
+  
+  <!-- Showreel videos prefetch for better performance -->
+  <link rel="prefetch" as="video" href="https://iframe.mediadelivery.net/embed/484739/8a3d179f-469c-405c-859f-30853f326d99?autoplay=true&loop=true&muted=true&preload=true&responsive=true">
+  <link rel="prefetch" as="video" href="https://iframe.mediadelivery.net/embed/484739/e8409ff4-2ef0-451c-9789-0e72a247bb10?autoplay=true&loop=true&muted=true&preload=true&responsive=true">
+  <link rel="prefetch" as="video" href="https://iframe.mediadelivery.net/embed/484739/2c6e025ac-4f35-4f14-99d9-5dffe3d1a5ac?autoplay=true&loop=true&muted=true&preload=true&responsive=true">
+  
+  <!-- Performance optimization hints -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="format-detection" content="telephone=no">
+  
+  <!-- DNS prefetch for external domains -->
+  <link rel="dns-prefetch" href="//iframe.mediadelivery.net">
+  <link rel="dns-prefetch" href="//vz-12fd57b1-764.b-cdn.net">
+  <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Modal styles with blur effects */
@@ -121,6 +139,603 @@
       100% { background-position: -200% 0; }
     }
 
+    /* Sticky CTA Button Styles */
+    .sticky-cta {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sticky-cta-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .sticky-cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .sticky-cta-button.primary {
+      background: linear-gradient(135deg, #193a55 0%, #2d5a7a 100%);
+      color: white;
+    }
+
+    .sticky-cta-button.secondary {
+      background: linear-gradient(135deg, #00c300 0%, #00a000 100%);
+      color: white;
+    }
+
+    .sticky-cta-button .tooltip {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .sticky-cta-button:hover .tooltip {
+      opacity: 1;
+    }
+
+    .sticky-cta-button .tooltip::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 5px solid transparent;
+      border-left-color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Mini Contact Form Modal */
+    .mini-contact-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1001;
+      backdrop-filter: blur(4px);
+    }
+
+    .mini-contact-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .mini-contact-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .mini-contact-header h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #193a55;
+      margin-bottom: 8px;
+    }
+
+    .mini-contact-header p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .mini-contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mini-contact-form input,
+    .mini-contact-form textarea {
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    .mini-contact-form input:focus,
+    .mini-contact-form textarea:focus {
+      outline: none;
+      border-color: #193a55;
+    }
+
+    .mini-contact-form textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .mini-contact-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .mini-contact-actions button {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .mini-contact-actions .submit-btn {
+      background: #193a55;
+      color: white;
+    }
+
+    .mini-contact-actions .submit-btn:hover {
+      background: #2d5a7a;
+      transform: translateY(-1px);
+    }
+
+    .mini-contact-actions .cancel-btn {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .mini-contact-actions .cancel-btn:hover {
+      background: #e5e7eb;
+    }
+
+    .mini-contact-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #9ca3af;
+      transition: color 0.3s ease;
+    }
+
+    .mini-contact-close:hover {
+      color: #374151;
+    }
+
+    /* Mobile responsive adjustments */
+    @media (max-width: 768px) {
+      .sticky-cta {
+        bottom: 20px;
+        right: 20px;
+        gap: 10px;
+      }
+
+      .sticky-cta-button {
+        width: 55px;
+        height: 55px;
+        font-size: 18px;
+      }
+
+      .mini-contact-content {
+        padding: 24px;
+        margin: 20px;
+        width: calc(100% - 40px);
+      }
+    }
+
+    /* Navigation Animation Styles */
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #193a55 !important;
+      transform: translateY(-1px);
+    }
+
+    .nav-underline {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #193a55 0%, #2d5a7a 100%);
+      transition: width 0.3s ease;
+      border-radius: 1px;
+    }
+
+    .nav-link:hover .nav-underline {
+      width: 100%;
+    }
+
+    /* Active navigation state */
+    .nav-link.active .nav-underline {
+      width: 100%;
+    }
+
+    .nav-link.active {
+      color: #193a55 !important;
+      font-weight: 600;
+    }
+
+    /* Mobile navigation animations */
+    .mobile-nav-link {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-nav-link::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(25, 58, 85, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .mobile-nav-link:hover::before {
+      left: 100%;
+    }
+
+    .mobile-nav-link:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(25, 58, 85, 0.15);
+    }
+
+    /* Mobile Navigation Styles - Burger Menu */
+    .mobile-nav-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .mobile-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      width: 100%;
+      background: rgba(25, 58, 85, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0 20px;
+      transition: all 0.5s ease-out;
+    }
+
+    .burger-container {
+      position: relative;
+      display: inline-block;
+      height: 50px;
+      width: 50px;
+      cursor: pointer;
+      transform: rotate(0deg);
+      transition: all 0.3s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #burger {
+      width: 18px;
+      height: 8px;
+      position: relative;
+      display: block;
+      margin: -4px auto 0;
+      top: 50%;
+    }
+
+    .bar {
+      width: 100%;
+      height: 2px;
+      display: block;
+      position: relative;
+      background: #FFF;
+      transition: all 0.3s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      transition-delay: 0s;
+      border-radius: 1px;
+    }
+
+    .bar.topBar {
+      transform: translateY(0px) rotate(0deg);
+    }
+
+    .bar.btmBar {
+      transform: translateY(6px) rotate(0deg);
+    }
+
+    .mobile-logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #FFF;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .mobile-cta {
+      display: flex;
+      align-items: center;
+    }
+
+    .mobile-cta-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-cta-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(25, 58, 85, 0.98);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease-out;
+      z-index: 999;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Mobile Menu Close Button */
+    .mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .mobile-menu-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-menu-close:active {
+      transform: scale(0.95);
+    }
+
+    .mobile-menu-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .mobile-menu {
+      position: relative;
+      display: block;
+      padding: 80px 48px 0 48px;
+      padding-right: 80px;
+      list-style: none;
+      margin: 0;
+    }
+
+    .mobile-menu-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 5px;
+      transform: scale(1.15) translateY(-30px);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.4, 0.01, 0.165, 0.99), opacity 0.6s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+    }
+
+    .mobile-menu-item:nth-child(1) { transition-delay: 0.07s; }
+    .mobile-menu-item:nth-child(2) { transition-delay: 0.14s; }
+    .mobile-menu-item:nth-child(3) { transition-delay: 0.21s; }
+    .mobile-menu-item:nth-child(4) { transition-delay: 0.28s; }
+    .mobile-menu-item:nth-child(5) { transition-delay: 0.35s; }
+    .mobile-menu-item:nth-child(6) { transition-delay: 0.42s; }
+    .mobile-menu-item:nth-child(7) { transition-delay: 0.49s; }
+
+    .mobile-menu-overlay.active .mobile-menu-item {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+    }
+
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(1) { transition-delay: 0.27s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(2) { transition-delay: 0.34s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(3) { transition-delay: 0.41s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(4) { transition-delay: 0.48s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(5) { transition-delay: 0.55s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(6) { transition-delay: 0.62s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(7) { transition-delay: 0.69s; }
+
+    .mobile-menu-item a {
+      display: block;
+      position: relative;
+      color: #FFF;
+      font-weight: 300;
+      text-decoration: none;
+      font-size: 20px;
+      line-height: 2.5;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-item a:hover {
+      color: #a8c5e4;
+      transform: translateX(10px);
+    }
+
+    /* Burger Menu Animation States */
+    .mobile-header.menu-opened {
+      background: rgba(25, 58, 85, 1);
+    }
+
+    .mobile-header.menu-opened .burger-container {
+      transform: rotate(90deg);
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar {
+      transition: all 0.4s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      transition-delay: 0.2s;
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar.topBar {
+      transform: translateY(4px) rotate(45deg);
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar.btmBar {
+      transform: translateY(3px) rotate(-45deg);
+    }
+
+    .mobile-header.menu-opened .mobile-logo {
+      transform: translateX(-50%) scale(0.9);
+      opacity: 0.8;
+    }
+
+    .mobile-header.menu-opened .mobile-cta {
+      transform: translateX(75px);
+      transition-delay: 0.3s;
+    }
+
+    /* Header animations */
+    header {
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Logo hover effects */
+    .group:hover .h-8 {
+      transform: rotate(5deg) scale(1.05);
+    }
+
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Navigation item stagger animation */
+    nav a {
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    nav a:nth-child(1) { animation-delay: 0.1s; }
+    nav a:nth-child(2) { animation-delay: 0.2s; }
+    nav a:nth-child(3) { animation-delay: 0.3s; }
+    nav a:nth-child(4) { animation-delay: 0.4s; }
+    nav a:nth-child(5) { animation-delay: 0.5s; }
+    nav a:nth-child(6) { animation-delay: 0.6s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hover state improvements */
+    .nav-link:hover span {
+      transform: translateY(-1px);
+    }
+
+    /* Active link indicator */
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      background: #193a55;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: translateX(-50%) scale(1.2);
+      }
+    }
+
     /* Grain effect for background */
     .grain {
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
@@ -198,52 +813,122 @@
       pointer-events: none;
       z-index: 10;
     }
+
+    /* Showreel video lazy loading styles */
+    .showreel-video {
+      transition: opacity 0.3s ease-in-out;
+    }
+    
+    .showreel-video.loaded {
+      opacity: 1 !important;
+    }
+    
+    /* Loading skeleton for showreel videos */
+    .showreel-skeleton {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: 8px;
+      z-index: 1;
+    }
+    
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
   </style>
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
   <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-      <a href="#top" class="group inline-flex items-center gap-3">
-        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
-        <span class="font-semibold tracking-wide text-zinc-800">流芯視覺</span>
+      <a href="#top" class="group inline-flex items-center gap-3 transition-all duration-300 hover:scale-105">
+        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)] transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(25,58,85,.5)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
+        <span class="font-semibold tracking-wide text-zinc-800 transition-colors duration-300 group-hover:text-[#193a55]">流芯視覺</span>
       </a>
       <nav class="hidden gap-8 md:flex">
-        <a href="#showreel" class="text-sm text-zinc-600 hover:text-zinc-800">精選作品集</a>
-        <a href="#advantages" class="text-sm text-zinc-600 hover:text-zinc-800">關於我們</a>
-        <a href="#cases" class="text-sm text-zinc-600 hover:text-zinc-800">AI應用項目</a>
-        <a href="#process" class="text-sm text-zinc-600 hover:text-zinc-800">服務流程</a>
-        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800">常見問題</a>
-        <a href="blog.html" class="text-sm text-zinc-600 hover:text-zinc-800">文章專欄</a>
+        <a href="#showreel" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">精選作品集</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="#advantages" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">關於我們</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="#cases" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">AI應用項目</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="#process" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">服務流程</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="faq.html" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">常見問題</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="blog.html" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">文章專欄</span>
+          <span class="nav-underline"></span>
+        </a>
       </nav>
-      <a href="#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200" style="background-color:#193a55;color:white">預約諮詢</a>
+      <a href="#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200 active:scale-95" style="background-color:#193a55;color:white">預約諮詢</a>
     </div>
   </header>
 
   <!-- Mobile Navigation Bar -->
-  <div class="md:hidden border-b border-black/10 bg-white shadow-sm mobile-nav-container">
-    <!-- Scroll hint for mobile navigation -->
-    <div class="px-4 py-2 text-center">
-      <div class="inline-flex items-center gap-2 text-xs text-zinc-500 bg-zinc-100 px-3 py-1.5 rounded-full">
-        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
-        </svg>
-        <span>左右滑動瀏覽選單</span>
-        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
+  <div class="md:hidden mobile-nav-container">
+    <!-- Mobile Header with Burger Menu -->
+    <div class="mobile-header">
+      <div class="burger-container" onclick="toggleMobileMenu()">
+        <div id="burger">
+          <div class="bar topBar"></div>
+          <div class="bar btmBar"></div>
+        </div>
+      </div>
+      
+      <div class="mobile-logo">
+        <span class="font-semibold tracking-wide text-white">流芯視覺</span>
+      </div>
+      
+      <div class="mobile-cta">
+        <a href="#contact" class="mobile-cta-btn">諮詢</a>
       </div>
     </div>
     
-    <div class="overflow-x-auto mobile-nav-scroll">
-      <div class="flex gap-6 pl-4 pr-8 py-3" style="min-width: max-content;">
-        <a href="#top" class="text-sm text-[#193a55] font-semibold border-b-2 whitespace-nowrap px-2 py-1 rounded-md bg-[#193a55]/10" style="border-color:#193a55">首頁</a>
-        <a href="#showreel" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">精選作品集</a>
-        <a href="#advantages" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">關於我們</a>
-        <a href="#cases" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">AI應用項目</a>
-        <a href="#process" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">服務流程</a>
-        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">常見問題</a>
-        <a href="blog.html" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">文章專欄</a>
-      </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+      <!-- Close button (X) -->
+      <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="關閉選單">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      
+      <ul class="mobile-menu">
+        <li class="mobile-menu-item">
+          <a href="#top" onclick="closeMobileMenu()">首頁</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="#showreel" onclick="closeMobileMenu()">精選作品集</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="#advantages" onclick="closeMobileMenu()">關於我們</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="#cases" onclick="closeMobileMenu()">AI應用項目</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="#process" onclick="closeMobileMenu()">服務流程</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="faq.html" onclick="closeMobileMenu()">常見問題</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="blog.html" onclick="closeMobileMenu()">文章專欄</a>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -268,15 +953,15 @@
         <div id="video-fallback" class="absolute inset-0 h-full w-full object-cover bg-cover bg-center" style="background-image: url('https://vz-12fd57b1-764.b-cdn.net/0fa9a53c-e39d-4c6f-b75f-23be41782997/thumbnail.jpg');">
         </div>
         <div class="absolute inset-0 bg-[radial-gradient(70%_80%_at_20%_50%,rgba(255,255,255,.35),transparent_60%),linear-gradient(to_top,rgba(255,255,255,.6),transparent_35%)]"></div>
-                <div class="absolute inset-0">
+        <div class="absolute inset-0">
           <!-- Desktop Layout (md and up) -->
           <div class="hidden md:flex mx-auto h-full max-w-7xl items-center px-6 lg:px-8">
             <div class="max-w-2xl text-left">
               <h1 class="text-balance text-white font-semibold leading-tight text-4xl lg:text-5xl xl:text-6xl leading-tight" style="text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);">AI 影像美學團隊，打造品牌完美視覺</h1>
               <p class="mt-5 max-w-xl text-white text-lg leading-relaxed" style="text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);">告別傳統攝影製作的耗時與高成本，減少70% 的製作時間與預算。</p>
               <div class="mt-8 flex flex-row items-center gap-3">
-                        <a href="#contact" class="inline-flex min-w-[220px] items-center justify-center rounded-full px-5 py-3 text-sm font-semibold shadow-[0_0_40px_rgba(25,58,85,.35)] hover:shadow-[0_0_50px_rgba(25,58,85,.5)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#193a55] transition-all duration-200" style="background-color:#193a55;color:white">預約諮詢</a>
-        <a href="#showreel" class="inline-flex min-w-[200px] items-center justify-center rounded-full border border-black/20 px-5 py-3 text-white font-semibold hover:border-black/40 hover:bg-white/10 hover:shadow-md transition-all duration-200">精選作品集</a>
+                <a href="#contact" class="inline-flex min-w-[220px] items-center justify-center rounded-full px-5 py-3 text-sm font-semibold shadow-[0_0_40px_rgba(25,58,85,.35)] hover:shadow-[0_0_50px_rgba(25,58,85,.5)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#193a55] transition-all duration-200" style="background-color:#193a55;color:white">預約諮詢</a>
+                <a href="#showreel" class="inline-flex min-w-[200px] items-center justify-center rounded-full border border-black/20 px-5 py-3 text-white font-semibold hover:border-black/40 hover:bg-white/10 hover:shadow-md transition-all duration-200">精選作品集</a>
               </div>
             </div>
           </div>
@@ -289,13 +974,14 @@
                 <p class="text-white text-sm sm:text-base leading-relaxed mb-6 px-2" style="text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.4);">告別傳統攝影製作的耗時與高成本，<br>
                   減少70% 的製作時間與預算。</p>
                 <div class="flex flex-row items-center justify-center gap-3">
-                          <a href="#contact" class="inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold shadow-[0_0_20px_rgba(25,58,85,.35)] hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200 active:scale-95" style="background-color:#193a55;color:white">預約諮詢</a>
-        <a href="#showreel" class="inline-flex items-center justify-center rounded-full border border-white/30 px-4 py-2.5 text-white text-sm font-semibold hover:bg-white/10 hover:shadow-md transition-all duration-200 active:scale-95">精選作品集</a>
+                  <a href="#contact" class="inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-semibold shadow-[0_0_20px_rgba(25,58,85,.35)] hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200 active:scale-95" style="background-color:#193a55;color:white">預約諮詢</a>
+                  <a href="#showreel" class="inline-flex items-center justify-center rounded-full border border-white/30 px-4 py-2.5 text-white text-sm font-semibold hover:bg-white/10 hover:shadow-md transition-all duration-200 active:scale-95">精選作品集</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
   </section>
 
@@ -347,7 +1033,18 @@
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal1')">
             <div class="relative aspect-video w-full overflow-hidden">
               <div style="position:relative;padding-top:56.25%;" class="h-full w-full">
-                <iframe src="https://iframe.mediadelivery.net/embed/484739/8a3d179f-469c-405c-859f-30853f326d99?autoplay=true&loop=true&muted=true&preload=true&responsive=true" loading="lazy" style="border:0;position:absolute;top:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" class="pointer-events-none"></iframe>
+                <!-- Loading skeleton -->
+                <div class="showreel-skeleton"></div>
+                
+                <!-- Lazy loaded iframe with autoplay -->
+                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300" 
+                        data-src="https://iframe.mediadelivery.net/embed/484739/8a3d179f-469c-405c-859f-30853f326d99?autoplay=true&loop=true&muted=true&preload=true&responsive=true" 
+                        loading="lazy" 
+                        style="border:0;" 
+                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+                        allowfullscreen="true" 
+                        class="pointer-events-none">
+                </iframe>
               </div>
               <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
             </div>
@@ -355,7 +1052,18 @@
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal2')">
             <div class="relative aspect-video w-full overflow-hidden">
               <div style="position:relative;padding-top:56.25%;" class="h-full w-full">
-                <iframe src="https://iframe.mediadelivery.net/embed/484739/e8409ff4-2ef0-451c-9789-0e72a247bb10?autoplay=true&loop=true&muted=true&preload=true&responsive=true" loading="lazy" style="border:0;position:absolute;top:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" class="pointer-events-none"></iframe>
+                <!-- Loading skeleton -->
+                <div class="showreel-skeleton"></div>
+                
+                <!-- Lazy loaded iframe with autoplay -->
+                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300" 
+                        data-src="https://iframe.mediadelivery.net/embed/484739/e8409ff4-2ef0-451c-9789-0e72a247bb10?autoplay=true&loop=true&muted=true&preload=true&responsive=true" 
+                        loading="lazy" 
+                        style="border:0;" 
+                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+                        allowfullscreen="true" 
+                        class="pointer-events-none">
+                </iframe>
               </div>
               <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
             </div>
@@ -363,7 +1071,18 @@
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal3')">
             <div class="relative aspect-video w-full overflow-hidden">
               <div style="position:relative;padding-top:56.25%;" class="h-full w-full">
-                <iframe src="https://iframe.mediadelivery.net/embed/484739/2c6e025ac-4f35-4f14-99d9-5dffe3d1a5ac?autoplay=true&loop=true&muted=true&preload=true&responsive=true" loading="lazy" style="border:0;position:absolute;top:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" class="pointer-events-none"></iframe>
+                <!-- Loading skeleton -->
+                <div class="showreel-skeleton"></div>
+                
+                <!-- Lazy loaded iframe with autoplay -->
+                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300" 
+                        data-src="https://iframe.mediadelivery.net/embed/484739/2c6e025ac-4f35-4f14-99d9-5dffe3d1a5ac?autoplay=true&loop=true&muted=true&preload=true&responsive=true" 
+                        loading="lazy" 
+                        style="border:0;" 
+                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+                        allowfullscreen="true" 
+                        class="pointer-events-none">
+                </iframe>
               </div>
               <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
             </div>
@@ -372,7 +1091,18 @@
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal4')">
             <div class="relative aspect-video w-full overflow-hidden">
               <div style="position:relative;padding-top:56.25%;" class="h-full w-full">
-                <iframe src="https://iframe.mediadelivery.net/embed/484739/dea84748-1887-4b58-85d8-23edc479d15c?autoplay=true&loop=true&muted=true&preload=true&responsive=true" loading="lazy" style="border:0;position:absolute;top:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" class="pointer-events-none"></iframe>
+                <!-- Loading skeleton -->
+                <div class="showreel-skeleton"></div>
+                
+                <!-- Lazy loaded iframe with autoplay -->
+                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300" 
+                        data-src="https://iframe.mediadelivery.net/embed/484739/dea84748-1887-4b58-85d8-23edc479d15c?autoplay=true&loop=true&muted=true&preload=true&responsive=true" 
+                        loading="lazy" 
+                        style="border:0;" 
+                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+                        allowfullscreen="true" 
+                        class="pointer-events-none">
+                </iframe>
               </div>
               <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
             </div>
@@ -380,7 +1110,18 @@
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal5')">
             <div class="relative aspect-video w-full overflow-hidden">
               <div style="position:relative;padding-top:56.25%;" class="h-full w-full">
-                <iframe src="https://iframe.mediadelivery.net/embed/484739/c6e025ac-4f35-4f14-99d9-5dffe3d1a5ac?autoplay=true&loop=true&muted=true&preload=true&responsive=true" loading="lazy" style="border:0;position:absolute;top:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" class="pointer-events-none"></iframe>
+                <!-- Loading skeleton -->
+                <div class="showreel-skeleton"></div>
+                
+                <!-- Lazy loaded iframe with autoplay -->
+                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300" 
+                        data-src="https://iframe.mediadelivery.net/embed/484739/c6e025ac-4f35-4f14-99d9-5dffe3d1a5ac?autoplay=true&loop=true&muted=true&preload=true&responsive=true" 
+                        loading="lazy" 
+                        style="border:0;" 
+                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+                        allowfullscreen="true" 
+                        class="pointer-events-none">
+                </iframe>
               </div>
               <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
             </div>
@@ -388,7 +1129,18 @@
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal6')">
             <div class="relative aspect-video w-full overflow-hidden">
               <div style="position:relative;padding-top:56.25%;" class="h-full w-full">
-                <iframe src="https://iframe.mediadelivery.net/embed/484739/6d74b994-297e-49c6-8892-aee14c50f49f?autoplay=true&loop=true&muted=true&preload=true&responsive=true" loading="lazy" style="border:0;position:absolute;top:0;height:100%;width:100%;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" class="pointer-events-none"></iframe>
+                <!-- Loading skeleton -->
+                <div class="showreel-skeleton"></div>
+                
+                <!-- Lazy loaded iframe with autoplay -->
+                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300" 
+                        data-src="https://iframe.mediadelivery.net/embed/484739/6d74b994-297e-49c6-8892-aee14c50f49f?autoplay=true&loop=true&muted=true&preload=true&responsive=true" 
+                        loading="lazy" 
+                        style="border:0;" 
+                        allow="accelerometer:gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+                        allowfullscreen="true" 
+                        class="pointer-events-none">
+                </iframe>
               </div>
               <div class="absolute bottom-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">▶︎ <span>點擊放大</span></div>
             </div>
@@ -594,7 +1346,43 @@
     </div>
   </footer>
 
+  <!-- Sticky CTA Buttons -->
+  <div class="sticky-cta">
+    <!-- 取得報價按鈕 -->
+    <button class="sticky-cta-button primary" onclick="openMiniContact()" title="取得報價">
+      💰
+      <span class="tooltip">取得報價</span>
+    </button>
+    
+    <!-- LINE 官方帳號按鈕 -->
+    <a href="https://lin.ee/0eBvgAV" target="_blank" class="sticky-cta-button secondary" title="LINE 官方帳號">
+      💬
+      <span class="tooltip">LINE 官方帳號</span>
+    </a>
+  </div>
 
+  <!-- Mini Contact Form Modal -->
+  <div id="miniContactModal" class="mini-contact-modal">
+    <div class="mini-contact-content">
+      <button class="mini-contact-close" onclick="closeMiniContact()">&times;</button>
+      
+      <div class="mini-contact-header">
+        <h3>取得報價</h3>
+        <p>留下資訊，我們將在 24 小時內回覆</p>
+      </div>
+      
+      <form class="mini-contact-form" action="https://formspree.io/f/mdkdqdqp" method="POST" enctype="text/plain">
+        <input type="text" name="Name" placeholder="您的姓名" required>
+        <input type="email" name="Email" placeholder="您的 Email" required>
+        <textarea name="Message" placeholder="簡述您的專案內容、時程與預算區間" required></textarea>
+        
+        <div class="mini-contact-actions">
+          <button type="submit" class="submit-btn">送出</button>
+          <button type="button" class="cancel-btn" onclick="closeMiniContact()">取消</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div id="modal1" class="modal">
     <div class="modal-content">
@@ -641,11 +1429,35 @@
       <span class="close" onclick="closeModal('modal6')">&times;</span>
       <!-- Modal skeleton loading -->
       <div id="modal6-skeleton" class="modal-skeleton"></div>
-      <iframe class="w-full h-full modal-iframe" src="https://iframe.mediadelivery.net/embed/484739/6d74b994-297e-49c6-8892-aee14c50f49f?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=true" loading="lazy" style="border:0;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" onload="handleModalVideoLoad('modal6', this)"></iframe>
+      <iframe class="w-full h-full modal-iframe" src="https://iframe.mediadelivery.net/embed/484739/6d74b994-297e-49c6-8892-aee14c50f49f?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=true" loading="lazy" style="border:0;" allow="accelerometer:gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" onload="handleModalVideoLoad('modal6', this)"></iframe>
     </div>
   </div>
 
   <script>
+    // Video optimization variables
+    let showreelObserver = null;
+    let videoLoadStats = {
+      showreelLoaded: 0,
+      totalShowreel: 6
+    };
+    
+    // Performance monitoring
+    const startTime = performance.now();
+    
+    // Video loading performance tracking
+    function trackVideoLoad(videoType, loadTime) {
+      console.log(`${videoType} loaded in ${loadTime.toFixed(2)}ms`);
+      
+      // Send performance data to analytics if available
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'video_load_performance', {
+          video_type: videoType,
+          load_time: loadTime,
+          page_load_time: performance.now() - startTime
+        });
+      }
+    }
+
     // Hero video loading handler with blur effects
     function handleHeroVideoLoad(iframe) {
       const skeleton = document.getElementById('hero-skeleton');
@@ -674,6 +1486,60 @@
           }
         }, 1000);
       }, 1000);
+    }
+
+    // Initialize IntersectionObserver for showreel videos (with autoplay)
+    function initShowreelObserver() {
+      if (showreelObserver) return;
+      
+      showreelObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const iframe = entry.target;
+            
+            if (iframe && !iframe.src && iframe.dataset.src) {
+              // Load video when entering viewport
+              const loadStartTime = performance.now();
+              
+              // Set src to trigger loading (autoplay will work)
+              iframe.src = iframe.dataset.src;
+              
+              // Show iframe after load
+              iframe.onload = function() {
+                const loadTime = performance.now() - loadStartTime;
+                trackVideoLoad('showreel', loadTime);
+                
+                // Hide skeleton and show iframe
+                const skeleton = iframe.parentElement.querySelector('.showreel-skeleton');
+                if (skeleton) {
+                  skeleton.style.opacity = '0';
+                  setTimeout(() => skeleton.style.display = 'none', 300);
+                }
+                
+                // Show iframe with smooth transition
+                setTimeout(() => {
+                  iframe.classList.add('loaded');
+                  iframe.style.opacity = '1';
+                }, 100);
+                
+                // Update loading stats
+                videoLoadStats.showreelLoaded++;
+                
+                // Log progress
+                console.log(`Showreel progress: ${videoLoadStats.showreelLoaded}/${videoLoadStats.totalShowreel} videos loaded`);
+              };
+            }
+          }
+        });
+      }, {
+        rootMargin: '100px', // Start loading 100px before entering viewport for smooth autoplay
+        threshold: 0.1
+      });
+      
+      // Observe all showreel video containers
+      document.querySelectorAll('.showreel-video').forEach(iframe => {
+        showreelObserver.observe(iframe);
+      });
     }
 
     // Modal video loading handler
@@ -723,13 +1589,29 @@
       }
     }
 
-    // Initialize hero video on page load
+    // Initialize page optimizations
     window.addEventListener('load', function() {
-      const heroVideo = document.querySelector('.hero-video-iframe');
-      if (heroVideo) {
-        // Ensure pointer events are disabled
-        heroVideo.style.pointerEvents = 'none';
-      }
+      // Initialize showreel observer for lazy loading
+      initShowreelObserver();
+      
+      // Performance report after page load
+      setTimeout(() => {
+        const totalLoadTime = performance.now() - startTime;
+        console.log(`🎬 Video Optimization Report:`);
+        console.log(`📊 Page Load Time: ${totalLoadTime.toFixed(2)}ms`);
+        console.log(`🎥 Hero Video: Preloaded for immediate display`);
+        console.log(`📺 Showreel Videos: ${videoLoadStats.showreelLoaded}/${videoLoadStats.totalShowreel} loaded`);
+        console.log(`💡 Tip: Videos load on-demand but maintain autoplay functionality`);
+        
+        // Send page load performance data if analytics available
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'page_load_performance', {
+            page_load_time: totalLoadTime,
+            hero_video_preloaded: true,
+            showreel_videos_loaded: videoLoadStats.showreelLoaded
+          });
+        }
+      }, 2000);
     });
 
     // Mobile navigation gradient control
@@ -763,6 +1645,289 @@
         // Check on window resize
         window.addEventListener('resize', checkScrollable);
       }
+    });
+
+    // Mini Contact Form Functions
+    function openMiniContact() {
+      const modal = document.getElementById('miniContactModal');
+      modal.style.display = 'block';
+      
+      // Add body scroll lock
+      document.body.style.overflow = 'hidden';
+      
+      // Focus on first input
+      setTimeout(() => {
+        const firstInput = modal.querySelector('input');
+        if (firstInput) firstInput.focus();
+      }, 100);
+    }
+
+    function closeMiniContact() {
+      const modal = document.getElementById('miniContactModal');
+      modal.style.display = 'none';
+      
+      // Restore body scroll
+      document.body.style.overflow = 'auto';
+      
+      // Reset form
+      const form = modal.querySelector('form');
+      if (form) form.reset();
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+      const modal = document.getElementById('miniContactModal');
+      if (event.target === modal) {
+        closeMiniContact();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeMiniContact();
+      }
+    });
+
+    // Handle form submission
+    document.addEventListener('DOMContentLoaded', function() {
+      const miniContactForm = document.querySelector('.mini-contact-form');
+      if (miniContactForm) {
+        miniContactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form data
+          const formData = new FormData(this);
+          const name = formData.get('Name');
+          const email = formData.get('Email');
+          const message = formData.get('Message');
+          
+          // Simple validation
+          if (!name || !email || !message) {
+            alert('請填寫所有必填欄位');
+            return;
+          }
+          
+          // Show loading state
+          const submitBtn = this.querySelector('.submit-btn');
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = '送出中...';
+          submitBtn.disabled = true;
+          
+          // Submit form using Formspree
+          fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              alert('感謝您的訊息！我們將在 24 小時內回覆。');
+              closeMiniContact();
+            } else {
+              throw new Error('提交失敗');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('提交失敗，請稍後再試或直接聯絡我們。');
+          })
+          .finally(() => {
+            // Restore button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          });
+        });
+      }
+
+      // Navigation scroll effects and active state management
+      initNavigationEffects();
+    });
+
+    // Navigation effects and scroll handling
+    function initNavigationEffects() {
+      const header = document.querySelector('header');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('section[id]');
+      
+      // Header scroll effect
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+        
+        // Update active navigation based on scroll position
+        updateActiveNavigation();
+      });
+
+      // Update active navigation state
+      function updateActiveNavigation() {
+        const scrollPos = window.scrollY + 100;
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          const sectionId = section.getAttribute('id');
+          
+          if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+            // Remove active class from all links
+            navLinks.forEach(link => {
+              link.classList.remove('active');
+            });
+            
+            // Add active class to current section link
+            const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+            if (activeLink) {
+              activeLink.classList.add('active');
+            }
+          }
+        });
+      }
+
+      // Smooth scroll for navigation links
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          
+          // Only handle internal links
+          if (href.startsWith('#')) {
+            e.preventDefault();
+            const targetSection = document.querySelector(href);
+            
+            if (targetSection) {
+              const headerHeight = header.offsetHeight;
+              const targetPosition = targetSection.offsetTop - headerHeight - 20;
+              
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
+
+      // Add hover sound effect (optional)
+      navLinks.forEach(link => {
+        link.addEventListener('mouseenter', function() {
+          // Add subtle hover effect
+          this.style.transform = 'translateY(-2px)';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+          // Reset transform
+          this.style.transform = 'translateY(0)';
+        });
+      });
+
+      // Mobile navigation improvements
+      const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+      mobileNavLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          // Add click feedback
+          this.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+          }, 150);
+        });
+      });
+    }
+
+    // Mobile Burger Menu Functions
+    function toggleMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      if (header.classList.contains('menu-opened')) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    }
+
+    function openMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      header.classList.add('menu-opened');
+      overlay.classList.add('active');
+      body.style.overflow = 'hidden';
+      
+      // Add entrance animation for menu items
+      setTimeout(() => {
+        const menuItems = document.querySelectorAll('.mobile-menu-item');
+        menuItems.forEach((item, index) => {
+          item.style.transitionDelay = `${0.07 * (index + 1) + 0.2}s`;
+        });
+      }, 100);
+    }
+
+    function closeMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      header.classList.remove('menu-opened');
+      overlay.classList.remove('active');
+      body.style.overflow = 'auto';
+      
+      // Reset menu items animation
+      const menuItems = document.querySelectorAll('.mobile-menu-item');
+      menuItems.forEach((item, index) => {
+        item.style.transitionDelay = `${0.56 - (index * 0.07)}s`;
+      });
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const header = document.querySelector('.mobile-header');
+      
+      if (overlay.classList.contains('active') && 
+          !overlay.contains(event.target) && 
+          !header.contains(event.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Close mobile menu with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeMobileMenu();
+      }
+    });
+
+    // Smooth scroll for mobile menu links
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuLinks = document.querySelectorAll('.mobile-menu-item a');
+      
+      mobileMenuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          
+          // Only handle internal links
+          if (href.startsWith('#')) {
+            e.preventDefault();
+            const targetSection = document.querySelector(href);
+            
+            if (targetSection) {
+              const headerHeight = document.querySelector('header').offsetHeight;
+              const targetPosition = targetSection.offsetTop - headerHeight - 20;
+              
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+            }
+          }
+        });
+      });
     });
   </script>
 </body>

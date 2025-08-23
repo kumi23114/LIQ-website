@@ -66,6 +66,243 @@
     .mobile-nav-container.show-gradient::after {
       opacity: 1;
     }
+
+    /* Mobile Navigation Styles - Burger Menu */
+    .mobile-nav-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .mobile-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      width: 100%;
+      background: rgba(25, 58, 85, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0 20px;
+      transition: all 0.5s ease-out;
+    }
+
+    .burger-container {
+      position: relative;
+      display: inline-block;
+      height: 50px;
+      width: 50px;
+      cursor: pointer;
+      transform: rotate(0deg);
+      transition: all 0.3s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #burger {
+      width: 18px;
+      height: 8px;
+      position: relative;
+      display: block;
+      margin: -4px auto 0;
+      top: 50%;
+    }
+
+    .bar {
+      width: 100%;
+      height: 2px;
+      display: block;
+      position: relative;
+      background: #FFF;
+      transition: all 0.3s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      transition-delay: 0s;
+      border-radius: 1px;
+    }
+
+    .bar.topBar {
+      transform: translateY(0px) rotate(0deg);
+    }
+
+    .bar.btmBar {
+      transform: translateY(6px) rotate(0deg);
+    }
+
+    .mobile-logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #FFF;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .mobile-cta {
+      display: flex;
+      align-items: center;
+    }
+
+    .mobile-cta-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-cta-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(25, 58, 85, 0.98);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease-out;
+      z-index: 999;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Mobile Menu Close Button */
+    .mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .mobile-menu-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-menu-close:active {
+      transform: scale(0.95);
+    }
+
+    .mobile-menu-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .mobile-menu {
+      position: relative;
+      display: block;
+      padding: 80px 48px 0 48px;
+      padding-right: 80px;
+      list-style: none;
+      margin: 0;
+    }
+
+    .mobile-menu-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 5px;
+      transform: scale(1.15) translateY(-30px);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.4, 0.01, 0.165, 0.99), opacity 0.6s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+    }
+
+    .mobile-menu-item:nth-child(1) { transition-delay: 0.07s; }
+    .mobile-menu-item:nth-child(2) { transition-delay: 0.14s; }
+    .mobile-menu-item:nth-child(3) { transition-delay: 0.21s; }
+    .mobile-menu-item:nth-child(4) { transition-delay: 0.28s; }
+    .mobile-menu-item:nth-child(5) { transition-delay: 0.35s; }
+    .mobile-menu-item:nth-child(6) { transition-delay: 0.42s; }
+    .mobile-menu-item:nth-child(7) { transition-delay: 0.49s; }
+
+    .mobile-menu-overlay.active .mobile-menu-item {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+    }
+
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(1) { transition-delay: 0.27s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(2) { transition-delay: 0.34s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(3) { transition-delay: 0.41s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(4) { transition-delay: 0.48s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(5) { transition-delay: 0.55s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(6) { transition-delay: 0.62s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(7) { transition-delay: 0.69s; }
+
+    .mobile-menu-item a {
+      display: block;
+      position: relative;
+      color: #FFF;
+      font-weight: 300;
+      text-decoration: none;
+      font-size: 20px;
+      line-height: 2.5;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-item a:hover {
+      color: #a8c5e4;
+      transform: translateX(10px);
+    }
+
+    /* Burger Menu Animation States */
+    .mobile-header.menu-opened {
+      background: rgba(25, 58, 85, 1);
+    }
+
+    .mobile-header.menu-opened .burger-container {
+      transform: rotate(90deg);
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar {
+      transition: all 0.4s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      transition-delay: 0.2s;
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar.topBar {
+      transform: translateY(4px) rotate(45deg);
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar.btmBar {
+      transform: translateY(3px) rotate(-45deg);
+    }
+
+    .mobile-header.menu-opened .mobile-logo {
+      transform: translateX(-50%) scale(0.9);
+      opacity: 0.8;
+    }
+
+    .mobile-header.menu-opened .mobile-cta {
+      transform: translateX(75px);
+      transition-delay: 0.3s;
+    }
   </style>
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
@@ -89,30 +326,57 @@
   </header>
 
   <!-- Mobile Navigation Bar -->
-  <div class="md:hidden border-b border-black/10 bg-white shadow-sm mobile-nav-container">
-    <!-- Scroll hint for mobile navigation -->
-    <div class="px-4 py-2 text-center">
-      <div class="inline-flex items-center gap-2 text-xs text-zinc-500 bg-zinc-100 px-3 py-1.5 rounded-full">
-        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
-        </svg>
-        <span>左右滑動瀏覽選單</span>
-        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
+  <div class="md:hidden mobile-nav-container">
+    <!-- Mobile Header with Burger Menu -->
+    <div class="mobile-header">
+      <div class="burger-container" onclick="toggleMobileMenu()">
+        <div id="burger">
+          <div class="bar topBar"></div>
+          <div class="bar btmBar"></div>
+        </div>
+      </div>
+      
+      <div class="mobile-logo">
+        <span class="font-semibold tracking-wide text-white">流芯視覺</span>
+      </div>
+      
+      <div class="mobile-cta">
+        <a href="index.html#contact" class="mobile-cta-btn">諮詢</a>
       </div>
     </div>
     
-    <div class="overflow-x-auto mobile-nav-scroll">
-      <div class="flex gap-6 pl-4 pr-8 py-3" style="min-width: max-content;">
-        <a href="index.html#top" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">首頁</a>
-        <a href="index.html#showreel" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">精選作品集</a>
-        <a href="index.html#advantages" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">關於我們</a>
-        <a href="index.html#cases" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">AI應用項目</a>
-        <a href="index.html#process" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">服務流程</a>
-        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">常見問題</a>
-        <a href="blog.html" class="text-sm text-[#193a55] font-semibold border-b-2 whitespace-nowrap px-2 py-1 rounded-md bg-[#193a55]/10" style="border-color:#193a55">文章專欄</a>
-      </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+      <!-- Close button (X) -->
+      <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="關閉選單">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      
+      <ul class="mobile-menu">
+        <li class="mobile-menu-item">
+          <a href="index.html#top" onclick="closeMobileMenu()">首頁</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#showreel" onclick="closeMobileMenu()">精選作品集</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#advantages" onclick="closeMobileMenu()">關於我們</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#cases" onclick="closeMobileMenu()">AI應用項目</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#process" onclick="closeMobileMenu()">服務流程</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="faq.html" onclick="closeMobileMenu()">常見問題</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="blog.html" onclick="closeMobileMenu()">文章專欄</a>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -345,6 +609,72 @@
   </footer>
 
   <script>
+    // Mobile Burger Menu Functions
+    function toggleMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      if (header.classList.contains('menu-opened')) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    }
+
+    function openMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      header.classList.add('menu-opened');
+      overlay.classList.add('active');
+      body.style.overflow = 'hidden';
+      
+      // Add entrance animation for menu items
+      setTimeout(() => {
+        const menuItems = document.querySelectorAll('.mobile-menu-item');
+        menuItems.forEach((item, index) => {
+          item.style.transitionDelay = `${0.07 * (index + 1) + 0.2}s`;
+        });
+      }, 100);
+    }
+
+    function closeMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      header.classList.remove('menu-opened');
+      overlay.classList.remove('active');
+      body.style.overflow = 'auto';
+      
+      // Reset menu items animation
+      const menuItems = document.querySelectorAll('.mobile-menu-item');
+      menuItems.forEach((item, index) => {
+        item.style.transitionDelay = `${0.56 - (index * 0.07)}s`;
+      });
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const header = document.querySelector('.mobile-header');
+      
+      if (overlay.classList.contains('active') && 
+          !overlay.contains(event.target) && 
+          !header.contains(event.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Close mobile menu with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeMobileMenu();
+      }
+    });
+
     // Newsletter subscription handler
     function handleNewsletter(event) {
       event.preventDefault();

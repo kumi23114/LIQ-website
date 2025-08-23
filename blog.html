@@ -57,45 +57,563 @@
       to { opacity: 1; }
     }
 
-    /* Mobile navigation styles */
-    .mobile-nav-scroll::-webkit-scrollbar {
-      height: 4px;
-    }
-    
-    .mobile-nav-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    .mobile-nav-scroll::-webkit-scrollbar-thumb {
-      background: rgba(25, 58, 85, 0.3);
-      border-radius: 2px;
-    }
-    
-    .mobile-nav-scroll::-webkit-scrollbar-thumb:hover {
-      background: rgba(25, 58, 85, 0.5);
-    }
-
-    /* Mobile navigation gradient hint */
-    .mobile-nav-container {
+    /* Navigation animations and styles */
+    .nav-link {
       position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
 
-    .mobile-nav-container::after {
+    .nav-link:hover {
+      color: #193a55 !important;
+      transform: translateY(-1px);
+    }
+
+    .nav-underline {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #193a55 0%, #2d5a7a 100%);
+      transition: width 0.3s ease;
+      border-radius: 1px;
+    }
+
+    .nav-link:hover .nav-underline {
+      width: 100%;
+    }
+
+    /* Active navigation state */
+    .nav-link.active .nav-underline {
+      width: 100%;
+    }
+
+    .nav-link.active {
+      color: #193a55 !important;
+      font-weight: 600;
+    }
+
+    /* Mobile Navigation Styles - Burger Menu */
+    .mobile-nav-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .mobile-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      width: 100%;
+      background: rgba(25, 58, 85, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0 20px;
+      transition: all 0.5s ease-out;
+    }
+
+    .burger-container {
+      position: relative;
+      display: inline-block;
+      height: 50px;
+      width: 50px;
+      cursor: pointer;
+      transform: rotate(0deg);
+      transition: all 0.3s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #burger {
+      width: 18px;
+      height: 8px;
+      position: relative;
+      display: block;
+      margin: -4px auto 0;
+      top: 50%;
+    }
+
+    .bar {
+      width: 100%;
+      height: 2px;
+      display: block;
+      position: relative;
+      background: #FFF;
+      transition: all 0.3s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      transition-delay: 0s;
+      border-radius: 1px;
+    }
+
+    .bar.topBar {
+      transform: translateY(0px) rotate(0deg);
+    }
+
+    .bar.btmBar {
+      transform: translateY(6px) rotate(0deg);
+    }
+
+    .mobile-logo {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #FFF;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .mobile-cta {
+      display: flex;
+      align-items: center;
+    }
+
+    .mobile-cta-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-cta-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Menu Overlay */
+    .mobile-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(25, 58, 85, 0.98);
+      backdrop-filter: blur(20px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease-out;
+      z-index: 999;
+    }
+
+    .mobile-menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Mobile Menu Close Button */
+    .mobile-menu-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .mobile-menu-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .mobile-menu-close:active {
+      transform: scale(0.95);
+    }
+
+    .mobile-menu-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .mobile-menu {
+      position: relative;
+      display: block;
+      padding: 80px 48px 0 48px;
+      padding-right: 80px;
+      list-style: none;
+      margin: 0;
+    }
+
+    .mobile-menu-item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 5px;
+      transform: scale(1.15) translateY(-30px);
+      opacity: 0;
+      transition: transform 0.5s cubic-bezier(0.4, 0.01, 0.165, 0.99), opacity 0.6s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+    }
+
+    .mobile-menu-item:nth-child(1) { transition-delay: 0.07s; }
+    .mobile-menu-item:nth-child(2) { transition-delay: 0.14s; }
+    .mobile-menu-item:nth-child(3) { transition-delay: 0.21s; }
+    .mobile-menu-item:nth-child(4) { transition-delay: 0.28s; }
+    .mobile-menu-item:nth-child(5) { transition-delay: 0.35s; }
+    .mobile-menu-item:nth-child(6) { transition-delay: 0.42s; }
+    .mobile-menu-item:nth-child(7) { transition-delay: 0.49s; }
+
+    .mobile-menu-overlay.active .mobile-menu-item {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+    }
+
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(1) { transition-delay: 0.27s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(2) { transition-delay: 0.34s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(3) { transition-delay: 0.41s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(4) { transition-delay: 0.48s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(5) { transition-delay: 0.55s; }
+    .mobile-menu-overlay.active .mobile-menu-item:nth-child(6) { transition-delay: 0.62s; }
+    .mobile-menu-item:nth-child(7) { transition-delay: 0.69s; }
+
+    .mobile-menu-item a {
+      display: block;
+      position: relative;
+      color: #FFF;
+      font-weight: 300;
+      text-decoration: none;
+      font-size: 20px;
+      line-height: 2.5;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-item a:hover {
+      color: #a8c5e4;
+      transform: translateX(10px);
+    }
+
+    /* Burger Menu Animation States */
+    .mobile-header.menu-opened {
+      background: rgba(25, 58, 85, 1);
+    }
+
+    .mobile-header.menu-opened .burger-container {
+      transform: rotate(90deg);
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar {
+      transition: all 0.4s cubic-bezier(0.4, 0.01, 0.165, 0.99);
+      transition-delay: 0.2s;
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar.topBar {
+      transform: translateY(4px) rotate(45deg);
+    }
+
+    .mobile-header.menu-opened .burger-container #burger .bar.btmBar {
+      transform: translateY(3px) rotate(-45deg);
+    }
+
+    .mobile-header.menu-opened .mobile-logo {
+      transform: translateX(-50%) scale(0.9);
+      opacity: 0.8;
+    }
+
+    .mobile-header.menu-opened .mobile-cta {
+      transform: translateX(75px);
+      transition-delay: 0.3s;
+    }
+
+    /* Header animations */
+    header {
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Logo hover effects */
+    .group:hover .h-8 {
+      transform: rotate(5deg) scale(1.05);
+    }
+
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Navigation item stagger animation */
+    nav a {
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    nav a:nth-child(1) { animation-delay: 0.1s; }
+    nav a:nth-child(2) { animation-delay: 0.2s; }
+    nav a:nth-child(3) { animation-delay: 0.3s; }
+    nav a:nth-child(4) { animation-delay: 0.3s; }
+    nav a:nth-child(5) { animation-delay: 0.4s; }
+    nav a:nth-child(6) { animation-delay: 0.5s; }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hover state improvements */
+    .nav-link:hover span {
+      transform: translateY(-1px);
+    }
+
+    /* Active link indicator */
+    .nav-link.active::after {
       content: '';
       position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 50px;
-      background: linear-gradient(to left, rgba(0, 0, 0, 0.08), transparent);
-      pointer-events: none;
-      z-index: 10;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      background: #193a55;
+      border-radius: 50%;
       opacity: 0;
       transition: opacity 0.3s ease;
     }
 
-    .mobile-nav-container.show-gradient::after {
+    .nav-link.active::after {
       opacity: 1;
+    }
+
+    /* Sticky CTA Button Styles */
+    .sticky-cta {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sticky-cta-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .sticky-cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .sticky-cta-button.primary {
+      background: linear-gradient(135deg, #193a55 0%, #2d5a7a 100%);
+      color: white;
+    }
+
+    .sticky-cta-button.secondary {
+      background: linear-gradient(135deg, #00c300 0%, #00a000 100%);
+      color: white;
+    }
+
+    .sticky-cta-button .tooltip {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .sticky-cta-button:hover .tooltip {
+      opacity: 1;
+    }
+
+    .sticky-cta-button .tooltip::after {
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 5px solid transparent;
+      border-left-color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Mini Contact Form Modal */
+    .mini-contact-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1001;
+      backdrop-filter: blur(4px);
+    }
+
+    .mini-contact-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    .mini-contact-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+    }
+
+    .mini-contact-close:hover {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .mini-contact-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .mini-contact-header h3 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #193a55;
+      margin-bottom: 8px;
+    }
+
+    .mini-contact-header p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .mini-contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .mini-contact-form input,
+    .mini-contact-form textarea {
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+      font-family: inherit;
+    }
+
+    .mini-contact-form input:focus,
+    .mini-contact-form textarea:focus {
+      outline: none;
+      border-color: #193a55;
+    }
+
+    .mini-contact-form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .mini-contact-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .submit-btn {
+      background: #193a55;
+      color: white;
+    }
+
+    .submit-btn:hover {
+      background: #2d5a7a;
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .cancel-btn {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .cancel-btn:hover {
+      background: #e5e7eb;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
     }
   </style>
 </head>
@@ -103,47 +621,92 @@
   <!-- NAV -->
   <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-      <a href="index.html#top" class="group inline-flex items-center gap-3">
-        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
-        <span class="font-semibold tracking-wide text-zinc-800">流芯視覺</span>
+      <a href="index.html#top" class="group inline-flex items-center gap-3 transition-all duration-300 hover:scale-105">
+        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)] transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(25,58,85,.5)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
+        <span class="font-semibold tracking-wide text-zinc-800 transition-colors duration-300 group-hover:text-[#193a55]">流芯視覺</span>
       </a>
       <nav class="hidden gap-8 md:flex">
-        <a href="index.html#showreel" class="text-sm text-zinc-600 hover:text-zinc-800">精選作品集</a>
-        <a href="index.html#advantages" class="text-sm text-zinc-600 hover:text-zinc-800">關於我們</a>
-        <a href="index.html#cases" class="text-sm text-zinc-600 hover:text-zinc-800">AI應用項目</a>
-        <a href="index.html#process" class="text-sm text-zinc-600 hover:text-zinc-800">服務流程</a>
-        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800">常見問題</a>
-        <a href="blog.html" class="text-sm text-zinc-800 border-b-2" style="border-color:#193a55">文章專欄</a>
+        <a href="index.html#showreel" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">精選作品集</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="index.html#advantages" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">關於我們</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="index.html#cases" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">AI應用項目</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="index.html#process" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">服務流程</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="faq.html" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">常見問題</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="blog.html" class="nav-link active text-sm text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">文章專欄</span>
+          <span class="nav-underline"></span>
+        </a>
       </nav>
-      <a href="index.html#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex" style="background-color:#193a55;color:white">預約諮詢</a>
+      <a href="index.html#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200 active:scale-95" style="background-color:#193a55;color:white">預約諮詢</a>
     </div>
   </header>
 
   <!-- Mobile Navigation Bar -->
-  <div class="md:hidden border-b border-black/10 bg-white shadow-sm mobile-nav-container">
-    <!-- Scroll hint for mobile navigation -->
-    <div class="px-4 py-2 text-center">
-      <div class="inline-flex items-center gap-2 text-xs text-zinc-500 bg-zinc-100 px-3 py-1.5 rounded-full">
-        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
-        </svg>
-        <span>左右滑動瀏覽選單</span>
-        <svg class="w-3 h-3 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-        </svg>
+  <div class="md:hidden mobile-nav-container">
+    <!-- Mobile Header with Burger Menu -->
+    <div class="mobile-header">
+      <div class="burger-container" onclick="toggleMobileMenu()">
+        <div id="burger">
+          <div class="bar topBar"></div>
+          <div class="bar btmBar"></div>
+        </div>
+      </div>
+      
+      <div class="mobile-logo">
+        <span class="font-semibold tracking-wide text-white">流芯視覺</span>
+      </div>
+      
+      <div class="mobile-cta">
+        <a href="index.html#contact" class="mobile-cta-btn">諮詢</a>
       </div>
     </div>
     
-    <div class="overflow-x-auto mobile-nav-scroll">
-      <div class="flex gap-6 pl-4 pr-8 py-3" style="min-width: max-content;">
-        <a href="index.html#top" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">首頁</a>
-        <a href="index.html#showreel" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">精選作品集</a>
-        <a href="index.html#advantages" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">關於我們</a>
-        <a href="index.html#cases" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">AI應用項目</a>
-        <a href="index.html#process" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">服務流程</a>
-        <a href="faq.html" class="text-sm text-zinc-600 hover:text-zinc-800 hover:bg-zinc-100 whitespace-nowrap px-2 py-1 rounded-md transition-colors">常見問題</a>
-        <a href="blog.html" class="text-sm text-[#193a55] font-semibold border-b-2 whitespace-nowrap px-2 py-1 rounded-md bg-[#193a55]/10" style="border-color:#193a55">文章專欄</a>
-      </div>
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+      <!-- Close button (X) -->
+      <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="關閉選單">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      
+      <ul class="mobile-menu">
+        <li class="mobile-menu-item">
+          <a href="index.html#top">首頁</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#showreel">精選作品集</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#advantages">關於我們</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#cases">AI應用項目</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#process">服務流程</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="faq.html">常見問題</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="blog.html">文章專欄</a>
+        </li>
+      </ul>
     </div>
   </div>
 
@@ -159,50 +722,10 @@
   <!-- BLOG SECTION -->
   <section class="border-t border-black/5 py-14 md:py-20 bg-zinc-100">
     <div class="mx-auto max-w-7xl px-4">
-      <!-- Featured Article -->
-      <div class="mb-16">
-        <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl mb-8 text-zinc-900">
-          <span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>精選文章
-        </h2>
-        <article class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
-            <div class="relative aspect-video lg:aspect-square overflow-hidden">
-              <img src="https://images.unsplash.com/photo-1518558400203-08fa1b3c85be?q=80&w=800&auto=format&fit=crop" alt="Featured Article" class="h-full w-full object-cover transition group-hover:scale-105" />
-              <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60"></div>
-              <div class="absolute top-4 left-4 inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur">精選</div>
-            </div>
-            <div class="p-8 flex flex-col justify-center">
-              <div class="flex items-center gap-3 text-sm text-zinc-500 mb-4">
-                <span>AI 影像製作</span>
-                <span>•</span>
-                <span>2024年12月</span>
-              </div>
-              <h3 class="text-2xl font-semibold mb-4 group-hover:text-[#193a55] transition-colors text-zinc-900">
-                AI 如何改變傳統影片製作流程？
-              </h3>
-              <p class="text-zinc-600 mb-6 leading-relaxed">
-                探討 AI 技術如何從腳本生成到後製調色，全方位革新傳統影片製作流程，讓創作者專注於創意表達而非技術細節...
-              </p>
-              <a href="#" class="inline-flex items-center gap-2 text-sm font-semibold text-[#193a55] hover:text-[#0d1a2a] hover:gap-3 transition-all duration-200">
-                閱讀全文
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <!-- Article Categories -->
-      <div class="mb-12">
-        <h3 class="text-xl font-semibold mb-6 text-zinc-900">文章分類</h3>
-        <div class="flex flex-wrap gap-3">
-                  <button class="px-4 py-2 rounded-full border border-black/20 bg-white text-sm font-medium hover:bg-black/5 hover:border-black/40 hover:shadow-md transition-all duration-200 text-zinc-800">全部</button>
-        <button class="px-4 py-2 rounded-full border border-black/20 bg-white text-sm font-medium hover:bg-black/5 hover:border-black/40 hover:shadow-md transition-all duration-200 text-zinc-800">AI 影像製作</button>
-        <button class="px-4 py-2 rounded-full border border-black/20 bg-white text-sm font-medium hover:bg-black/5 hover:border-black/40 hover:shadow-md transition-all duration-200 text-zinc-800">數位行銷</button>
-        <button class="px-4 py-2 rounded-full border border-black/20 bg-white text-sm font-medium hover:bg-black/5 hover:border-black/40 hover:shadow-md transition-all duration-200 text-zinc-800">視覺設計</button>
-        <button class="px-4 py-2 rounded-full border border-black/20 bg-white text-sm font-medium hover:bg-black/5 hover:border-black/40 hover:shadow-md transition-all duration-200 text-zinc-800">產業趨勢</button>
+      <!-- Section Header -->
+      <div class="mb-16 text-center">
+        <div class="inline-flex items-center justify-center mb-4">
+          <span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>
         </div>
       </div>
 
@@ -244,17 +767,6 @@
         </div>
       </div>
 
-
-
-
-
-
-
-
-
-
-      </div>
-
       <!-- Load More Button -->
       <div class="mt-16 text-center">
         <button id="load-more-btn" onclick="loadMorePosts()" class="inline-flex items-center justify-center rounded-full border border-black/20 px-8 py-3 text-sm font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-zinc-800">
@@ -289,6 +801,44 @@
     </div>
   </footer>
 
+  <!-- Sticky CTA Buttons -->
+  <div class="sticky-cta">
+    <!-- 取得報價按鈕 -->
+    <button class="sticky-cta-button primary" onclick="openMiniContact()" title="取得報價">
+      💰
+      <span class="tooltip">取得報價</span>
+    </button>
+    
+    <!-- LINE 官方帳號按鈕 -->
+    <a href="https://lin.ee/0eBvgAV" target="_blank" class="sticky-cta-button secondary" title="LINE 官方帳號">
+      💬
+      <span class="tooltip">LINE 官方帳號</span>
+    </a>
+  </div>
+
+  <!-- Mini Contact Form Modal -->
+  <div id="miniContactModal" class="mini-contact-modal">
+    <div class="mini-contact-content">
+      <button class="mini-contact-close" onclick="closeMiniContact()">&times;</button>
+      
+      <div class="mini-contact-header">
+        <h3>取得報價</h3>
+        <p>留下資訊，我們將在 24 小時內回覆</p>
+      </div>
+      
+      <form class="mini-contact-form" action="https://formspree.io/f/mdkdqdqp" method="POST" enctype="text/plain">
+        <input type="text" name="Name" placeholder="您的姓名" required>
+        <input type="email" name="Email" placeholder="您的 Email" required>
+        <textarea name="Message" placeholder="簡述您的專案內容、時程與預算區間" required></textarea>
+        
+        <div class="mini-contact-actions">
+          <button type="submit" class="submit-btn">送出</button>
+          <button type="button" class="cancel-btn" onclick="closeMiniContact()">取消</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // Newsletter subscription handler
     function handleNewsletter(event) {
@@ -307,6 +857,104 @@
       event.target.reset();
     }
 
+    // Mini Contact Form Functions
+    function openMiniContact() {
+      const modal = document.getElementById('miniContactModal');
+      modal.style.display = 'block';
+      
+      // Add body scroll lock
+      document.body.style.overflow = 'hidden';
+      
+      // Focus on first input
+      setTimeout(() => {
+        const firstInput = modal.querySelector('input');
+        if (firstInput) firstInput.focus();
+      }, 100);
+    }
+
+    function closeMiniContact() {
+      const modal = document.getElementById('miniContactModal');
+      modal.style.display = 'none';
+      
+      // Restore body scroll
+      document.body.style.overflow = 'auto';
+      
+      // Reset form
+      const form = modal.querySelector('form');
+      if (form) form.reset();
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', function(event) {
+      const modal = document.getElementById('miniContactModal');
+      if (event.target === modal) {
+        closeMiniContact();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeMiniContact();
+      }
+    });
+
+    // Handle form submission
+    document.addEventListener('DOMContentLoaded', function() {
+      const miniContactForm = document.querySelector('.mini-contact-form');
+      if (miniContactForm) {
+        miniContactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form data
+          const formData = new FormData(this);
+          const name = formData.get('Name');
+          const email = formData.get('Email');
+          const message = formData.get('Message');
+          
+          // Simple validation
+          if (!name || !email || !message) {
+            alert('請填寫所有必填欄位');
+            return;
+          }
+          
+          // Show loading state
+          const submitBtn = this.querySelector('.submit-btn');
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = '送出中...';
+          submitBtn.disabled = true;
+          
+          // Submit form using Formspree
+          fetch(this.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          })
+          .then(response => {
+            if (response.ok) {
+              alert('感謝您的訊息！我們將在 24 小時內回覆。');
+              closeMiniContact();
+            } else {
+              throw new Error('提交失敗');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('提交失敗，請稍後再試或直接聯絡我們。');
+          })
+          .finally(() => {
+            // Restore button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          });
+        });
+      }
+    });
+
+
+
     // Contentful API 相關函數
     async function fetchBlogPosts(limit = 6, skip = 0) {
       try {
@@ -316,7 +964,7 @@
           throw new Error('請先設置 Contentful API 配置');
         }
 
-        const response = await fetch(`${CONTENTFUL_API_URL}?content_type=${CONTENTFUL_CONFIG.CONTENT_TYPE}&order=-sys.createdAt&limit=${limit}&skip=${skip}`, {
+        const response = await fetch(`${CONTENTFUL_API_URL}?content_type=${CONTENTFUL_CONFIG.CONTENT_TYPE}&order=-sys.createdAt&limit=${limit}&skip=${skip}&include=1`, {
           headers: {
             'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
           }
@@ -330,7 +978,8 @@
         console.log('Contentful API Response:', data); // 調試信息
         return {
           items: data.items || [],
-          total: data.total || 0
+          total: data.total || 0,
+          includes: data.includes || {}
         };
       } catch (error) {
         console.error('Error fetching blog posts:', error);
@@ -339,21 +988,29 @@
     }
 
     // 渲染文章卡片
-    function renderBlogPost(article) {
+    function renderBlogPost(article, assetMap) {
       const fields = article.fields;
       
-      // 處理圖片 - 支援多種圖片欄位名稱
+      // 處理圖片 - 使用 Asset Map 模式
       let imageUrl = 'https://images.unsplash.com/photo-1518558400203-08fa1b3c85be?q=80&w=800&auto=format&fit=crop'; // 預設圖片
       
-      // 嘗試多種可能的圖片欄位名稱
-      if (fields.featuredImage && fields.featuredImage.fields && fields.featuredImage.fields.file) {
-        imageUrl = `https:${fields.featuredImage.fields.file.url}`;
-      } else if (fields.image && fields.image.fields && fields.image.fields.file) {
-        imageUrl = `https:${fields.image.fields.file.url}`;
-      } else if (fields.heroImage && fields.heroImage.fields && fields.heroImage.fields.file) {
-        imageUrl = `https:${fields.heroImage.fields.file.url}`;
-      } else if (fields.thumbnail && fields.thumbnail.fields && fields.thumbnail.fields.file) {
-        imageUrl = `https:${fields.thumbnail.fields.file.url}`;
+      // 調試：記錄文章的所有欄位
+      console.log(`Article "${fields.title || '無標題'}" fields:`, fields);
+      
+      // 使用 Asset Map 查找圖片資源
+      if (fields.featuredImage && fields.featuredImage.sys && fields.featuredImage.sys.id) {
+        const assetId = fields.featuredImage.sys.id;
+        const asset = assetMap.get(assetId);
+        
+        if (asset && asset.fields && asset.fields.file && asset.fields.file.url) {
+          imageUrl = `https:${asset.fields.file.url}`;
+          console.log(`✅ 從 Asset Map 找到圖片: ${imageUrl}`);
+        } else {
+          console.log(`⚠️ Asset Map 中未找到 ID 為 ${assetId} 的圖片資源`);
+        }
+      } else {
+        console.log(`⚠️ 文章中未找到 featuredImage 的 sys.id`);
+        console.log(`featuredImage 欄位:`, fields.featuredImage);
       }
       
       // 處理日期
@@ -375,14 +1032,16 @@
         excerpt = fields.content.content[0].content[0].value.substring(0, 100) + '...';
       }
       
-      // 生成文章連結 - 使用 slug 或 ID
-      const articleSlug = fields.slug || article.sys.id;
-      const articleUrl = `article.html?id=${articleSlug}`;
+      // 生成文章連結 - 統一使用 sys.id 確保唯一性和一致性
+      const articleUrl = `article.html?id=${article.sys.id}`;
+      
+      // 調試信息：記錄文章 ID 和連結
+      console.log(`Article "${fields.title || '無標題'}": ID=${article.sys.id}, URL=${articleUrl}`);
       
       return `
         <article class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md hover:border-black/20 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div class="relative aspect-video overflow-hidden">
-            <img src="${imageUrl}" alt="${fields.title || '文章圖片'}" class="h-full w-full object-cover transition group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1518558400203-08fa1b3c85be?q=80&w=800&auto=format&fit=crop'" />
+            <img src="${imageUrl}" alt="${fields.title || '文章圖片'}" class="h-full w-full object-cover transition group-hover:scale-105" onerror="console.error('圖片載入失敗:', this.src); this.src='https://images.unsplash.com/photo-1518558400203-08fa1b3c85be?q=80&w=800&auto=format&fit=crop'" onload="console.log('圖片載入成功:', this.src)" />
             <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60"></div>
           </div>
           <div class="p-6">
@@ -427,13 +1086,25 @@
           // 顯示無文章狀態
           noArticlesState.classList.remove('hidden');
         } else {
-          // 渲染文章
-          const articlesHTML = result.items.map(renderBlogPost).join('');
+          // 建立 Asset Map 以便快速查找圖片資源
+          const assets = result.includes?.Asset || [];
+          const assetMap = new Map();
+          
+          assets.forEach(asset => {
+            if (asset.sys && asset.sys.id) {
+              assetMap.set(asset.sys.id, asset);
+            }
+          });
+          
+          console.log(`建立 Asset Map，包含 ${assetMap.size} 個圖片資源`);
+          
+          // 渲染文章，傳遞 assetMap 參數
+          const articlesHTML = result.items.map(article => renderBlogPost(article, assetMap)).join('');
           articlesContainer.innerHTML = articlesHTML;
           
-                  // 更新載入更多按鈕狀態
-        updateLoadMoreButton(result.total, result.items.length);
-      }
+          // 更新載入更多按鈕狀態
+          updateLoadMoreButton(result.total, result.items.length);
+        }
     } catch (error) {
       console.error('Error loading blog posts:', error);
       
@@ -490,8 +1161,20 @@
       const result = await fetchBlogPosts(6, currentSkip);
       
       if (result.items.length > 0) {
-        // 添加新文章到現有容器
-        const newArticlesHTML = result.items.map(renderBlogPost).join('');
+        // 建立 Asset Map 以便快速查找圖片資源
+        const assets = result.includes?.Asset || [];
+        const assetMap = new Map();
+        
+        assets.forEach(asset => {
+          if (asset.sys && asset.sys.id) {
+            assetMap.set(asset.sys.id, asset);
+          }
+        });
+        
+        console.log(`載入更多文章時建立 Asset Map，包含 ${assetMap.size} 個圖片資源`);
+        
+        // 添加新文章到現有容器，傳遞 assetMap 參數
+        const newArticlesHTML = result.items.map(article => renderBlogPost(article, assetMap)).join('');
         articlesContainer.insertAdjacentHTML('beforeend', newArticlesHTML);
         
         // 更新計數器
@@ -527,6 +1210,72 @@
       loadMoreBtn.disabled = false;
     }
   }
+
+    // Mobile Burger Menu Functions
+    function toggleMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      if (header.classList.contains('menu-opened')) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    }
+
+    function openMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      header.classList.add('menu-opened');
+      overlay.classList.add('active');
+      body.style.overflow = 'hidden';
+      
+      // Add entrance animation for menu items
+      setTimeout(() => {
+        const menuItems = document.querySelectorAll('.mobile-menu-item');
+        menuItems.forEach((item, index) => {
+          item.style.transitionDelay = `${0.07 * (index + 1) + 0.2}s`;
+        });
+      }, 100);
+    }
+
+    function closeMobileMenu() {
+      const header = document.querySelector('.mobile-header');
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const body = document.body;
+      
+      header.classList.remove('menu-opened');
+      overlay.classList.remove('active');
+      body.style.overflow = 'auto';
+      
+      // Reset menu items animation
+      const menuItems = document.querySelectorAll('.mobile-menu-item');
+      menuItems.forEach((item, index) => {
+        item.style.transitionDelay = `${0.56 - (index * 0.07)}s`;
+      });
+    }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const overlay = document.getElementById('mobileMenuOverlay');
+      const header = document.querySelector('.mobile-header');
+      
+      if (overlay.classList.contains('active') && 
+          !overlay.contains(event.target) && 
+          !header.contains(event.target)) {
+        closeMobileMenu();
+      }
+    });
+
+    // Close mobile menu with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeMobileMenu();
+      }
+    });
 
     // 頁面載入完成後自動載入文章
     document.addEventListener('DOMContentLoaded', function() {
@@ -564,37 +1313,6 @@
       
       // 載入文章
       loadBlogPosts();
-      
-      // Mobile navigation gradient control
-      const mobileNav = document.querySelector('.mobile-nav-container');
-      const mobileNavScroll = document.querySelector('.mobile-nav-scroll');
-      
-      if (mobileNav && mobileNavScroll) {
-        // Check if content is scrollable
-        function checkScrollable() {
-          if (mobileNavScroll.scrollWidth > mobileNavScroll.clientWidth) {
-            mobileNav.classList.add('show-gradient');
-          } else {
-            mobileNav.classList.remove('show-gradient');
-          }
-        }
-        
-        // Initial check
-        checkScrollable();
-        
-        // Check on scroll
-        mobileNavScroll.addEventListener('scroll', function() {
-          const isAtEnd = mobileNavScroll.scrollLeft + mobileNavScroll.clientWidth >= mobileNavScroll.scrollWidth;
-          if (isAtEnd) {
-            mobileNav.classList.remove('show-gradient');
-          } else {
-            mobileNav.classList.add('show-gradient');
-          }
-        });
-        
-        // Check on window resize
-        window.addEventListener('resize', checkScrollable);
-      }
     });
   </script>
 </body>

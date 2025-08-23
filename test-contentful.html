@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contentful API 測試 · 流芯視覺</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Contentful API Configuration -->
+  <script>
+    const CONTENTFUL_CONFIG = {
+      SPACE_ID: 'id4y90f1h82c',
+      ACCESS_TOKEN: 'vxnpypRajiFP97o7gEfMoavejunX98K8undinDWuVbY',
+      ENVIRONMENT: 'master',
+      CONTENT_TYPE: 'pageBlogPost'
+    };
+    
+    const CONTENTFUL_API_URL = `https://cdn.contentful.com/spaces/${CONTENTFUL_CONFIG.SPACE_ID}/environments/${CONTENTFUL_CONFIG.ENVIRONMENT}/entries`;
+  </script>
+</head>
+<body class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-6xl mx-auto px-4">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Contentful API 測試頁面</h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- 測試按鈕 -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">API 測試</h2>
+        <div class="space-y-4">
+          <button onclick="testConnection()" class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            測試 API 連接
+          </button>
+          <button onclick="testContentTypes()" class="w-full bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            檢查內容類型
+          </button>
+          <button onclick="testBlogPosts()" class="w-full bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+            測試博客文章
+          </button>
+          <button onclick="testImages()" class="w-full bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700">
+            測試圖片欄位
+          </button>
+        </div>
+      </div>
+      
+      <!-- 結果顯示 -->
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">測試結果</h2>
+        <div id="results" class="space-y-4">
+          <p class="text-gray-500">點擊上方按鈕開始測試...</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 詳細結果 -->
+    <div class="mt-8 bg-white p-6 rounded-lg shadow">
+      <h2 class="text-xl font-semibold mb-4">詳細結果</h2>
+      <pre id="detailed-results" class="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-96">等待測試結果...</pre>
+    </div>
+  </div>
+
+  <script>
+    function showResult(message, type = 'info') {
+      const results = document.getElementById('results');
+      const colors = {
+        success: 'text-green-600',
+        error: 'text-red-600',
+        info: 'text-blue-600'
+      };
+      
+      const resultDiv = document.createElement('div');
+      resultDiv.className = `p-3 rounded border ${colors[type]}`;
+      resultDiv.textContent = message;
+      results.appendChild(resultDiv);
+      
+      // 限制顯示的結果數量
+      if (results.children.length > 5) {
+        results.removeChild(results.children[0]);
+      }
+    }
+
+    function showDetailedResult(data) {
+      const detailedResults = document.getElementById('detailed-results');
+      detailedResults.textContent = JSON.stringify(data, null, 2);
+    }
+
+    async function testConnection() {
+      try {
+        showResult('正在測試 API 連接...', 'info');
+        
+        const response = await fetch(`${CONTENTFUL_API_URL}?limit=1`, {
+          headers: {
+            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          showResult(`✅ API 連接成功！狀態碼: ${response.status}`, 'success');
+          showDetailedResult(data);
+        } else {
+          showResult(`❌ API 連接失敗！狀態碼: ${response.status}`, 'error');
+        }
+      } catch (error) {
+        showResult(`❌ API 連接錯誤: ${error.message}`, 'error');
+        console.error('Connection test error:', error);
+      }
+    }
+
+    async function testContentTypes() {
+      try {
+        showResult('正在檢查內容類型...', 'info');
+        
+        const response = await fetch(`${CONTENTFUL_API_URL}?limit=10`, {
+          headers: {
+            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const contentTypes = [...new Set(data.items.map(item => item.sys.contentType.sys.id))];
+          
+          showResult(`✅ 找到 ${contentTypes.length} 種內容類型: ${contentTypes.join(', ')}`, 'success');
+          
+          // 檢查是否有我們需要的內容類型
+          if (contentTypes.includes(CONTENTFUL_CONFIG.CONTENT_TYPE)) {
+            showResult(`✅ 找到目標內容類型: ${CONTENTFUL_CONFIG.CONTENT_TYPE}`, 'success');
+          } else {
+            showResult(`⚠️ 未找到目標內容類型: ${CONTENTFUL_CONFIG.CONTENT_TYPE}`, 'error');
+          }
+          
+          showDetailedResult(data);
+        } else {
+          showResult(`❌ 檢查內容類型失敗！狀態碼: ${response.status}`, 'error');
+        }
+      } catch (error) {
+        showResult(`❌ 檢查內容類型錯誤: ${error.message}`, 'error');
+        console.error('Content types test error:', error);
+      }
+    }
+
+    async function testBlogPosts() {
+      try {
+        showResult('正在測試博客文章...', 'info');
+        
+        const response = await fetch(`${CONTENTFUL_API_URL}?content_type=${CONTENTFUL_CONFIG.CONTENT_TYPE}&limit=5`, {
+          headers: {
+            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.items && data.items.length > 0) {
+            showResult(`✅ 找到 ${data.items.length} 篇博客文章`, 'success');
+            
+            // 顯示文章詳情
+            data.items.forEach((item, index) => {
+              const fields = item.fields;
+              const title = fields.title || '無標題';
+              const status = item.sys.publishedVersion ? '已發布' : '草稿';
+              showResult(`${index + 1}. ${title} (${status}) - ID: ${item.sys.id}`, 'info');
+            });
+          } else {
+            showResult(`⚠️ 未找到任何博客文章`, 'error');
+          }
+          
+          showDetailedResult(data);
+        } else {
+          showResult(`❌ 測試博客文章失敗！狀態碼: ${response.status}`, 'error');
+        }
+      } catch (error) {
+        showResult(`❌ 測試博客文章錯誤: ${error.message}`, 'error');
+        console.error('Blog posts test error:', error);
+      }
+    }
+
+    async function testImages() {
+      try {
+        showResult('正在測試圖片欄位...', 'info');
+        
+        const response = await fetch(`${CONTENTFUL_API_URL}?content_type=${CONTENTFUL_CONFIG.CONTENT_TYPE}&limit=5`, {
+          headers: {
+            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          
+          if (data.items && data.items.length > 0) {
+            showResult(`正在分析 ${data.items.length} 篇文章的圖片欄位...`, 'info');
+            
+            data.items.forEach((item, index) => {
+              const fields = item.fields;
+              const title = fields.title || '無標題';
+              
+              // 檢查各種圖片欄位
+              let imageInfo = [];
+              
+              if (fields.featuredImage) {
+                // 檢查多種可能的結構
+                let url = null;
+                let structure = 'unknown';
+                
+                if (fields.featuredImage.fields && fields.featuredImage.fields.file && fields.featuredImage.fields.file.url) {
+                  url = `https:${fields.featuredImage.fields.file.url}`;
+                  structure = 'standard (fields.file.url)';
+                } else if (fields.featuredImage.file && fields.featuredImage.file.url) {
+                  url = `https:${fields.featuredImage.file.url}`;
+                  structure = 'direct (file.url)';
+                } else if (typeof fields.featuredImage === 'string' && fields.featuredImage.startsWith('//')) {
+                  url = `https:${fields.featuredImage}`;
+                  structure = 'string URL';
+                } else if (typeof fields.featuredImage === 'string' && fields.featuredImage.startsWith('http')) {
+                  url = fields.featuredImage;
+                  structure = 'full URL';
+                } else if (fields.featuredImage.sys && fields.featuredImage.sys.id) {
+                  structure = `asset reference (${fields.featuredImage.sys.id})`;
+                }
+                
+                if (url) {
+                  imageInfo.push(`✅ featuredImage [${structure}]: ${url}`);
+                } else {
+                  imageInfo.push(`⚠️ featuredImage 存在但結構不正確 [${structure}]`);
+                  imageInfo.push(`   結構詳情: ${JSON.stringify(fields.featuredImage, null, 2).substring(0, 200)}...`);
+                }
+              }
+              
+              if (fields.image) {
+                if (fields.image.fields && fields.image.fields.file) {
+                  const url = `https:${fields.image.fields.file.url}`;
+                  imageInfo.push(`✅ image: ${url}`);
+                } else {
+                  imageInfo.push(`⚠️ image 存在但結構不正確`);
+                }
+              }
+              
+              if (fields.heroImage) {
+                if (fields.heroImage.fields && fields.heroImage.fields.file) {
+                  const url = `https:${fields.heroImage.fields.file.url}`;
+                  imageInfo.push(`✅ heroImage: ${url}`);
+                } else {
+                  imageInfo.push(`⚠️ heroImage 存在但結構不正確`);
+                }
+              }
+              
+              if (fields.thumbnail) {
+                if (fields.thumbnail.fields && fields.thumbnail.fields.file) {
+                  const url = `https:${fields.thumbnail.fields.file.url}`;
+                  imageInfo.push(`✅ thumbnail: ${url}`);
+                } else {
+                  imageInfo.push(`⚠️ thumbnail 存在但結構不正確`);
+                }
+              }
+              
+              if (imageInfo.length === 0) {
+                showResult(`${index + 1}. "${title}": ❌ 沒有找到任何圖片欄位`, 'error');
+              } else {
+                showResult(`${index + 1}. "${title}": 找到 ${imageInfo.length} 個圖片欄位`, 'success');
+                imageInfo.forEach(info => showResult(`   ${info}`, 'info'));
+              }
+            });
+          } else {
+            showResult(`⚠️ 未找到任何博客文章來測試圖片`, 'error');
+          }
+          
+          showDetailedResult(data);
+        } else {
+          showResult(`❌ 測試圖片欄位失敗！狀態碼: ${response.status}`, 'error');
+        }
+      } catch (error) {
+        showResult(`❌ 測試圖片欄位錯誤: ${error.message}`, 'error');
+        console.error('Images test error:', error);
+      }
+    }
+  </script>
+</body>
+</html>

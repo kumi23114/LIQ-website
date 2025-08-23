@@ -107,6 +107,25 @@ function closeMiniContact() {
 // ============================================================================
 
 /**
+ * 開啟指定的模態框
+ * @param {string} modalId - 要開啟的模態框 ID
+ */
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+  
+  modal.style.display = "block";
+  
+  // 觸發模糊效果
+  setTimeout(() => {
+    modal.classList.add('show');
+  }, 10);
+  
+  // 鎖定頁面滾動
+  document.body.style.overflow = 'hidden';
+}
+
+/**
  * 處理影片模態框的載入
  * @param {string} modalId - 模態框的 ID
  * @param {HTMLIFrameElement} iframe - iframe 元素
@@ -116,11 +135,14 @@ function handleModalVideoLoad(modalId, iframe) {
   const skeleton = document.getElementById(`${modalId}-skeleton`);
   
   if (modal && skeleton) {
-    // 隱藏載入骨架
-    skeleton.style.display = 'none';
+    // 添加載入完成的樣式類別
+    iframe.classList.add('loaded');
     
-    // 顯示 iframe
-    iframe.style.display = 'block';
+    // 隱藏載入骨架
+    setTimeout(() => {
+      skeleton.style.opacity = '0';
+      setTimeout(() => skeleton.style.display = 'none', 500);
+    }, 300);
     
     // 記錄載入統計
     if (window.videoLoadStats) {
@@ -138,14 +160,29 @@ function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (!modal) return;
   
-  modal.style.display = 'none';
+  // 觸發模糊消失效果
+  modal.classList.remove('show');
+  
+  // 隱藏模態框
+  setTimeout(() => {
+    modal.style.display = "none";
+  }, 300);
+  
+  // 恢復頁面滾動
+  document.body.style.overflow = 'auto';
   
   // 重置 iframe 和骨架狀態
   const iframe = modal.querySelector('.modal-iframe');
   const skeleton = modal.querySelector('.modal-skeleton');
   
-  if (iframe) iframe.style.display = 'none';
-  if (skeleton) skeleton.style.display = 'block';
+  if (iframe) {
+    iframe.classList.remove('loaded');
+    iframe.style.display = 'none';
+  }
+  if (skeleton) {
+    skeleton.style.display = 'block';
+    skeleton.style.opacity = '1';
+  }
 }
 
 // ============================================================================

@@ -301,6 +301,18 @@
 
 
 
+    // 顯示錯誤狀態的輔助函數
+    function showError(message) {
+      const errorState = document.getElementById('error-state');
+      const loadingState = document.getElementById('loading-state');
+      
+      if (errorState && loadingState) {
+        loadingState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+        errorState.querySelector('p:last-of-type').textContent = `錯誤詳情: ${message}`;
+      }
+    }
+
     // 確保頁面所有資源 (包含外部腳本) 載入完成後，才自動載入文章
     window.onload = function() {
       // 確認核心工具已載入，若無則報錯

@@ -653,78 +653,7 @@
   <!-- 引入首頁專用 JavaScript 功能 -->
   <script src="js/page-index.js"></script>
   
-  <!-- 開場動畫 -->
-  <script>
-    // 等待 DOM 載入完成
-    document.addEventListener('DOMContentLoaded', function() {
-      // 禁用滾動功能
-      function disableScroll() {
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100%';
-      }
-      
-      // 啟用滾動功能
-      function enableScroll() {
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
-      }
-      
-      // 立即禁用滾動
-      disableScroll();
-      
-      // 創建 GSAP Timeline
-      const tl = gsap.timeline();
-      
-      // 設置初始狀態
-      gsap.set('.sb-logo img', { opacity: 0, scale: 0.5 });
-      gsap.set('.js-border-top', { scaleX: 0, transformOrigin: 'left' });
-      gsap.set('.js-border-left', { scaleY: 0, transformOrigin: 'top' });
-      gsap.set('.js-border-right', { scaleY: 0, transformOrigin: 'top' });
-      
-      // Logo 淡入動畫
-      tl.to('.sb-logo img', { 
-        opacity: 1, 
-        scale: 1, 
-        duration: 2, 
-        ease: 'power2.out' 
-      })
-      
-      // 邊框動畫 - 提前1秒開始，與Logo動畫重疊
-      .to('.js-border-top', { 
-        scaleX: 1, 
-        duration: 0.8, 
-        ease: 'power2.out' 
-      }, '-=1')
-      .to('.js-border-left', { 
-        scaleY: 1, 
-        duration: 0.8, 
-        ease: 'power2.out' 
-      }, '-=0.6')
-      .to('.js-border-right', { 
-        scaleY: 1, 
-        duration: 0.8, 
-        ease: 'power2.out' 
-      }, '-=0.4')
-      
-      // 畫面揭露和主體顯示
-      .to('.site-intro', { 
-        yPercent: -100, 
-        duration: 1.2, 
-        ease: 'power2.inOut' 
-      })
-      .to('#main-content', { 
-        opacity: 1, 
-        duration: 0.8, 
-        ease: 'power2.out' 
-      }, '-=0.6')
-      
-      // 清理舞台並重新啟用滾動
-      .set('.site-intro', { display: 'none' })
-      .call(enableScroll);
-    });
-  </script>
+
 </body>
 </html>
 

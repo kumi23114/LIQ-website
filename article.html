@@ -306,10 +306,22 @@
 
 
 
-    // 頁面載入完成後自動載入文章
-    document.addEventListener('DOMContentLoaded', function() {
+    // 確保頁面所有資源 (包含外部腳本) 載入完成後，才自動載入文章
+    window.onload = function() {
+      // 檢查官方函式庫是否成功載入
+      if (typeof window.contentfulRichText === 'undefined') {
+        console.error('❌ Contentful Rich Text Renderer 函式庫載入失敗！');
+        const errorState = document.getElementById('error-state');
+        if(errorState) {
+            document.getElementById('loading-state').classList.add('hidden');
+            errorState.classList.remove('hidden');
+            errorState.querySelector('p:last-of-type').textContent = '錯誤詳情: 核心渲染工具載入失敗，請檢查網路連線或重新整理。';
+          }
+        return;
+      }
+      // 一切就緒，載入文章
       loadArticle();
-    });
+    };
   </script>
 
   <!-- 引入共用 JavaScript 功能 -->

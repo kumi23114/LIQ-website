@@ -34,6 +34,9 @@
   </script>
   
   <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Contentful Rich Text Renderer -->
+  <script src="https://unpkg.com/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.bundle.js"></script>
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
 
@@ -203,59 +206,34 @@
       `;
     }
 
-    // 渲染富文本內容
-    function renderRichText(richText) {
-      if (!richText || !richText.content) return '<p>內容載入中...</p>';
-
-      let html = '';
+    // 渲染富文本內容 (使用官方函式庫)
+    function renderRichText(richTextDocument) {
+      if (!richTextDocument) {
+        return '<p>內容載入中...</p>';
+      }
       
-      richText.content.forEach(node => {
-        if (node.nodeType === 'paragraph') {
-          html += '<p>';
-          if (node.content) {
-            node.content.forEach(textNode => {
-              let text = textNode.value || '';
-              if (textNode.marks) {
-                textNode.marks.forEach(mark => {
-                  if (mark.type === 'bold') {
-                    text = `<strong>${text}</strong>`;
-                  } else if (mark.type === 'italic') {
-                    text = `<em>${text}</em>`;
-                  } else if (mark.type === 'underline') {
-                    text = `<u>${text}</u>`;
-                  }
-                });
-              }
-              html += text;
-            });
+      // 自訂渲染規則 (選填，但功能強大)
+      const options = {
+        renderNode: {
+          // 規則：當遇到內嵌的圖片時...
+          'embedded-asset-block': (node) => {
+            // 注意：此功能需要你在 fetchArticle 時也把圖片資源 (Asset) 一併撈取回來
+            const asset = assetMap.get(node.data.target.sys.id);
+            if (asset && asset.fields.file) {
+              return `<img src="https:${asset.fields.file.url}" alt="${asset.fields.description || ''}" class="my-4 rounded-lg shadow-md" />`;
+            }
+            return '';
+          },
+          // 規則：當遇到引言 (Blockquote) 時...
+          'blockquote': (node, next) => {
+            // 這裡的 blockquote class 會對應到你 style.css 裡的樣式
+            return `<blockquote>${next(node.content)}</blockquote>`;
           }
-          html += '</p>';
-        } else if (node.nodeType === 'heading-1') {
-          html += `<h1>${node.content?.[0]?.value || ''}</h1>`;
-        } else if (node.nodeType === 'heading-2') {
-          html += `<h2>${node.content?.[0]?.value || ''}</h2>`;
-        } else if (node.nodeType === 'heading-3') {
-          html += `<h3>${node.content?.[0]?.value || ''}</h3>`;
-        } else if (node.nodeType === 'unordered-list') {
-          html += '<ul>';
-          if (node.content) {
-            node.content.forEach(listItem => {
-              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
-            });
-          }
-          html += '</ul>';
-        } else if (node.nodeType === 'ordered-list') {
-          html += '<ol>';
-          if (node.content) {
-            node.content.forEach(listItem => {
-              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
-            });
-          }
-          html += '</ol>';
         }
-      });
+      };
 
-      return html || '<p>內容載入中...</p>';
+      // 使用 window.contentfulRichText.documentToHtmlString 進行轉換
+      return window.contentfulRichText.documentToHtmlString(richTextDocument, options);
     }
 
     // 載入文章

@@ -35,8 +35,6 @@
   
   <link rel="stylesheet" href="css/style.css">
   
-  <!-- Contentful Rich Text Renderer -->
-  <script src="https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.bundle.js"></script>
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
 
@@ -118,6 +116,14 @@
     // 渲染富文本內容 (使用官方函式庫，並接收 assetMap)
     function renderRichText(richTextDocument, assetMap) {
       if (!richTextDocument) return '內容載入中...';
+      
+      // 檢查多個可能的物件名稱
+      const renderer = window.contentfulRichText || window.richTextHtmlRenderer || window.richTextRenderer;
+      if (!renderer) {
+        console.error('❌ 找不到 Contentful Rich Text Renderer 函式庫');
+        return '<p>渲染工具載入失敗，請重新整理頁面</p>';
+      }
+      
       const options = {
         renderNode: {
           'embedded-asset-block': (node) => {
@@ -132,7 +138,13 @@
           'blockquote': (node, next) => `<blockquote>${next(node.content)}</blockquote>`
         }
       };
-      return window.contentfulRichText.documentToHtmlString(richTextDocument, options);
+      
+      try {
+        return renderer.documentToHtmlString(richTextDocument, options);
+      } catch (error) {
+        console.error('❌ 渲染富文本時發生錯誤:', error);
+        return '<p>內容渲染失敗，請重新整理頁面</p>';
+      }
     }
 
     // 渲染文章內容
@@ -204,14 +216,30 @@
 
     // 確保頁面所有資源 (包含外部腳本) 載入完成後，才自動載入文章
     window.onload = function() {
-      if (typeof window.contentfulRichText === 'undefined') {
-        showError('核心渲染工具載入失敗，請檢查瀏覽器擴充功能或網路連線。');
+      console.log('🔍 檢查 Contentful Rich Text Renderer 函式庫...');
+      
+      // 檢查多個可能的物件名稱
+      const renderer = window.contentfulRichText || window.richTextHtmlRenderer || window.richTextRenderer;
+      
+      console.log('window.contentfulRichText:', window.contentfulRichText);
+      console.log('window.richTextHtmlRenderer:', window.richTextHtmlRenderer);
+      console.log('window.richTextRenderer:', window.richTextRenderer);
+      console.log('找到的 renderer:', renderer);
+      
+      if (!renderer) {
+        console.error('❌ 所有可能的渲染工具都未載入！');
+        showError('核心渲染工具載入失敗，請檢查網路連線或重新整理頁面。');
         return;
       }
+      
+      console.log('✅ 渲染工具載入成功！開始載入文章...');
       loadArticle();
     };
   </script>
 
+  <!-- Contentful Rich Text Renderer -->
+  <script src="https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.bundle.js"></script>
+  
   <!-- 引入共用 JavaScript 功能 -->
   <!-- 引入共用組件系統 -->
   <script src="js/components.js"></script>

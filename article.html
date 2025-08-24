@@ -37,6 +37,21 @@
   
   <!-- Contentful Rich Text Renderer -->
   <script src="https://unpkg.com/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.bundle.js"></script>
+  <!-- 備用 CDN 來源 -->
+  <script>
+    // 如果主要 CDN 載入失敗，嘗試備用來源
+    if (typeof window.contentfulRichText === 'undefined') {
+      const backupScript = document.createElement('script');
+      backupScript.src = 'https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.bundle.js';
+      backupScript.onload = function() {
+        console.log('✅ 備用 CDN 載入成功！');
+      };
+      backupScript.onerror = function() {
+        console.error('❌ 備用 CDN 也載入失敗！');
+      };
+      document.head.appendChild(backupScript);
+    }
+  </script>
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
 
@@ -303,20 +318,52 @@
 
     // 確保頁面所有資源 (包含外部腳本) 載入完成後，才自動載入文章
     window.onload = function() {
+      // 延遲檢查，確保腳本有足夠時間載入
+      setTimeout(() => {
+        checkAndLoadArticle();
+      }, 1000);
+    };
+
+    // 檢查函式庫並載入文章
+    function checkAndLoadArticle() {
       // 檢查官方函式庫是否成功載入
       if (typeof window.contentfulRichText === 'undefined') {
         console.error('❌ Contentful Rich Text Renderer 函式庫載入失敗！');
-        const errorState = document.getElementById('error-state');
-        if(errorState) {
-            document.getElementById('loading-state').classList.add('hidden');
-            errorState.classList.remove('hidden');
-            errorState.querySelector('p:last-of-type').textContent = '錯誤詳情: 核心渲染工具載入失敗，請檢查網路連線或重新整理。';
-          }
+        console.log('嘗試重新載入腳本...');
+        
+        // 嘗試重新載入腳本
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.bundle.js';
+        script.onload = function() {
+          console.log('✅ 腳本重新載入成功！');
+          setTimeout(() => {
+            checkAndLoadArticle();
+          }, 500);
+        };
+        script.onerror = function() {
+          console.error('❌ 腳本重新載入失敗！');
+          showError('核心渲染工具載入失敗，請檢查網路連線或重新整理。');
+        };
+        document.head.appendChild(script);
         return;
       }
+      
+      console.log('✅ Contentful Rich Text Renderer 函式庫載入成功！');
       // 一切就緒，載入文章
       loadArticle();
-    };
+    }
+
+    // 顯示錯誤狀態
+    function showError(message) {
+      const errorState = document.getElementById('error-state');
+      const loadingState = document.getElementById('loading-state');
+      
+      if (errorState && loadingState) {
+        loadingState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+        errorState.querySelector('p:last-of-type').textContent = `錯誤詳情: ${message}`;
+      }
+    }
   </script>
 
   <!-- 引入共用 JavaScript 功能 -->

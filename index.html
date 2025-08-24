@@ -37,10 +37,21 @@
   <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
-  <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
+  <!-- Site Intro Section -->
+  <div class="site-intro js-intro" style="opacity: 1; position: fixed; top: 0; left: 0; z-index: 50; width: 100%; height: 100%; background: #193a55;">
+    <div class="sb-logo js-logo">
+      <img src="assets/logo.png" alt="流芯視覺 Logo">
+    </div><!-- .sb-logo -->
+    <div class="site-intro__border site-intro__border--top js-border-top"></div>
+    <div class="site-intro__border site-intro__border--left js-border-left"></div>
+    <div class="site-intro__border site-intro__border--right js-border-right"></div>
+  </div><!-- .site-intro -->
+  <main id="main-content" style="opacity: 0;">
+    <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
       <a href="#top" class="group inline-flex items-center gap-3 transition-all duration-300 hover:scale-105">
         <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)] transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(25,58,85,.5)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
@@ -522,6 +533,7 @@
       </form>
     </div>
   </section>
+  </main>
 
   <footer class="border-t border-black/5 py-10">
     <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-zinc-600 md:flex-row">
@@ -627,6 +639,79 @@
   
   <!-- 引入首頁專用 JavaScript 功能 -->
   <script src="js/page-index.js"></script>
+  
+  <!-- 開場動畫 -->
+  <script>
+    // 等待 DOM 載入完成
+    document.addEventListener('DOMContentLoaded', function() {
+      // 禁用滾動功能
+      function disableScroll() {
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
+      }
+      
+      // 啟用滾動功能
+      function enableScroll() {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+      }
+      
+      // 立即禁用滾動
+      disableScroll();
+      
+      // 創建 GSAP Timeline
+      const tl = gsap.timeline();
+      
+      // 設置初始狀態
+      gsap.set('.sb-logo img', { opacity: 0, scale: 0.5 });
+      gsap.set('.js-border-top', { scaleX: 0, transformOrigin: 'left' });
+      gsap.set('.js-border-left', { scaleY: 0, transformOrigin: 'top' });
+      gsap.set('.js-border-right', { scaleY: 0, transformOrigin: 'top' });
+      
+      // Logo 淡入動畫
+      tl.to('.sb-logo img', { 
+        opacity: 1, 
+        scale: 1, 
+        duration: 2, 
+        ease: 'power2.out' 
+      })
+      
+      // 邊框動畫 - 提前1秒開始，與Logo動畫重疊
+      .to('.js-border-top', { 
+        scaleX: 1, 
+        duration: 0.8, 
+        ease: 'power2.out' 
+      }, '-=1')
+      .to('.js-border-left', { 
+        scaleY: 1, 
+        duration: 0.8, 
+        ease: 'power2.out' 
+      }, '-=0.6')
+      .to('.js-border-right', { 
+        scaleY: 1, 
+        duration: 0.8, 
+        ease: 'power2.out' 
+      }, '-=0.4')
+      
+      // 畫面揭露和主體顯示
+      .to('.site-intro', { 
+        yPercent: -100, 
+        duration: 1.2, 
+        ease: 'power2.inOut' 
+      })
+      .to('#main-content', { 
+        opacity: 1, 
+        duration: 0.8, 
+        ease: 'power2.out' 
+      }, '-=0.6')
+      
+      // 清理舞台並重新啟用滾動
+      .set('.site-intro', { display: 'none' })
+      .call(enableScroll);
+    });
+  </script>
 </body>
 </html>
 

@@ -203,59 +203,76 @@
       `;
     }
 
-    // 渲染富文本內容
-    function renderRichText(richText) {
-      if (!richText || !richText.content) return '<p>內容載入中...</p>';
+    // 渲染富文本內容 (使用官方函式庫)
+    function renderRichText(richTextDocument) {
+      if (!richTextDocument) {
+        return '<p>內容載入中...</p>';
+      }
 
-      let html = '';
-      
-      richText.content.forEach(node => {
-        if (node.nodeType === 'paragraph') {
-          html += '<p>';
-          if (node.content) {
-            node.content.forEach(textNode => {
-              let text = textNode.value || '';
-              if (textNode.marks) {
-                textNode.marks.forEach(mark => {
-                  if (mark.type === 'bold') {
-                    text = `<strong>${text}</strong>`;
-                  } else if (mark.type === 'italic') {
-                    text = `<em>${text}</em>`;
-                  } else if (mark.type === 'underline') {
-                    text = `<u>${text}</u>`;
-                  }
-                });
-              }
-              html += text;
-            });
-          }
-          html += '</p>';
-        } else if (node.nodeType === 'heading-1') {
-          html += `<h1>${node.content?.[0]?.value || ''}</h1>`;
-        } else if (node.nodeType === 'heading-2') {
-          html += `<h2>${node.content?.[0]?.value || ''}</h2>`;
-        } else if (node.nodeType === 'heading-3') {
-          html += `<h3>${node.content?.[0]?.value || ''}</h3>`;
-        } else if (node.nodeType === 'unordered-list') {
-          html += '<ul>';
-          if (node.content) {
-            node.content.forEach(listItem => {
-              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
-            });
-          }
-          html += '</ul>';
-        } else if (node.nodeType === 'ordered-list') {
-          html += '<ol>';
-          if (node.content) {
-            node.content.forEach(listItem => {
-              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
-            });
-          }
-          html += '</ol>';
-        }
-      });
+      // 檢查官方函式庫是否可用
+      if (typeof window.richTextHtmlRenderer === 'undefined') {
+        console.error('❌ Contentful Rich Text Renderer 函式庫未載入');
+        return '<p>渲染工具載入失敗，請重新整理頁面</p>';
+      }
 
-      return html || '<p>內容載入中...</p>';
+      try {
+        // 使用官方的 documentToHtmlString 方法
+        const options = {
+          preserveWhitespace: true, // 保留空白字元
+          renderNode: {
+            // 自訂段落渲染
+            'paragraph': (node, next) => `<p class="mb-4 leading-relaxed">${next(node.content)}</p>`,
+            
+            // 自訂標題渲染
+            'heading-1': (node, next) => `<h1 class="text-3xl font-bold text-gray-900 mb-4 mt-8">${next(node.content)}</h1>`,
+            'heading-2': (node, next) => `<h2 class="text-2xl font-bold text-gray-900 mb-3 mt-6">${next(node.content)}</h2>`,
+            'heading-3': (node, next) => `<h3 class="text-xl font-bold text-gray-800 mb-3 mt-5">${next(node.content)}</h3>`,
+            'heading-4': (node, next) => `<h4 class="text-lg font-semibold text-gray-800 mb-2 mt-4">${next(node.content)}</h4>`,
+            'heading-5': (node, next) => `<h5 class="text-base font-semibold text-gray-700 mb-2 mt-3">${next(node.content)}</h5>`,
+            'heading-6': (node, next) => `<h6 class="text-sm font-semibold text-gray-700 mb-2 mt-3">${next(node.content)}</h6>`,
+            
+            // 自訂列表渲染
+            'unordered-list': (node, next) => `<ul class="list-disc list-inside mb-4 space-y-1">${next(node.content)}</ul>`,
+            'ordered-list': (node, next) => `<ol class="list-decimal list-inside mb-4 space-y-1">${next(node.content)}</ol>`,
+            'list-item': (node, next) => `<li class="text-gray-700">${next(node.content)}</li>`,
+            
+            // 自訂引用渲染
+            'quote': (node, next) => `<blockquote class="border-l-4 border-blue-500 pl-4 py-2 my-4 bg-gray-50 italic text-gray-700">${next(node.content)}</blockquote>`,
+            
+            // 自訂水平線渲染
+            'hr': () => `<hr class="my-6 border-gray-300">`,
+            
+            // 自訂內嵌資源渲染
+            'embedded-asset-block': (node) => {
+              // 這裡可以處理內嵌的圖片等資源
+              return `<div class="my-6 text-center text-gray-500">[內嵌資源]</div>`;
+            },
+            
+            // 自訂內嵌條目渲染
+            'embedded-entry-block': (node) => {
+              // 這裡可以處理內嵌的條目
+              return `<div class="my-6 text-center text-gray-500">[內嵌條目]</div>`;
+            }
+          },
+          
+          renderMark: {
+            // 自訂標記渲染
+            'bold': text => `<strong class="font-bold">${text}</strong>`,
+            'italic': text => `<em class="italic">${text}</em>`,
+            'underline': text => `<u class="underline">${text}</u>`,
+            'code': text => `<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">${text}</code>`,
+            'superscript': text => `<sup class="text-xs">${text}</sup>`,
+            'subscript': text => `<sub class="text-xs">${text}</sub>`,
+            'strikethrough': text => `<del class="line-through">${text}</del>`
+          }
+        };
+
+        return window.richTextHtmlRenderer.documentToHtmlString(richTextDocument, options);
+        
+      } catch (error) {
+        console.error('❌ 渲染富文本時發生錯誤:', error);
+        return '<p>內容渲染失敗，請重新整理頁面</p>';
+      }
     }
 
     // 載入文章
@@ -330,14 +347,30 @@
 
     // 頁面載入完成後自動載入文章
     document.addEventListener('DOMContentLoaded', function() {
-      loadArticle();
+      // 檢查官方函式庫是否可用
+      if (typeof window.richTextHtmlRenderer === 'undefined') {
+        console.error('❌ Contentful Rich Text Renderer 函式庫未載入');
+        // 延遲一下再檢查，給腳本更多載入時間
+        setTimeout(() => {
+          if (typeof window.richTextHtmlRenderer === 'undefined') {
+            console.error('❌ 函式庫仍然未載入，嘗試載入文章...');
+          }
+          loadArticle();
+        }, 1000);
+      } else {
+        console.log('✅ 函式庫已載入，開始載入文章...');
+        loadArticle();
+      }
     });
   </script>
 
-  <!-- 引入共用 JavaScript 功能 -->
-  <!-- 引入共用組件系統 -->
-  <script src="js/components.js"></script>
-  
-  <script src="js/main.js"></script>
+      <!-- Contentful Rich Text Renderer (UMD 版本) -->
+    <script src="https://unpkg.com/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js"></script>
+    
+    <!-- 引入共用 JavaScript 功能 -->
+    <!-- 引入共用組件系統 -->
+    <script src="js/components.js"></script>
+    
+    <script src="js/main.js"></script>
 </body>
 </html>

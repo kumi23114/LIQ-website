@@ -4,6 +4,61 @@
  */
 
 /* ============================================================================
+   GLOBAL CSS VARIABLES - 品牌色彩統一管理
+   ============================================================================ */
+
+:root {
+  /* 品牌主色系 */
+  --color-primary: #193a55;
+  --color-primary-light: #2d5a7a;
+  --color-primary-dark: #0d1d2b;
+  --color-primary-transparent: rgba(25, 58, 85, 0.1);
+  
+  /* 品牌輔助色系 */
+  --color-secondary: #00c300;
+  --color-secondary-light: #00a000;
+  
+  /* 中性色系 */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* 透明度變數 */
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  
+  /* 陰影變數 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* 品牌陰影 */
+  --shadow-brand: 0 0 30px rgba(25, 58, 85, 0.35);
+  --shadow-brand-hover: 0 0 40px rgba(25, 58, 85, 0.5);
+  --shadow-brand-cta: 0 0 40px rgba(25, 58, 85, 0.35);
+  --shadow-brand-cta-hover: 0 0 50px rgba(25, 58, 85, 0.5);
+}
+
+/* ============================================================================
    MODAL STYLES WITH BLUR EFFECTS
    ============================================================================ */
 

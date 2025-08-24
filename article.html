@@ -177,12 +177,12 @@
       // 處理分類
       const category = fields.category || fields.tags?.[0] || '未分類';
 
-      // 處理文章內容
-      let content = '<p>文章內容載入中...</p>';
+      // 處理文章內容，並正確傳遞 assetMap
+      let content = '文章內容載入中...';
       if (fields.content && fields.content.content) {
-        content = renderRichText(fields.content);
+        content = renderRichText(fields.content, assetMap);
       } else if (fields.body) {
-        content = renderRichText(fields.body);
+        content = renderRichText(fields.body, assetMap);
       }
 
       return `
@@ -206,33 +206,28 @@
       `;
     }
 
-    // 渲染富文本內容 (使用官方函式庫)
-    function renderRichText(richTextDocument) {
+    // 渲染富文本內容 (使用官方函式庫，並接收 assetMap)
+    function renderRichText(richTextDocument, assetMap) {
       if (!richTextDocument) {
         return '<p>內容載入中...</p>';
       }
       
-      // 自訂渲染規則 (選填，但功能強大)
       const options = {
         renderNode: {
-          // 規則：當遇到內嵌的圖片時...
           'embedded-asset-block': (node) => {
-            // 注意：此功能需要你在 fetchArticle 時也把圖片資源 (Asset) 一併撈取回來
-            const asset = assetMap.get(node.data.target.sys.id);
-            if (asset && asset.fields.file) {
-              return `<img src="https:${asset.fields.file.url}" alt="${asset.fields.description || ''}" class="my-4 rounded-lg shadow-md" />`;
+            const assetId = node.data?.target?.sys?.id;
+            if (!assetId) return '';
+            const asset = assetMap.get(assetId);
+            if (asset && asset.fields && asset.fields.file) {
+              return `<figure class="my-6"><img src="https:${asset.fields.file.url}" alt="${asset.fields.description || ''}" class="mx-auto rounded-lg shadow-lg" /><figcaption class="text-center text-sm text-zinc-500 mt-2">${asset.fields.description || ''}</figcaption></figure>`;
             }
             return '';
           },
-          // 規則：當遇到引言 (Blockquote) 時...
           'blockquote': (node, next) => {
-            // 這裡的 blockquote class 會對應到你 style.css 裡的樣式
             return `<blockquote>${next(node.content)}</blockquote>`;
           }
         }
       };
-
-      // 使用 window.contentfulRichText.documentToHtmlString 進行轉換
       return window.contentfulRichText.documentToHtmlString(richTextDocument, options);
     }
 

@@ -34,7 +34,6 @@
   </script>
   
   <link rel="stylesheet" href="css/style.css">
-  
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
 
@@ -86,23 +85,35 @@
 
 
   <script>
+
+
     // 從 URL 參數獲取文章 ID
     function getArticleId() {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get('id');
     }
 
+
+
     // 獲取文章內容
     async function fetchArticle(articleId) {
       try {
         const apiUrl = `${CONTENTFUL_API_URL}?sys.id=${articleId}&include=1`;
+        console.log(`Fetching article from: ${apiUrl}`);
+        
         const response = await fetch(apiUrl, {
-          headers: { 'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}` }
+          headers: {
+            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
+          }
         });
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+
         const data = await response.json();
+        console.log(`Contentful API response for article ${articleId}:`, data);
+        
         return {
           article: data.items?.[0] || null,
           includes: data.includes || {}
@@ -113,133 +124,216 @@
       }
     }
 
-    // 渲染富文本內容 (使用官方函式庫，並接收 assetMap)
-    function renderRichText(richTextDocument, assetMap) {
-      if (!richTextDocument) return '內容載入中...';
-      
-      // 檢查多個可能的物件名稱
-      const renderer = window.contentfulRichText || window.richTextHtmlRenderer || window.richTextRenderer;
-      if (!renderer) {
-        console.error('❌ 找不到 Contentful Rich Text Renderer 函式庫');
-        return '<p>渲染工具載入失敗，請重新整理頁面</p>';
-      }
-      
-      const options = {
-        renderNode: {
-          'embedded-asset-block': (node) => {
-            const assetId = node.data?.target?.sys?.id;
-            if (!assetId) return '';
-            const asset = assetMap.get(assetId);
-            if (asset && asset.fields && asset.fields.file) {
-              return `<figure class="my-6"><img src="https:${asset.fields.file.url}" alt="${asset.fields.description || ''}" class="mx-auto rounded-lg shadow-lg" /><figcaption class="text-center text-sm text-zinc-500 mt-2">${asset.fields.description || ''}</figcaption></figure>`;
-            }
-            return '';
-          },
-          'blockquote': (node, next) => `<blockquote>${next(node.content)}</blockquote>`
-        }
-      };
-      
-      try {
-        return renderer.documentToHtmlString(richTextDocument, options);
-      } catch (error) {
-        console.error('❌ 渲染富文本時發生錯誤:', error);
-        return '<p>內容渲染失敗，請重新整理頁面</p>';
-      }
-    }
-
     // 渲染文章內容
     function renderArticle(article, assetMap) {
       const fields = article.fields;
+      
+      // 處理特色圖片 - 使用 Asset Map 模式
       let heroImage = '';
+      
+      // 調試：記錄圖片相關欄位
+      console.log(`Processing images for article "${fields.title || '無標題'}"`);
+      console.log('Image fields:', {
+        featuredImage: fields.featuredImage,
+        image: fields.image,
+        heroImage: fields.heroImage,
+        thumbnail: fields.thumbnail
+      });
+      
+      // 使用 Asset Map 查找圖片資源
       let imageUrl = null;
-      if (fields.featuredImage?.sys?.id) {
-        const asset = assetMap.get(fields.featuredImage.sys.id);
-        if (asset?.fields?.file?.url) {
+      if (fields.featuredImage && fields.featuredImage.sys && fields.featuredImage.sys.id) {
+        const assetId = fields.featuredImage.sys.id;
+        const asset = assetMap.get(assetId);
+        
+        if (asset && asset.fields && asset.fields.file && asset.fields.file.url) {
           imageUrl = `https:${asset.fields.file.url}`;
+          console.log(`✅ 從 Asset Map 找到圖片: ${imageUrl}`);
+        } else {
+          console.log(`⚠️ Asset Map 中未找到 ID 為 ${assetId} 的圖片資源`);
         }
+      } else {
+        console.log(`⚠️ 文章中未找到 featuredImage 的 sys.id`);
       }
+      
       if (imageUrl) {
-        heroImage = `<div class="mb-8"><img src="${imageUrl}" alt="${fields.title || '文章特色圖片'}" class="w-full h-64 md:h-96 object-cover rounded-2xl shadow-lg" /></div>`;
+        heroImage = `
+          <div class="mb-8">
+            <img src="${imageUrl}" alt="${fields.title || '文章特色圖片'}" class="w-full h-64 md:h-96 object-cover rounded-2xl shadow-lg" onerror="console.error('圖片載入失敗:', this.src); this.style.display='none';" onload="console.log('圖片載入成功:', this.src);" />
+          </div>
+        `;
       }
-      const publishDate = fields.publishDate ? new Date(fields.publishDate).toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' }) : '近期';
+
+      // 處理發布日期
+      const publishDate = fields.publishDate ? new Date(fields.publishDate).toLocaleDateString('zh-TW', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }) : '近期';
+
+      // 處理分類
       const category = fields.category || fields.tags?.[0] || '未分類';
-      let content = '文章內容載入中...';
-      if (fields.content?.content) {
-        content = renderRichText(fields.content, assetMap);
+
+      // 處理文章內容
+      let content = '<p>文章內容載入中...</p>';
+      if (fields.content && fields.content.content) {
+        content = renderRichText(fields.content);
       } else if (fields.body) {
-        content = renderRichText(fields.body, assetMap);
+        content = renderRichText(fields.body);
       }
-      return `<article>${heroImage}<header class="mb-8"><div class="flex items-center gap-3 text-sm text-zinc-500 mb-4"><span class="px-3 py-1 bg-zinc-100 rounded-full">${category}</span><span>•</span><span>${publishDate}</span></div><h1 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">${fields.title || '無標題'}</h1>${fields.excerpt ? `<p class="text-lg text-zinc-600 leading-relaxed">${fields.excerpt}</p>` : ''}</header><div class="article-content prose prose-lg max-w-none">${content}</div></article>`;
+
+      return `
+        <article>
+          ${heroImage}
+          
+          <header class="mb-8">
+            <div class="flex items-center gap-3 text-sm text-zinc-500 mb-4">
+              <span class="px-3 py-1 bg-zinc-100 rounded-full">${category}</span>
+              <span>•</span>
+              <span>${publishDate}</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-zinc-900 mb-4">${fields.title || '無標題'}</h1>
+            ${fields.excerpt ? `<p class="text-lg text-zinc-600 leading-relaxed">${fields.excerpt}</p>` : ''}
+          </header>
+
+          <div class="article-content prose prose-lg max-w-none">
+            ${content}
+          </div>
+        </article>
+      `;
     }
 
-    // 顯示錯誤狀態的輔助函數
-    function showError(message) {
-      const errorState = document.getElementById('error-state');
-      const loadingState = document.getElementById('loading-state');
-      const articleContainer = document.getElementById('article-container');
-      if (errorState && loadingState) {
-        loadingState.classList.add('hidden');
-        articleContainer.classList.add('hidden');
-        errorState.classList.remove('hidden');
-        errorState.querySelector('p:last-of-type').textContent = `錯誤詳情: ${message}`;
-      }
+    // 渲染富文本內容
+    function renderRichText(richText) {
+      if (!richText || !richText.content) return '<p>內容載入中...</p>';
+
+      let html = '';
+      
+      richText.content.forEach(node => {
+        if (node.nodeType === 'paragraph') {
+          html += '<p>';
+          if (node.content) {
+            node.content.forEach(textNode => {
+              let text = textNode.value || '';
+              if (textNode.marks) {
+                textNode.marks.forEach(mark => {
+                  if (mark.type === 'bold') {
+                    text = `<strong>${text}</strong>`;
+                  } else if (mark.type === 'italic') {
+                    text = `<em>${text}</em>`;
+                  } else if (mark.type === 'underline') {
+                    text = `<u>${text}</u>`;
+                  }
+                });
+              }
+              html += text;
+            });
+          }
+          html += '</p>';
+        } else if (node.nodeType === 'heading-1') {
+          html += `<h1>${node.content?.[0]?.value || ''}</h1>`;
+        } else if (node.nodeType === 'heading-2') {
+          html += `<h2>${node.content?.[0]?.value || ''}</h2>`;
+        } else if (node.nodeType === 'heading-3') {
+          html += `<h3>${node.content?.[0]?.value || ''}</h3>`;
+        } else if (node.nodeType === 'unordered-list') {
+          html += '<ul>';
+          if (node.content) {
+            node.content.forEach(listItem => {
+              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+            });
+          }
+          html += '</ul>';
+        } else if (node.nodeType === 'ordered-list') {
+          html += '<ol>';
+          if (node.content) {
+            node.content.forEach(listItem => {
+              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+            });
+          }
+          html += '</ol>';
+        }
+      });
+
+      return html || '<p>內容載入中...</p>';
     }
 
-    // 載入文章主函數
+    // 載入文章
     async function loadArticle() {
       const articleId = getArticleId();
+      const loadingState = document.getElementById('loading-state');
+      const errorState = document.getElementById('error-state');
+      const articleContainer = document.getElementById('article-container');
+      
+      // 調試信息：記錄從 URL 獲取的文章 ID
+      console.log(`Attempting to load article with ID: "${articleId}"`);
+      console.log(`Current URL: ${window.location.href}`);
+
       if (!articleId) {
-        showError('缺少文章 ID 參數');
+        // 沒有文章 ID，顯示錯誤
+        loadingState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+        errorState.querySelector('p:last-of-type').textContent = '錯誤詳情: 缺少文章 ID 參數';
         return;
       }
+
       try {
-        const loadingState = document.getElementById('loading-state');
-        const articleContainer = document.getElementById('article-container');
+        // 顯示載入狀態
         loadingState.classList.remove('hidden');
+        errorState.classList.add('hidden');
         articleContainer.classList.add('hidden');
+
+        // 獲取文章
         const result = await fetchArticle(articleId);
+
         if (!result.article) {
-          throw new Error(`找不到 ID 為 "${articleId}" 的文章。`);
+          throw new Error(`找不到 ID 為 "${articleId}" 的文章。可能的原因：1) 文章尚未發布 2) 文章已被刪除 3) ID 格式不正確`);
         }
+
+        // 建立 Asset Map 以便快速查找圖片資源
+        const assets = result.includes?.Asset || [];
         const assetMap = new Map();
-        (result.includes?.Asset || []).forEach(asset => assetMap.set(asset.sys.id, asset));
-        const articleHTML = renderArticle(result.article, assetMap);
+        
+        assets.forEach(asset => {
+          if (asset.sys && asset.sys.id) {
+            assetMap.set(asset.sys.id, asset);
+          }
+        });
+        
+        console.log(`建立 Asset Map，包含 ${assetMap.size} 個圖片資源`);
+
+        // 隱藏載入狀態
         loadingState.classList.add('hidden');
+
+        // 渲染文章，傳遞 assetMap 參數
+        const articleHTML = renderArticle(result.article, assetMap);
         articleContainer.innerHTML = articleHTML;
         articleContainer.classList.remove('hidden');
-        document.title = `${result.article.fields.title || '文章詳情'} · 流芯視覺`;
+
+        // 更新頁面標題
+        const title = result.article.fields.title || '文章詳情';
+        document.title = `${title} · 流芯視覺`;
+
       } catch (error) {
         console.error('Error loading article:', error);
-        showError(error.message);
+        
+        // 隱藏載入狀態
+        loadingState.classList.add('hidden');
+        
+        // 顯示錯誤狀態
+        errorState.classList.remove('hidden');
+        errorState.querySelector('p:last-of-type').textContent = `錯誤詳情: ${error.message}`;
       }
     }
 
-    // 確保頁面所有資源 (包含外部腳本) 載入完成後，才自動載入文章
-    window.onload = function() {
-      console.log('🔍 檢查 Contentful Rich Text Renderer 函式庫...');
-      
-      // 檢查多個可能的物件名稱
-      const renderer = window.contentfulRichText || window.richTextHtmlRenderer || window.richTextRenderer;
-      
-      console.log('window.contentfulRichText:', window.contentfulRichText);
-      console.log('window.richTextHtmlRenderer:', window.richTextHtmlRenderer);
-      console.log('window.richTextRenderer:', window.richTextRenderer);
-      console.log('找到的 renderer:', renderer);
-      
-      if (!renderer) {
-        console.error('❌ 所有可能的渲染工具都未載入！');
-        showError('核心渲染工具載入失敗，請檢查網路連線或重新整理頁面。');
-        return;
-      }
-      
-      console.log('✅ 渲染工具載入成功！開始載入文章...');
+
+
+    // 頁面載入完成後自動載入文章
+    document.addEventListener('DOMContentLoaded', function() {
       loadArticle();
-    };
+    });
   </script>
 
-  <!-- Contentful Rich Text Renderer (UMD 版本) -->
-  <script src="https://unpkg.com/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js"></script>
-  
   <!-- 引入共用 JavaScript 功能 -->
   <!-- 引入共用組件系統 -->
   <script src="js/components.js"></script>

@@ -203,76 +203,106 @@
       `;
     }
 
-    // 渲染富文本內容 (使用官方函式庫)
+    // 渲染富文本內容 (動態尋找可用的渲染工具)
     function renderRichText(richTextDocument) {
       if (!richTextDocument) {
         return '<p>內容載入中...</p>';
       }
 
-      // 檢查官方函式庫是否可用
-      if (typeof window.richTextHtmlRenderer === 'undefined') {
-        console.error('❌ Contentful Rich Text Renderer 函式庫未載入');
-        return '<p>渲染工具載入失敗，請重新整理頁面</p>';
+      // 動態尋找可用的渲染工具
+      const availableRenderer = window.richTextHtmlRenderer || 
+                              window.contentfulRichText || 
+                              window.richTextRenderer || 
+                              window.documentToHtmlString || 
+                              (typeof documentToHtmlString !== 'undefined' ? documentToHtmlString : null);
+
+      if (!availableRenderer) {
+        console.error('❌ 找不到可用的渲染工具！');
+        console.log('嘗試使用備用渲染方案...');
+        
+        // 備用方案：簡單的 HTML 渲染
+        return renderRichTextFallback(richTextDocument);
       }
 
       try {
-        // 使用官方的 documentToHtmlString 方法
-        const options = {
-          preserveWhitespace: true, // 保留空白字元
-          renderNode: {
-            // 自訂段落渲染
-            'paragraph': (node, next) => `<p class="mb-4 leading-relaxed">${next(node.content)}</p>`,
-            
-            // 自訂標題渲染
-            'heading-1': (node, next) => `<h1 class="text-3xl font-bold text-gray-900 mb-4 mt-8">${next(node.content)}</h1>`,
-            'heading-2': (node, next) => `<h2 class="text-2xl font-bold text-gray-900 mb-3 mt-6">${next(node.content)}</h2>`,
-            'heading-3': (node, next) => `<h3 class="text-xl font-bold text-gray-800 mb-3 mt-5">${next(node.content)}</h3>`,
-            'heading-4': (node, next) => `<h4 class="text-lg font-semibold text-gray-800 mb-2 mt-4">${next(node.content)}</h4>`,
-            'heading-5': (node, next) => `<h5 class="text-base font-semibold text-gray-700 mb-2 mt-3">${next(node.content)}</h5>`,
-            'heading-6': (node, next) => `<h6 class="text-sm font-semibold text-gray-700 mb-2 mt-3">${next(node.content)}</h6>`,
-            
-            // 自訂列表渲染
-            'unordered-list': (node, next) => `<ul class="list-disc list-inside mb-4 space-y-1">${next(node.content)}</ul>`,
-            'ordered-list': (node, next) => `<ol class="list-decimal list-inside mb-4 space-y-1">${next(node.content)}</ol>`,
-            'list-item': (node, next) => `<li class="text-gray-700">${next(node.content)}</li>`,
-            
-            // 自訂引用渲染
-            'quote': (node, next) => `<blockquote class="border-l-4 border-blue-500 pl-4 py-2 my-4 bg-gray-50 italic text-gray-700">${next(node.content)}</blockquote>`,
-            
-            // 自訂水平線渲染
-            'hr': () => `<hr class="my-6 border-gray-300">`,
-            
-            // 自訂內嵌資源渲染
-            'embedded-asset-block': (node) => {
-              // 這裡可以處理內嵌的圖片等資源
-              return `<div class="my-6 text-center text-gray-500">[內嵌資源]</div>`;
-            },
-            
-            // 自訂內嵌條目渲染
-            'embedded-entry-block': (node) => {
-              // 這裡可以處理內嵌的條目
-              return `<div class="my-6 text-center text-gray-500">[內嵌條目]</div>`;
-            }
-          },
-          
-          renderMark: {
-            // 自訂標記渲染
-            'bold': text => `<strong class="font-bold">${text}</strong>`,
-            'italic': text => `<em class="italic">${text}</em>`,
-            'underline': text => `<u class="underline">${text}</u>`,
-            'code': text => `<code class="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">${text}</code>`,
-            'superscript': text => `<sup class="text-xs">${text}</sup>`,
-            'subscript': text => `<sub class="text-xs">${text}</sub>`,
-            'strikethrough': text => `<del class="line-through">${text}</del>`
-          }
-        };
-
-        return window.richTextHtmlRenderer.documentToHtmlString(richTextDocument, options);
+        console.log('✅ 使用渲染工具:', availableRenderer);
+        
+        // 檢查是否有 documentToHtmlString 方法
+        if (typeof availableRenderer.documentToHtmlString === 'function') {
+          return availableRenderer.documentToHtmlString(richTextDocument);
+        } else if (typeof availableRenderer === 'function') {
+          return availableRenderer(richTextDocument);
+        } else {
+          console.error('❌ 渲染工具格式不正確');
+          return renderRichTextFallback(richTextDocument);
+        }
         
       } catch (error) {
         console.error('❌ 渲染富文本時發生錯誤:', error);
-        return '<p>內容渲染失敗，請重新整理頁面</p>';
+        console.log('使用備用渲染方案...');
+        return renderRichTextFallback(richTextDocument);
       }
+    }
+
+    // 備用渲染方案
+    function renderRichTextFallback(richText) {
+      if (!richText || !richText.content) return '<p>內容載入中...</p>';
+
+      let html = '';
+      
+      richText.content.forEach(node => {
+        if (node.nodeType === 'paragraph') {
+          html += '<p class="mb-4 leading-relaxed">';
+          if (node.content) {
+            node.content.forEach(textNode => {
+              let text = textNode.value || '';
+              if (textNode.marks) {
+                textNode.marks.forEach(mark => {
+                  if (mark.type === 'bold') {
+                    text = `<strong class="font-bold">${text}</strong>`;
+                  } else if (mark.type === 'italic') {
+                    text = `<em class="italic">${text}</em>`;
+                  } else if (mark.type === 'underline') {
+                    text = `<u class="underline">${text}</u>`;
+                  }
+                });
+              }
+              html += text;
+            });
+          }
+          html += '</p>';
+        } else if (node.nodeType === 'heading-1') {
+          html += `<h1 class="text-3xl font-bold text-gray-900 mb-4 mt-8">${node.content?.[0]?.value || ''}</h1>`;
+        } else if (node.nodeType === 'heading-2') {
+          html += `<h2 class="text-2xl font-bold text-gray-900 mb-3 mt-6">${node.content?.[0]?.value || ''}</h2>`;
+        } else if (node.nodeType === 'heading-3') {
+          html += `<h3 class="text-xl font-bold text-gray-800 mb-3 mt-5">${node.content?.[0]?.value || ''}</h3>`;
+        } else if (node.nodeType === 'heading-4') {
+          html += `<h4 class="text-lg font-semibold text-gray-800 mb-2 mt-4">${node.content?.[0]?.value || ''}</h4>`;
+        } else if (node.nodeType === 'heading-5') {
+          html += `<h5 class="text-base font-semibold text-gray-700 mb-2 mt-3">${node.content?.[0]?.value || ''}</h5>`;
+        } else if (node.nodeType === 'heading-6') {
+          html += `<h6 class="text-sm font-semibold text-gray-700 mb-2 mt-3">${node.content?.[0]?.value || ''}</h6>`;
+        } else if (node.nodeType === 'unordered-list') {
+          html += '<ul class="list-disc list-inside mb-4 space-y-1">';
+          if (node.content) {
+            node.content.forEach(listItem => {
+              html += `<li class="text-gray-700">${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+            });
+          }
+          html += '</ul>';
+        } else if (node.nodeType === 'ordered-list') {
+          html += '<ol class="list-decimal list-inside mb-4 space-y-1">';
+          if (node.content) {
+            node.content.forEach(listItem => {
+              html += `<li class="text-gray-700">${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+            });
+          }
+          html += '</ol>';
+        }
+      });
+
+      return html || '<p>內容載入中...</p>';
     }
 
     // 載入文章
@@ -347,18 +377,59 @@
 
     // 頁面載入完成後自動載入文章
     document.addEventListener('DOMContentLoaded', function() {
-      // 檢查官方函式庫是否可用
-      if (typeof window.richTextHtmlRenderer === 'undefined') {
-        console.error('❌ Contentful Rich Text Renderer 函式庫未載入');
-        // 延遲一下再檢查，給腳本更多載入時間
+      console.log('🔍 積極排錯：檢查所有可能的物件名稱...');
+      
+      // 檢查多個可能的物件名稱
+      console.log('window.richTextHtmlRenderer:', typeof window.richTextHtmlRenderer);
+      console.log('window.contentfulRichText:', typeof window.contentfulRichText);
+      console.log('window.richTextRenderer:', typeof window.richTextRenderer);
+      console.log('window.documentToHtmlString:', typeof window.documentToHtmlString);
+      console.log('documentToHtmlString (全域):', typeof documentToHtmlString);
+      
+      // 列出所有以 rich 開頭的屬性
+      const richProps = Object.getOwnPropertyNames(window).filter(prop => 
+        prop.toLowerCase().includes('rich') || 
+        prop.toLowerCase().includes('contentful') ||
+        prop.toLowerCase().includes('document')
+      );
+      console.log('找到的相關屬性:', richProps);
+      
+      // 檢查是否有任何可用的渲染函數
+      const availableRenderer = window.richTextHtmlRenderer || 
+                              window.contentfulRichText || 
+                              window.richTextRenderer || 
+                              window.documentToHtmlString || 
+                              (typeof documentToHtmlString !== 'undefined' ? documentToHtmlString : null);
+      
+      if (!availableRenderer) {
+        console.error('❌ 所有可能的渲染工具都未載入！');
+        console.error('嘗試延遲載入...');
+        
+        // 延遲檢查，給腳本更多載入時間
         setTimeout(() => {
-          if (typeof window.richTextHtmlRenderer === 'undefined') {
-            console.error('❌ 函式庫仍然未載入，嘗試載入文章...');
+          console.log('🔍 延遲檢查：再次檢查所有可能的物件名稱...');
+          console.log('window.richTextHtmlRenderer:', typeof window.richTextHtmlRenderer);
+          console.log('window.contentfulRichText:', typeof window.contentfulRichText);
+          console.log('documentToHtmlString (全域):', typeof documentToHtmlString);
+          
+          const delayedRenderer = window.richTextHtmlRenderer || 
+                                window.contentfulRichText || 
+                                window.richTextRenderer || 
+                                window.documentToHtmlString || 
+                                (typeof documentToHtmlString !== 'undefined' ? documentToHtmlString : null);
+          
+          if (!delayedRenderer) {
+            console.error('❌ 延遲檢查後仍然未找到渲染工具！');
+            console.error('嘗試使用備用方案...');
+          } else {
+            console.log('✅ 延遲檢查後找到渲染工具！');
           }
+          
+          // 無論如何都嘗試載入文章
           loadArticle();
-        }, 1000);
+        }, 2000);
       } else {
-        console.log('✅ 函式庫已載入，開始載入文章...');
+        console.log('✅ 找到可用的渲染工具！開始載入文章...');
         loadArticle();
       }
     });

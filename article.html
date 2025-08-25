@@ -15,8 +15,8 @@
   gtag('config', 'G-4M94YE8ETT');
 </script>
 
-  <meta name="description" content="流芯視覺 LIQ media 文章詳情頁面">
-  <meta name="keywords" content="流芯視覺,LIQ media,文章,AI 影像,數位行銷,視覺設計">
+  <meta name="description" content="流芯視覺 LYQD media 文章詳情頁面">
+  <meta name="keywords" content="流芯視覺,LYQD media,文章,AI 影像,數位行銷,視覺設計">
   
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -457,16 +457,6 @@
           script.src = cdnSources[currentIndex];
           script.onload = function() {
             console.log(`✅ CDN 載入成功: ${cdnSources[currentIndex]}`);
-            // 掛載全域渲染函式，供 renderRichText() 使用
-            if (
-              window.contentfulRichTextHtmlRenderer &&
-              typeof window.contentfulRichTextHtmlRenderer.documentToHtmlString === 'function'
-            ) {
-              window.documentToHtmlString = window.contentfulRichTextHtmlRenderer.documentToHtmlString;
-              console.log('✅ 已將 documentToHtmlString 掛載到 window');
-            } else {
-              console.warn('⚠️ 未發現 contentfulRichTextHtmlRenderer.documentToHtmlString');
-            }
           };
           script.onerror = function() {
             console.error(`❌ CDN 載入失敗: ${cdnSources[currentIndex]}`);

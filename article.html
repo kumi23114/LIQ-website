@@ -524,60 +524,7 @@
       `;
     }
 
-    // 渲染富文本內容
-    function renderRichText(richText) {
-      if (!richText || !richText.content) return '<p>內容載入中...</p>';
-
-      let html = '';
-      
-      richText.content.forEach(node => {
-        if (node.nodeType === 'paragraph') {
-          html += '<p>';
-          if (node.content) {
-            node.content.forEach(textNode => {
-              let text = textNode.value || '';
-              if (textNode.marks) {
-                textNode.marks.forEach(mark => {
-                  if (mark.type === 'bold') {
-                    text = `<strong>${text}</strong>`;
-                  } else if (mark.type === 'italic') {
-                    text = `<em>${text}</em>`;
-                  } else if (mark.type === 'underline') {
-                    text = `<u>${text}</u>`;
-                  }
-                });
-              }
-              html += text;
-            });
-          }
-          html += '</p>';
-        } else if (node.nodeType === 'heading-1') {
-          html += `<h1>${node.content?.[0]?.value || ''}</h1>`;
-        } else if (node.nodeType === 'heading-2') {
-          html += `<h2>${node.content?.[0]?.value || ''}</h2>`;
-        } else if (node.nodeType === 'heading-3') {
-          html += `<h3>${node.content?.[0]?.value || ''}</h3>`;
-        } else if (node.nodeType === 'unordered-list') {
-          html += '<ul>';
-          if (node.content) {
-            node.content.forEach(listItem => {
-              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
-            });
-          }
-          html += '</ul>';
-        } else if (node.nodeType === 'ordered-list') {
-          html += '<ol>';
-          if (node.content) {
-            node.content.forEach(listItem => {
-              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
-            });
-          }
-          html += '</ol>';
-        }
-      });
-
-      return html || '<p>內容載入中...</p>';
-    }
+    // 下方舊版手刻 renderRichText 已移除，統一使用上方 documentToHtmlString 版本
 
     // 載入文章
     async function loadArticle() {

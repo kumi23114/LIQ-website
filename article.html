@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>文章詳情 · 流芯視覺</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer@16/dist/rich-text-html-renderer.min.js"></script>
+  <!-- 直接載入 Contentful Rich Text Renderer（最簡版） -->
+  <script src="https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer@16/dist/rich-text-html-renderer.browser.min.js"></script>
+  <script>
+    // 從全域物件取出函式
+    const { documentToHtmlString } = window.contentfulRichTextHtmlRenderer || {};
+  </script>
   <script>
     // 確保全域可用（不同版本可能掛在 window.contentfulRichTextHtmlRenderer）
     if (typeof window.documentToHtmlString !== 'function' &&
@@ -495,12 +500,11 @@
       // 處理分類
       const category = fields.category || fields.tags?.[0] || '未分類';
 
-      // 處理文章內容
+      // 處理文章內容（最簡渲染：使用官方 documentToHtmlString）
       let content = '<p>文章內容載入中...</p>';
-      if (fields.content && fields.content.content) {
-        content = renderRichText(fields.content);
-      } else if (fields.body) {
-        content = renderRichText(fields.body);
+      const richTextDocument = fields.body || fields.content;
+      if (richTextDocument && typeof documentToHtmlString === 'function') {
+        content = documentToHtmlString(richTextDocument);
       }
 
       return `
@@ -517,7 +521,7 @@
             ${fields.excerpt ? `<p class="text-lg text-zinc-600 leading-relaxed">${fields.excerpt}</p>` : ''}
           </header>
 
-          <div class="article-content prose prose-lg max-w-none">
+          <div class="article-content prose prose-lg max-w-none" id="article">
             ${content}
           </div>
         </article>

@@ -21,9 +21,15 @@ function markIntroAnimationAsPlayed() {
 function playIntroAnimation() {
   // 禁用滾動功能
   function disableScroll() {
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.documentElement.style.scrollBehavior = 'auto';
     document.body.style.overflow = 'hidden';
     document.body.style.position = 'fixed';
     document.body.style.width = '100%';
+    if (scrollBarWidth > 0) {
+      document.body.style.paddingRight = scrollBarWidth + 'px';
+    }
+    window.scrollTo(0, 0);
   }
   
   // 啟用滾動功能
@@ -31,6 +37,8 @@ function playIntroAnimation() {
     document.body.style.overflow = '';
     document.body.style.position = '';
     document.body.style.width = '';
+    document.body.style.paddingRight = '';
+    document.documentElement.style.scrollBehavior = '';
   }
   
   // 立即禁用滾動
@@ -39,7 +47,13 @@ function playIntroAnimation() {
   // 創建 GSAP Timeline
   const tl = gsap.timeline();
   
-  // 設置初始狀態
+  // 設置初始狀態（避免 layout thrash，先一次性 set）
+  gsap.set([
+    '.sb-logo img',
+    '.js-border-top',
+    '.js-border-left',
+    '.js-border-right'
+  ], { force3D: true });
   gsap.set('.sb-logo img', { opacity: 0, scale: 0.5 });
   gsap.set('.js-border-top', { scaleX: 0, transformOrigin: 'left' });
   gsap.set('.js-border-left', { scaleY: 0, transformOrigin: 'top' });
@@ -70,24 +84,24 @@ function playIntroAnimation() {
     ease: 'power2.out' 
   }, '-=0.4')
   
-  // 畫面揭露和主體顯示
+  // 畫面揭露和主體顯示（確保 intro 全屏覆蓋，header 不需延遲）
   .to('.site-intro', { 
     yPercent: -100, 
-    duration: 1.2, 
-    ease: 'power2.inOut' 
+    duration: 0.9, 
+    ease: 'power2.inOut'
   })
   .to('#main-content', { 
     opacity: 1, 
-    duration: 0.8, 
+    duration: 0.6, 
     ease: 'power2.out' 
-  }, '-=0.6')
+  }, '-=0.45')
   
   // 清理舞台並重新啟用滾動
   .set('.site-intro', { display: 'none' })
   .call(() => {
     enableScroll();
     markIntroAnimationAsPlayed();
-    // 顯示導覽與 CTA
+    // 觸發 CTA 優雅進場
     document.body.classList.add('intro-done');
   });
 }

@@ -101,24 +101,19 @@ function playIntroAnimation() {
   .call(() => {
     enableScroll();
     markIntroAnimationAsPlayed();
-    // 廣播事件，讓共用層統一處理 CTA 顯示
-    document.dispatchEvent(new CustomEvent('intro:done'));
+    // 無需廣播，CTA 由 overlay 覆蓋即可
   });
 }
 
 // 初始化開場動畫
 function initIntroAnimation() {
   if (shouldPlayIntroAnimation()) {
-    // 讓共用層知道本頁有 intro 覆蓋
-    document.body.classList.add('has-intro');
     // 如果還沒播放過，執行開場動畫
     playIntroAnimation();
   } else {
     // 如果已經播放過，直接顯示主內容並隱藏開場動畫
     gsap.set('#main-content', { opacity: 1 });
     gsap.set('.site-intro', { display: 'none' });
-    // 同時標記為完成（供 CTA 顯示）
-    document.body.classList.add('intro-done');
   }
 }
 

@@ -793,17 +793,7 @@ body {
 
 /* Smoothly reveal UI after intro finishes (avoid layout shift) */
 /* CTA elegant entrance only when intro overlay exists */
-body.has-intro .sticky-cta {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.6s ease;
-}
-
-body.has-intro.intro-done .sticky-cta {
-  opacity: 1;
-  transform: none;
-  transition-delay: .15s;
-}
+/* CTA 不延遲，由開場覆蓋即可（移除隱藏） */
 
 @keyframes fadeIn {
   to { opacity: 1; }

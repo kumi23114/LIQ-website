@@ -243,14 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // 全站 CTA 顯示邏輯：僅當本頁有 intro 覆蓋時，等待 intro:done 再顯示
-  if (document.body.classList.contains('has-intro')) {
-    // 初始隱藏狀態由 CSS 控制（body.has-intro .sticky-cta {...}）
-    const revealCTA = () => {
-      document.body.classList.add('intro-done');
-    };
-    document.addEventListener('intro:done', revealCTA, { once: true });
-  }
+  // CTA 現在不再延遲，由 intro 覆蓋，無需事件控制
 
   // ESC 鍵關閉迷你聯絡表單彈窗
   document.addEventListener('keydown', function(event) {

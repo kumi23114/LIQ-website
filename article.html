@@ -6,6 +6,14 @@
   <title>文章詳情 · 流芯視覺</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer@16/dist/rich-text-html-renderer.min.js"></script>
+  <script>
+    // 確保全域可用（不同版本可能掛在 window.contentfulRichTextHtmlRenderer）
+    if (typeof window.documentToHtmlString !== 'function' &&
+        window.contentfulRichTextHtmlRenderer &&
+        typeof window.contentfulRichTextHtmlRenderer.documentToHtmlString === 'function') {
+      window.documentToHtmlString = window.contentfulRichTextHtmlRenderer.documentToHtmlString;
+    }
+  </script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-4M94YE8ETT"></script>
@@ -40,7 +48,7 @@
     // 獲取文章內容
     async function fetchArticle(articleId) {
       try {
-        const apiUrl = contentfulProxyUrl({ 'sys.id': articleId, include: '1' });
+        const apiUrl = contentfulProxyUrl({ 'sys.id': articleId, include: '2' });
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -51,19 +59,42 @@
       }
     }
 
-    // 使用官方函式庫渲染富文本（支援嵌入資產）
+    // 使用官方函式庫渲染富文本（支援嵌入資產與超連結）
     function renderRichText(richText, assetMap) {
       if (!richText || !richText.content) return '<p>內容載入中...</p>';
-      return documentToHtmlString(richText, {
+      const renderer = (typeof window.documentToHtmlString === 'function')
+        ? window.documentToHtmlString
+        : (window.contentfulRichTextHtmlRenderer && typeof window.contentfulRichTextHtmlRenderer.documentToHtmlString === 'function'
+            ? window.contentfulRichTextHtmlRenderer.documentToHtmlString
+            : null);
+      if (!renderer) {
+        console.error('Contentful renderer 未載入');
+        return '<p>內容載入中...</p>';
+      }
+      return renderer(richText, {
         renderNode: {
           'embedded-asset-block': (node) => {
-            const asset = assetMap.get(node.data.target.sys.id);
+            const asset = assetMap.get(node?.data?.target?.sys?.id);
             if (asset?.fields?.file?.url) {
               const imageUrl = `https:${asset.fields.file.url}`;
-              const altText = asset.fields.description || '嵌入式圖片';
+              const altText = asset.fields.description || asset.fields.title || '嵌入式圖片';
               return `<figure class="my-8"><img src="${imageUrl}" alt="${altText}" class="w-full rounded-lg shadow-md" /></figure>`;
             }
             return '';
+          },
+          'embedded-asset-inline': (node) => {
+            const asset = assetMap.get(node?.data?.target?.sys?.id);
+            if (asset?.fields?.file?.url) {
+              const imageUrl = `https:${asset.fields.file.url}`;
+              const altText = asset.fields.description || asset.fields.title || '圖片';
+              return `<img src="${imageUrl}" alt="${altText}" class="inline-block align-middle max-w-full h-auto" />`;
+            }
+            return '';
+          },
+          'hyperlink': (node, next) => {
+            const url = node?.data?.uri || '#';
+            const text = next(node.content);
+            return `<a href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`;
           }
         }
       });

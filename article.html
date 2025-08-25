@@ -177,9 +177,9 @@
       // 處理文章內容
       let content = '<p>文章內容載入中...</p>';
       if (fields.content && fields.content.content) {
-        content = renderRichText(fields.content);
+        content = renderRichTextWithAssets(fields.content, assetMap);
       } else if (fields.body) {
-        content = renderRichText(fields.body);
+        content = renderRichTextWithAssets(fields.body, assetMap);
       }
 
       return `
@@ -241,6 +241,61 @@
         console.error('❌ 渲染富文本時發生錯誤:', error);
         console.log('使用備用渲染方案...');
         return renderRichTextFallback(richTextDocument);
+      }
+    }
+
+    // 使用資產映射渲染富文本（支援嵌入資產）
+    function renderRichTextWithAssets(richTextDocument, assetMap) {
+      if (!richTextDocument) {
+        return '<p>內容載入中...</p>';
+      }
+
+      // 若全域渲染器尚未就緒，回退至基礎渲染
+      const renderer = (typeof window !== 'undefined' && window.documentToHtmlString)
+        ? window.documentToHtmlString
+        : null;
+      if (!renderer) {
+        console.warn('⚠️ documentToHtmlString 未就緒，使用回退渲染');
+        return renderRichText(richTextDocument);
+      }
+
+      function findAssetUrlFromNode(node) {
+        try {
+          const assetId = node?.data?.target?.sys?.id;
+          if (!assetId) return null;
+          const asset = assetMap && assetMap.get ? assetMap.get(assetId) : null;
+          const url = asset?.fields?.file?.url ? `https:${asset.fields.file.url}` : null;
+          return url;
+        } catch (_) {
+          return null;
+        }
+      }
+
+      const options = {
+        renderNode: {
+          // 直接使用節點類型字串，避免依賴外部常量
+          'embedded-asset-block': (node) => {
+            const url = findAssetUrlFromNode(node);
+            if (!url) return '';
+            const alt = node?.data?.target?.fields?.title || 'image';
+            return `<figure><img src="${url}" alt="${alt}"/></figure>`;
+          },
+          'embedded-asset-inline': (node) => {
+            const url = findAssetUrlFromNode(node);
+            if (!url) return '';
+            const alt = node?.data?.target?.fields?.title || 'image';
+            return `<img src="${url}" alt="${alt}"/>`;
+          }
+        }
+      };
+
+      try {
+        const html = renderer(richTextDocument, options);
+        console.log('🧱 RichText render length:', html ? html.length : 0);
+        return html || '<p></p>';
+      } catch (error) {
+        console.error('❌ 帶資產渲染出錯，回退基礎渲染:', error);
+        return renderRichText(richTextDocument);
       }
     }
 

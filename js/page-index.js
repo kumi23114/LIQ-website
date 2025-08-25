@@ -1,7 +1,111 @@
 /**
  * LYQD Media - 首頁專用 JavaScript 功能
- * 包含：Showreel 影片懶載入、輪播指示器、Hero 影片載入、導覽列效果等
+ * 包含：Showreel 影片懶載入、Hero 影片載入、輪播指示器、桌面版導覽列效果等
  */
+
+// ============================================================================
+// 開場動畫控制 - 使用 sessionStorage 確保每次瀏覽只播放一次
+// ============================================================================
+
+// 檢查是否已經播放過開場動畫
+function shouldPlayIntroAnimation() {
+  return !sessionStorage.getItem('introAnimationPlayed');
+}
+
+// 標記開場動畫已播放
+function markIntroAnimationAsPlayed() {
+  sessionStorage.setItem('introAnimationPlayed', 'true');
+}
+
+// 開場動畫主函數
+function playIntroAnimation() {
+  // 禁用滾動功能
+  function disableScroll() {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+  }
+  
+  // 啟用滾動功能
+  function enableScroll() {
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+  }
+  
+  // 立即禁用滾動
+  disableScroll();
+  
+  // 創建 GSAP Timeline
+  const tl = gsap.timeline();
+  
+  // 設置初始狀態
+  gsap.set('.sb-logo img', { opacity: 0, scale: 0.5 });
+  gsap.set('.js-border-top', { scaleX: 0, transformOrigin: 'left' });
+  gsap.set('.js-border-left', { scaleY: 0, transformOrigin: 'top' });
+  gsap.set('.js-border-right', { scaleY: 0, transformOrigin: 'top' });
+  
+  // Logo 淡入動畫
+  tl.to('.sb-logo img', { 
+    opacity: 1, 
+    scale: 1, 
+    duration: 2, 
+    ease: 'power2.out' 
+  })
+  
+  // 邊框動畫 - 提前1秒開始，與Logo動畫重疊
+  .to('.js-border-top', { 
+    scaleX: 1, 
+    duration: 0.8, 
+    ease: 'power2.out' 
+  }, '-=1')
+  .to('.js-border-left', { 
+    scaleY: 1, 
+    duration: 0.8, 
+    ease: 'power2.out' 
+  }, '-=0.6')
+  .to('.js-border-right', { 
+    scaleY: 1, 
+    duration: 0.8, 
+    ease: 'power2.out' 
+  }, '-=0.4')
+  
+  // 畫面揭露和主體顯示
+  .to('.site-intro', { 
+    yPercent: -100, 
+    duration: 1.2, 
+    ease: 'power2.inOut' 
+  })
+  .to('#main-content', { 
+    opacity: 1, 
+    duration: 0.8, 
+    ease: 'power2.out' 
+  }, '-=0.6')
+  
+  // 清理舞台並重新啟用滾動
+  .set('.site-intro', { display: 'none' })
+  .call(() => {
+    enableScroll();
+    markIntroAnimationAsPlayed();
+  });
+}
+
+// 初始化開場動畫
+function initIntroAnimation() {
+  if (shouldPlayIntroAnimation()) {
+    // 如果還沒播放過，執行開場動畫
+    playIntroAnimation();
+  } else {
+    // 如果已經播放過，直接顯示主內容並隱藏開場動畫
+    gsap.set('#main-content', { opacity: 1 });
+    gsap.set('.site-intro', { display: 'none' });
+  }
+}
+
+// 等待 DOM 載入完成後初始化開場動畫
+document.addEventListener('DOMContentLoaded', function() {
+  initIntroAnimation();
+});
 
 // ============================================================================
 // VIDEO OPTIMIZATION VARIABLES

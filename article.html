@@ -490,8 +490,47 @@
     });
   </script>
 
-      <!-- Contentful Rich Text Renderer (UMD 版本) -->
-    <script src="https://unpkg.com/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js"></script>
+      <!-- Contentful Rich Text Renderer (多個 CDN 來源) -->
+    <script>
+      // 嘗試載入 Contentful Rich Text Renderer
+      function loadContentfulRenderer() {
+        const cdnSources = [
+          'https://unpkg.com/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js',
+          'https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js',
+          'https://unpkg.com/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.umd.js'
+        ];
+        
+        let currentIndex = 0;
+        
+        function tryNextCDN() {
+          if (currentIndex >= cdnSources.length) {
+            console.error('❌ 所有 CDN 來源都載入失敗');
+            return;
+          }
+          
+          const script = document.createElement('script');
+          script.src = cdnSources[currentIndex];
+          script.onload = function() {
+            console.log(`✅ CDN 載入成功: ${cdnSources[currentIndex]}`);
+          };
+          script.onerror = function() {
+            console.error(`❌ CDN 載入失敗: ${cdnSources[currentIndex]}`);
+            currentIndex++;
+            tryNextCDN();
+          };
+          document.head.appendChild(script);
+        }
+        
+        tryNextCDN();
+      }
+      
+      // 頁面載入後嘗試載入
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadContentfulRenderer);
+      } else {
+        loadContentfulRenderer();
+      }
+    </script>
     
     <!-- 引入共用 JavaScript 功能 -->
     <!-- 引入共用組件系統 -->

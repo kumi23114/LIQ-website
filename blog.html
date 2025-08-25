@@ -53,97 +53,9 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
-  <!-- NAV -->
-  <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
-    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-      <a href="index.html#top" class="group inline-flex items-center gap-3 transition-all duration-300 hover:scale-105">
-        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)] transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(25,58,85,.5)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
-        <span class="font-semibold tracking-wide text-zinc-800 transition-colors duration-300 group-hover:text-[#193a55]">流芯視覺</span>
-      </a>
-      <nav class="hidden gap-8 md:flex">
-        <a href="index.html#showreel" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
-          <span class="relative z-10">精選作品集</span>
-          <span class="nav-underline"></span>
-        </a>
-        <a href="index.html#advantages" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
-          <span class="relative z-10">關於我們</span>
-          <span class="nav-underline"></span>
-        </a>
-        <a href="index.html#cases" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
-          <span class="relative z-10">AI應用項目</span>
-          <span class="nav-underline"></span>
-        </a>
-        <a href="index.html#process" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
-          <span class="relative z-10">服務流程</span>
-          <span class="nav-underline"></span>
-        </a>
-        <a href="faq.html" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
-          <span class="relative z-10">常見問題</span>
-          <span class="nav-underline"></span>
-        </a>
-        <a href="blog.html" class="nav-link active text-sm text-zinc-800 relative overflow-hidden transition-all duration-300">
-          <span class="relative z-10">文章專欄</span>
-          <span class="nav-underline"></span>
-        </a>
-      </nav>
-      <a href="index.html#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200 active:scale-95" style="background-color:#193a55;color:white">預約諮詢</a>
-    </div>
-  </header>
 
-  <!-- Mobile Navigation Bar -->
-  <div class="md:hidden mobile-nav-container">
-    <!-- Mobile Header with Burger Menu -->
-    <div class="mobile-header">
-      <div class="burger-container" onclick="toggleMobileMenu()">
-        <div id="burger">
-          <div class="bar topBar"></div>
-          <div class="bar btmBar"></div>
-        </div>
-      </div>
-      
-      <div class="mobile-logo">
-        <span class="font-semibold tracking-wide text-white">流芯視覺</span>
-      </div>
-      
-      <div class="mobile-cta">
-        <a href="index.html#contact" class="mobile-cta-btn">諮詢</a>
-      </div>
-    </div>
-    
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
-      <!-- Close button (X) -->
-      <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="關閉選單">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      
-      <ul class="mobile-menu">
-        <li class="mobile-menu-item">
-          <a href="index.html#top">首頁</a>
-        </li>
-        <li class="mobile-menu-item">
-          <a href="index.html#showreel">精選作品集</a>
-        </li>
-        <li class="mobile-menu-item">
-          <a href="index.html#advantages">關於我們</a>
-        </li>
-        <li class="mobile-menu-item">
-          <a href="index.html#cases">AI應用項目</a>
-        </li>
-        <li class="mobile-menu-item">
-          <a href="index.html#process">服務流程</a>
-        </li>
-        <li class="mobile-menu-item">
-          <a href="faq.html">常見問題</a>
-        </li>
-        <li class="mobile-menu-item">
-          <a href="blog.html">文章專欄</a>
-        </li>
-      </ul>
-    </div>
-  </div>
+
+
 
   <!-- HERO SECTION -->
   <section class="relative isolate overflow-hidden py-16 md:py-24">
@@ -223,56 +135,7 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="border-t border-black/5 py-10">
-    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-zinc-600 md:flex-row">
-      <p>LYQD Media · 電影級 AI 製作</p>
-      <div class="flex items-center gap-6">
-        <a href="index.html#showreel" class="hover:text-zinc-800">精選作品集</a>
-        <a href="index.html#cases" class="hover:text-zinc-800">AI應用項目</a>
-        <a href="index.html#contact" class="hover:text-zinc-800">聯絡我們</a>
-        <a href="blog.html" class="hover:text-zinc-800">文章專欄</a>
-      </div>
-    </div>
-  </footer>
 
-  <!-- Sticky CTA Buttons -->
-  <div class="sticky-cta">
-    <!-- 取得報價按鈕 -->
-    <button class="sticky-cta-button primary" onclick="openMiniContact()" title="取得報價">
-      💰
-      <span class="tooltip">取得報價</span>
-    </button>
-    
-    <!-- LINE 官方帳號按鈕 -->
-    <a href="https://lin.ee/0eBvgAV" target="_blank" class="sticky-cta-button secondary" title="LINE 官方帳號">
-      💬
-      <span class="tooltip">LINE 官方帳號</span>
-    </a>
-  </div>
-
-  <!-- Mini Contact Form Modal -->
-  <div id="miniContactModal" class="mini-contact-modal">
-    <div class="mini-contact-content">
-      <button class="mini-contact-close" onclick="closeMiniContact()">&times;</button>
-      
-      <div class="mini-contact-header">
-        <h3>取得報價</h3>
-        <p>留下資訊，我們將在 24 小時內回覆</p>
-      </div>
-      
-      <form class="mini-contact-form" action="https://formspree.io/f/mdkdqdqp" method="POST" enctype="text/plain">
-        <input type="text" name="Name" placeholder="您的姓名" required>
-        <input type="email" name="Email" placeholder="您的 Email" required>
-        <textarea name="Message" placeholder="簡述您的專案內容、時程與預算區間" required></textarea>
-        
-        <div class="mini-contact-actions">
-          <button type="submit" class="submit-btn">送出</button>
-          <button type="button" class="cancel-btn" onclick="closeMiniContact()">取消</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <script>
     // Newsletter subscription handler
@@ -594,6 +457,9 @@
   </script>
 
   <!-- 引入共用 JavaScript 功能 -->
+  <!-- 引入共用組件系統 -->
+  <script src="js/components.js"></script>
+  
   <script src="js/main.js"></script>
 </body>
 </html>

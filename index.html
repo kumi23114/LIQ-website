@@ -36,6 +36,9 @@
   <link rel="dns-prefetch" href="//vz-12fd57b1-764.b-cdn.net">
   <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
   
+  <!-- Preload intro logo to avoid decode jank -->
+  <link rel="preload" as="image" href="assets/logo.png" fetchpriority="high">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <link rel="stylesheet" href="css/style.css">

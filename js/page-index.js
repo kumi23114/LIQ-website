@@ -63,31 +63,31 @@ function playIntroAnimation() {
   tl.to('.sb-logo img', { 
     opacity: 1, 
     scale: 1, 
-    duration: 2, 
+    duration: 1.2, 
     ease: 'power2.out' 
   })
   
   // 邊框動畫 - 提前1秒開始，與Logo動畫重疊
   .to('.js-border-top', { 
     scaleX: 1, 
-    duration: 0.8, 
+    duration: 0.6, 
     ease: 'power2.out' 
-  }, '-=1')
+  }, '-=0.9')
   .to('.js-border-left', { 
     scaleY: 1, 
-    duration: 0.8, 
+    duration: 0.6, 
     ease: 'power2.out' 
-  }, '-=0.6')
+  }, '-=0.5')
   .to('.js-border-right', { 
     scaleY: 1, 
-    duration: 0.8, 
+    duration: 0.6, 
     ease: 'power2.out' 
-  }, '-=0.4')
+  }, '-=0.35')
   
   // 畫面揭露和主體顯示（確保 intro 全屏覆蓋，header 不需延遲）
   .to('.site-intro', { 
     yPercent: -100, 
-    duration: 0.9, 
+    duration: 0.7, 
     ease: 'power2.inOut'
   })
   .to('#main-content', { 

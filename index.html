@@ -37,9 +37,19 @@
   <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
+  <!-- Site Intro Section (Intro Animation) -->
+  <div class="site-intro js-intro" style="opacity: 1; position: fixed; top: 0; left: 0; z-index: 50; width: 100%; height: 100%; background: #193a55;">
+    <div class="sb-logo js-logo">
+      <img src="assets/logo.png" alt="流芯視覺 Logo">
+    </div>
+    <div class="site-intro__border site-intro__border--top js-border-top"></div>
+    <div class="site-intro__border site-intro__border--left js-border-left"></div>
+    <div class="site-intro__border site-intro__border--right js-border-right"></div>
+  </div>
   <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
       <a href="#top" class="group inline-flex items-center gap-3 transition-all duration-300 hover:scale-105">

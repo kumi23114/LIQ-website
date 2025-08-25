@@ -36,9 +36,97 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body id="top" class="min-h-screen bg-white text-zinc-800 selection:bg-[#193a55]/30">
+  <!-- NAV -->
+  <header class="sticky top-0 z-40 border-b border-black/5 bg-white/70 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+      <a href="index.html#top" class="group inline-flex items-center gap-3 transition-all duration-300 hover:scale-105">
+        <div class="h-8 w-8 rounded-sm shadow-[0_0_30px_rgba(25,58,85,.35)] transition-all duration-300 group-hover:shadow-[0_0_40px_rgba(25,58,85,.5)]" style="background:linear-gradient(135deg, rgba(25,58,85,1) 0%, rgba(13,29,43,1) 100%)"></div>
+        <span class="font-semibold tracking-wide text-zinc-800 transition-colors duration-300 group-hover:text-[#193a55]">流芯視覺</span>
+      </a>
+      <nav class="hidden gap-8 md:flex">
+        <a href="index.html#showreel" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">精選作品集</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="index.html#advantages" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">關於我們</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="index.html#cases" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">AI應用項目</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="index.html#process" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">服務流程</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="faq.html" class="nav-link text-sm text-zinc-600 hover:text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">常見問題</span>
+          <span class="nav-underline"></span>
+        </a>
+        <a href="blog.html" class="nav-link active text-sm text-zinc-800 relative overflow-hidden transition-all duration-300">
+          <span class="relative z-10">文章專欄</span>
+          <span class="nav-underline"></span>
+        </a>
+      </nav>
+      <a href="index.html#contact" class="hidden rounded-full px-4 py-2 text-sm font-semibold md:inline-flex hover:shadow-[0_0_30px_rgba(25,58,85,.5)] hover:-translate-y-0.5 transition-all duration-200 active:scale-95" style="background-color:#193a55;color:white">預約諮詢</a>
+    </div>
+  </header>
 
-
-
+  <!-- Mobile Navigation Bar -->
+  <div class="md:hidden mobile-nav-container">
+    <!-- Mobile Header with Burger Menu -->
+    <div class="mobile-header">
+      <div class="burger-container" onclick="toggleMobileMenu()">
+        <div id="burger">
+          <div class="bar topBar"></div>
+          <div class="bar btmBar"></div>
+        </div>
+      </div>
+      
+      <div class="mobile-logo">
+        <span class="font-semibold tracking-wide text-white">流芯視覺</span>
+      </div>
+      
+      <div class="mobile-cta">
+        <a href="index.html#contact" class="mobile-cta-btn">諮詢</a>
+      </div>
+    </div>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+      <!-- Close button (X) -->
+      <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="關閉選單">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      
+      <ul class="mobile-menu">
+        <li class="mobile-menu-item">
+          <a href="index.html#top">首頁</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#showreel">精選作品集</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#advantages">關於我們</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#cases">AI應用項目</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="index.html#process">服務流程</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="faq.html">常見問題</a>
+        </li>
+        <li class="mobile-menu-item">
+          <a href="blog.html">文章專欄</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 
   <!-- ARTICLE CONTENT -->
   <main class="py-8 md:py-16">
@@ -82,7 +170,56 @@
     </div>
   </main>
 
+  <!-- FOOTER -->
+  <footer class="border-t border-black/5 py-10">
+    <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-zinc-600 md:flex-row">
+      <p>LYQD Media · 電影級 AI 製作</p>
+      <div class="flex items-center gap-6">
+        <a href="index.html#showreel" class="hover:text-zinc-800">精選作品集</a>
+        <a href="index.html#cases" class="hover:text-zinc-800">AI應用項目</a>
+        <a href="index.html#contact" class="hover:text-zinc-800">聯絡我們</a>
+        <a href="blog.html" class="hover:text-zinc-800">文章專欄</a>
+      </div>
+    </div>
+  </footer>
 
+  <!-- Sticky CTA Buttons -->
+  <div class="sticky-cta">
+    <!-- 取得報價按鈕 -->
+    <button class="sticky-cta-button primary" onclick="openMiniContact()" title="取得報價">
+      💰
+      <span class="tooltip">取得報價</span>
+    </button>
+    
+    <!-- LINE 官方帳號按鈕 -->
+    <a href="https://lin.ee/0eBvgAV" target="_blank" class="sticky-cta-button secondary" title="LINE 官方帳號">
+      💬
+      <span class="tooltip">LINE 官方帳號</span>
+    </a>
+  </div>
+
+  <!-- Mini Contact Form Modal -->
+  <div id="miniContactModal" class="mini-contact-modal">
+    <div class="mini-contact-content">
+      <button class="mini-contact-close" onclick="closeMiniContact()">&times;</button>
+      
+      <div class="mini-contact-header">
+        <h3>取得報價</h3>
+        <p>留下資訊，我們將在 24 小時內回覆</p>
+      </div>
+      
+      <form class="mini-contact-form" action="https://formspree.io/f/mdkdqdqp" method="POST" enctype="text/plain">
+        <input type="text" name="Name" placeholder="您的姓名" required>
+        <input type="email" name="Email" placeholder="您的 Email" required>
+        <textarea name="Message" placeholder="簡述您的專案內容、時程與預算區間" required></textarea>
+        
+        <div class="mini-contact-actions">
+          <button type="submit" class="submit-btn">送出</button>
+          <button type="button" class="cancel-btn" onclick="closeMiniContact()">取消</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
 
@@ -203,67 +340,26 @@
       `;
     }
 
-    // 渲染富文本內容 (動態尋找可用的渲染工具)
-    function renderRichText(richTextDocument) {
-      if (!richTextDocument) {
-        return '<p>內容載入中...</p>';
-      }
-
-      // 動態尋找可用的渲染工具
-      const availableRenderer = window.richTextHtmlRenderer || 
-                              window.contentfulRichText || 
-                              window.richTextRenderer || 
-                              window.documentToHtmlString || 
-                              (typeof documentToHtmlString !== 'undefined' ? documentToHtmlString : null);
-
-      if (!availableRenderer) {
-        console.error('❌ 找不到可用的渲染工具！');
-        console.log('嘗試使用備用渲染方案...');
-        
-        // 備用方案：簡單的 HTML 渲染
-        return renderRichTextFallback(richTextDocument);
-      }
-
-      try {
-        console.log('✅ 使用渲染工具:', availableRenderer);
-        
-        // 檢查是否有 documentToHtmlString 方法
-        if (typeof availableRenderer.documentToHtmlString === 'function') {
-          return availableRenderer.documentToHtmlString(richTextDocument);
-        } else if (typeof availableRenderer === 'function') {
-          return availableRenderer(richTextDocument);
-        } else {
-          console.error('❌ 渲染工具格式不正確');
-          return renderRichTextFallback(richTextDocument);
-        }
-        
-      } catch (error) {
-        console.error('❌ 渲染富文本時發生錯誤:', error);
-        console.log('使用備用渲染方案...');
-        return renderRichTextFallback(richTextDocument);
-      }
-    }
-
-    // 備用渲染方案
-    function renderRichTextFallback(richText) {
+    // 渲染富文本內容
+    function renderRichText(richText) {
       if (!richText || !richText.content) return '<p>內容載入中...</p>';
 
       let html = '';
       
       richText.content.forEach(node => {
         if (node.nodeType === 'paragraph') {
-          html += '<p class="mb-4 leading-relaxed">';
+          html += '<p>';
           if (node.content) {
             node.content.forEach(textNode => {
               let text = textNode.value || '';
               if (textNode.marks) {
                 textNode.marks.forEach(mark => {
                   if (mark.type === 'bold') {
-                    text = `<strong class="font-bold">${text}</strong>`;
+                    text = `<strong>${text}</strong>`;
                   } else if (mark.type === 'italic') {
-                    text = `<em class="italic">${text}</em>`;
+                    text = `<em>${text}</em>`;
                   } else if (mark.type === 'underline') {
-                    text = `<u class="underline">${text}</u>`;
+                    text = `<u>${text}</u>`;
                   }
                 });
               }
@@ -272,30 +368,24 @@
           }
           html += '</p>';
         } else if (node.nodeType === 'heading-1') {
-          html += `<h1 class="text-3xl font-bold text-gray-900 mb-4 mt-8">${node.content?.[0]?.value || ''}</h1>`;
+          html += `<h1>${node.content?.[0]?.value || ''}</h1>`;
         } else if (node.nodeType === 'heading-2') {
-          html += `<h2 class="text-2xl font-bold text-gray-900 mb-3 mt-6">${node.content?.[0]?.value || ''}</h2>`;
+          html += `<h2>${node.content?.[0]?.value || ''}</h2>`;
         } else if (node.nodeType === 'heading-3') {
-          html += `<h3 class="text-xl font-bold text-gray-800 mb-3 mt-5">${node.content?.[0]?.value || ''}</h3>`;
-        } else if (node.nodeType === 'heading-4') {
-          html += `<h4 class="text-lg font-semibold text-gray-800 mb-2 mt-4">${node.content?.[0]?.value || ''}</h4>`;
-        } else if (node.nodeType === 'heading-5') {
-          html += `<h5 class="text-base font-semibold text-gray-700 mb-2 mt-3">${node.content?.[0]?.value || ''}</h5>`;
-        } else if (node.nodeType === 'heading-6') {
-          html += `<h6 class="text-sm font-semibold text-gray-700 mb-2 mt-3">${node.content?.[0]?.value || ''}</h6>`;
+          html += `<h3>${node.content?.[0]?.value || ''}</h3>`;
         } else if (node.nodeType === 'unordered-list') {
-          html += '<ul class="list-disc list-inside mb-4 space-y-1">';
+          html += '<ul>';
           if (node.content) {
             node.content.forEach(listItem => {
-              html += `<li class="text-gray-700">${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
             });
           }
           html += '</ul>';
         } else if (node.nodeType === 'ordered-list') {
-          html += '<ol class="list-decimal list-inside mb-4 space-y-1">';
+          html += '<ol>';
           if (node.content) {
             node.content.forEach(listItem => {
-              html += `<li class="text-gray-700">${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
+              html += `<li>${listItem.content?.[0]?.content?.[0]?.value || ''}</li>`;
             });
           }
           html += '</ol>';
@@ -377,110 +467,11 @@
 
     // 頁面載入完成後自動載入文章
     document.addEventListener('DOMContentLoaded', function() {
-      console.log('🔍 積極排錯：檢查所有可能的物件名稱...');
-      
-      // 檢查多個可能的物件名稱
-      console.log('window.richTextHtmlRenderer:', typeof window.richTextHtmlRenderer);
-      console.log('window.contentfulRichText:', typeof window.contentfulRichText);
-      console.log('window.richTextRenderer:', typeof window.richTextRenderer);
-      console.log('window.documentToHtmlString:', typeof window.documentToHtmlString);
-      console.log('documentToHtmlString (全域):', typeof documentToHtmlString);
-      
-      // 列出所有以 rich 開頭的屬性
-      const richProps = Object.getOwnPropertyNames(window).filter(prop => 
-        prop.toLowerCase().includes('rich') || 
-        prop.toLowerCase().includes('contentful') ||
-        prop.toLowerCase().includes('document')
-      );
-      console.log('找到的相關屬性:', richProps);
-      
-      // 檢查是否有任何可用的渲染函數
-      const availableRenderer = window.richTextHtmlRenderer || 
-                              window.contentfulRichText || 
-                              window.richTextRenderer || 
-                              window.documentToHtmlString || 
-                              (typeof documentToHtmlString !== 'undefined' ? documentToHtmlString : null);
-      
-      if (!availableRenderer) {
-        console.error('❌ 所有可能的渲染工具都未載入！');
-        console.error('嘗試延遲載入...');
-        
-        // 延遲檢查，給腳本更多載入時間
-        setTimeout(() => {
-          console.log('🔍 延遲檢查：再次檢查所有可能的物件名稱...');
-          console.log('window.richTextHtmlRenderer:', typeof window.richTextHtmlRenderer);
-          console.log('window.contentfulRichText:', typeof window.contentfulRichText);
-          console.log('documentToHtmlString (全域):', typeof documentToHtmlString);
-          
-          const delayedRenderer = window.richTextHtmlRenderer || 
-                                window.contentfulRichText || 
-                                window.richTextRenderer || 
-                                window.documentToHtmlString || 
-                                (typeof documentToHtmlString !== 'undefined' ? documentToHtmlString : null);
-          
-          if (!delayedRenderer) {
-            console.error('❌ 延遲檢查後仍然未找到渲染工具！');
-            console.error('嘗試使用備用方案...');
-          } else {
-            console.log('✅ 延遲檢查後找到渲染工具！');
-          }
-          
-          // 無論如何都嘗試載入文章
-          loadArticle();
-        }, 2000);
-      } else {
-        console.log('✅ 找到可用的渲染工具！開始載入文章...');
-        loadArticle();
-      }
+      loadArticle();
     });
   </script>
 
-      <!-- Contentful Rich Text Renderer (多個 CDN 來源) -->
-    <script>
-      // 嘗試載入 Contentful Rich Text Renderer
-      function loadContentfulRenderer() {
-        const cdnSources = [
-          'https://unpkg.com/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js',
-          'https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js',
-          'https://unpkg.com/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.umd.js'
-        ];
-        
-        let currentIndex = 0;
-        
-        function tryNextCDN() {
-          if (currentIndex >= cdnSources.length) {
-            console.error('❌ 所有 CDN 來源都載入失敗');
-            return;
-          }
-          
-          const script = document.createElement('script');
-          script.src = cdnSources[currentIndex];
-          script.onload = function() {
-            console.log(`✅ CDN 載入成功: ${cdnSources[currentIndex]}`);
-          };
-          script.onerror = function() {
-            console.error(`❌ CDN 載入失敗: ${cdnSources[currentIndex]}`);
-            currentIndex++;
-            tryNextCDN();
-          };
-          document.head.appendChild(script);
-        }
-        
-        tryNextCDN();
-      }
-      
-      // 頁面載入後嘗試載入
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadContentfulRenderer);
-      } else {
-        loadContentfulRenderer();
-      }
-    </script>
-    
-    <!-- 引入共用 JavaScript 功能 -->
-    <!-- 引入共用組件系統 -->
-    <script src="js/components.js"></script>
-    
-    <script src="js/main.js"></script>
+  <!-- 引入共用 JavaScript 功能 -->
+  <script src="js/main.js"></script>
 </body>
 </html>

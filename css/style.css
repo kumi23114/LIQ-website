@@ -779,6 +779,11 @@ body {
   animation: fadeIn 0.8s ease forwards;
 }
 
+/* Hide certain UI until intro finishes */
+body:not(.intro-done) .hide-until-intro {
+  display: none !important;
+}
+
 @keyframes fadeIn {
   to { opacity: 1; }
 }

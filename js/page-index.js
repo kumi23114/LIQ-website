@@ -87,6 +87,8 @@ function playIntroAnimation() {
   .call(() => {
     enableScroll();
     markIntroAnimationAsPlayed();
+    // 顯示導覽與 CTA
+    document.body.classList.add('intro-done');
   });
 }
 

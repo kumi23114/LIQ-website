@@ -1,5 +1,5 @@
 /**
- * LYQD Media - 首頁專用 JavaScript 功能
+ * LIQ Media - 首頁專用 JavaScript 功能
  * 包含：Showreel 影片懶載入、Hero 影片載入、輪播指示器、桌面版導覽列效果等
  */
 

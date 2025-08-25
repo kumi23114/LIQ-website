@@ -1,5 +1,5 @@
 /**
- * LYQD Media - 共用組件系統
+ * LIQ Media - 共用組件系統
  * 包含：Header、Mobile Navigation、Footer、Sticky CTA 等共用組件
  */
 
@@ -108,7 +108,7 @@ const COMPONENTS = {
   footer: `
     <footer class="border-t border-black/5 py-10">
       <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 text-sm text-zinc-600 md:flex-row">
-        <p>LYQD Media · 電影級 AI 製作</p>
+        <p>LIQ Media · 電影級 AI 製作</p>
         <div class="flex items-center gap-6">
           <a href="#showreel" class="hover:text-zinc-800">精選作品</a>
           <a href="#cases" class="hover:text-zinc-800">AI應用項目</a>
@@ -147,7 +147,7 @@ const COMPONENTS = {
           <p>留下資訊，我們將在 24 小時內回覆</p>
         </div>
         
-        <form class="mini-contact-form" action="https://formspree.io/f/mdkdqdqp" method="POST" enctype="text/plain">
+        <form class="mini-contact-form" action="https://formspree.io/f/mdkdqdqp" method="POST">
           <input type="text" name="Name" placeholder="您的姓名" required>
           <input type="email" name="Email" placeholder="您的 Email" required>
           <textarea name="Message" placeholder="簡述您的專案內容、時程與預算區間" required></textarea>

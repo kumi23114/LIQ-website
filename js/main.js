@@ -1,5 +1,5 @@
 /**
- * LYQD Media - 共用 JavaScript 功能
+ * LIQ Media - 共用 JavaScript 功能
  * 包含：漢堡選單、Sticky CTA、Mini Contact Modal 等共用功能
  */
 

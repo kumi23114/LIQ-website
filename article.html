@@ -495,8 +495,9 @@
       // 嘗試載入 Contentful Rich Text Renderer
       function loadContentfulRenderer() {
         const cdnSources = [
-          'https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer@17.1.0/dist/rich-text-html-renderer.umd.js',
-          'https://unpkg.com/@contentful/rich-text-html-renderer@17.1.0/dist/rich-text-html-renderer.umd.js'
+          'https://unpkg.com/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js',
+          'https://cdn.jsdelivr.net/npm/@contentful/rich-text-html-renderer/dist/rich-text-html-renderer.umd.js',
+          'https://unpkg.com/@contentful/rich-text-html-renderer@16.3.0/dist/rich-text-html-renderer.umd.js'
         ];
         
         let currentIndex = 0;

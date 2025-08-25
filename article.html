@@ -495,29 +495,12 @@
       // 處理分類
       const category = fields.category || fields.tags?.[0] || '未分類';
 
-      // 處理文章內容（統一使用官方 renderer）
+      // 處理文章內容
       let content = '<p>文章內容載入中...</p>';
-      const richTextDocument = fields.body || fields.content;
-      if (richTextDocument) {
-        content = documentToHtmlString(richTextDocument, {
-          renderText: (text) => text.replace(/\n/g, '<br/>'),
-          renderMark: { underline: (text) => `<u>${text}</u>` },
-          renderNode: {
-            'embedded-asset-block': (node) => {
-              const asset = assetMap.get(node?.data?.target?.sys?.id);
-              if (asset?.fields?.file?.url) {
-                const imageUrl = `https:${asset.fields.file.url}`;
-                const altText = asset.fields.description || asset.fields.title || '嵌入式圖片';
-                return `<figure class="my-8"><img src="${imageUrl}" alt="${altText}" class="w-full rounded-lg shadow-md" /></figure>`;
-              }
-              return '';
-            },
-            'hyperlink': (node, next) => {
-              const url = node?.data?.uri || '#';
-              return `<a href="${url}" target="_blank" rel="noopener noreferrer">${next(node.content)}</a>`;
-            }
-          }
-        });
+      if (fields.content && fields.content.content) {
+        content = renderRichText(fields.content);
+      } else if (fields.body) {
+        content = renderRichText(fields.body);
       }
 
       return `

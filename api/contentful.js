@@ -11,22 +11,26 @@ export default async function handler(request, response) {
   }
 
   try {
-    const { path = '/entries', search = '' } = request.query || {};
+    // 正確地解構所有查詢參數，並將 'path' 以外的參數全部放入 'rest' 變數中
+    const { path = '/entries', ...rest } = request.query || {};
 
     // 安全限制：只允許讀取型 API 路徑
     const safePath = String(path).startsWith('/') ? path : `/${path}`;
     if (!['/entries', '/assets'].some(p => safePath.startsWith(p))) {
       return response.status(400).json({ error: '不被允許的 Contentful API 路徑' });
     }
+    
+    // 將所有額外參數重新組合為一個新的查詢字串
+    const searchParams = new URLSearchParams(rest).toString();
 
     const base = `https://cdn.contentful.com/spaces/${SPACE_ID}/environments/${ENVIRONMENT}`;
-    const url = `${base}${safePath}${search ? (search.startsWith('?') ? search : `?${search}`) : ''}`;
+    // 構建最終的完整 URL，包含所有參數
+    const url = `${base}${safePath}?${searchParams}`;
 
     const cf = await fetch(url, {
       headers: {
         Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
-      // 只允許 GET，避免被濫用為修改 API
       method: 'GET',
     });
 
@@ -36,7 +40,6 @@ export default async function handler(request, response) {
     }
 
     const data = await cf.json();
-    // 可選：加入簡單快取標頭
     response.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=300');
     return response.status(200).json(data);
   } catch (error) {

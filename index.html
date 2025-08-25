@@ -150,7 +150,16 @@
       <div class="relative aspect-[16/9] w-full">
         <div style="position:relative;padding-top:56.25%;" class="absolute inset-0 h-full w-full">
           <!-- Skeleton loading -->
-          <div id="hero-skeleton" class="hero-skeleton"></div>
+          <div id="hero-skeleton" class="hero-skeleton">
+            <div class="hero-loading" aria-hidden="true">
+              <span class="hero-loading__label">Loading</span>
+              <span class="hero-loading__dots">
+                <span class="hero-loading__dot dot-1"></span>
+                <span class="hero-loading__dot dot-2"></span>
+                <span class="hero-loading__dot dot-3"></span>
+              </span>
+            </div>
+          </div>
           
           <iframe src="https://iframe.mediadelivery.net/embed/484739/a8b08e82-633c-4488-8627-573ab0d0315d?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=false&title=false" 
                   loading="lazy" 
@@ -203,10 +212,8 @@
   <section id="showreel" class="border-t border-black/5 py-14 md:py-20 bg-zinc-100">
     <div class="mx-auto max-w-7xl px-4">
       <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>精選作品</h2>
-      <p class="mt-2 max-w-2xl text-zinc-600"> 運用電影級光影、高級色彩與節奏剪輯，打造您的品牌獨家敘事。</p>
-      
-      <!-- Enhanced carousel indicators - Premium design, centered -->
-      <div class="carousel-indicators-container">
+      <!-- Centered scroll indicators under title -->
+      <div class="my-4 md:my-6 flex justify-center">
         <div class="carousel-indicators-wrapper">
           <div class="carousel-indicator active" data-index="0"></div>
           <div class="carousel-indicator" data-index="1"></div>
@@ -217,20 +224,8 @@
         </div>
       </div>
       
-      <div class="overflow-x-auto relative showreel-scroll">
-        <!-- Desktop scroll hint -->
-        <div class="hidden md:block absolute top-2 right-4 z-10">
-          <div class="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur px-3 py-1.5 text-xs text-zinc-600 shadow-sm border border-black/10">
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
-            </svg>
-            <span>滾動查看更多</span>
-            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
-          </div>
-        </div>
-        
+      
+      <div class="mt-10 overflow-x-auto relative showreel-scroll">
         <div class="flex gap-6 pb-4" style="min-width: max-content;">
           <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md cursor-pointer flex-shrink-0" style="width: 400px;" onclick="openModal('modal1')">
             <div class="relative aspect-video w-full overflow-hidden">
@@ -273,13 +268,13 @@
               <div style="position:relative;padding-top:56.25%;" class="h-full w-full">
                 <!-- Loading skeleton -->
                 <div class="showreel-skeleton"></div>
-                
+
                 <!-- Lazy loaded iframe with autoplay -->
-                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300 pointer-events-none" 
-                        data-src="https://iframe.mediadelivery.net/embed/484739/2c6e025ac-4f35-4f14-99d9-5dffe3d1a5ac?autoplay=true&loop=true&muted=true&preload=true&responsive=true" 
-                        loading="lazy" 
-                        style="border:0;" 
-                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" 
+                <iframe class="showreel-video absolute inset-0 h-full w-full opacity-0 transition-opacity duration-300 pointer-events-none"
+                        data-src="https://iframe.mediadelivery.net/embed/484739/566745f9-b089-49ad-a00e-00eea929d0e9?autoplay=true&loop=true&muted=true&preload=true&responsive=true"
+                        loading="lazy"
+                        style="border:0;"
+                        allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
                         allowfullscreen="true">
                 </iframe>
               </div>
@@ -343,6 +338,7 @@
           </figure>
         </div>
       </div>
+      <p class="mt-6 max-w-2xl text-zinc-600"> 運用電影級光影、高級色彩與節奏剪輯，打造您的品牌獨家敘事。</p>
     </div>
   </section>
 
@@ -372,50 +368,49 @@
   <section id="cases" class="border-t border-black/5 py-14 md:py-20 bg-zinc-100">
     <div class="mx-auto max-w-7xl px-4">
       <h2 class="text-pretty text-2xl font-semibold tracking-wide md:text-4xl text-zinc-900"><span class="mr-3 inline-block h-3 w-12 -translate-y-1 rounded-full" style="background-color:#193a55"></span>AI應用項目</h2>
-      <div class="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
-          <div class="relative aspect-video overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?q=80&w=1400&auto=format&fit=crop" alt="AI電商換裝" class="h-full w-full object-cover opacity-80" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-          </div>
-          <div class="space-y-2 p-6">
-            <h3 class="text-xl font-semibold text-zinc-900">AI電商換裝</h3>
-            <p class="text-sm text-zinc-600">AI驅動的虛擬試衣技術，讓顧客在購買前看到真實的穿著效果</p>
-            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a>
-          </div>
+      <div class="my-4 md:my-6 flex justify-center">
+        <div class="carousel-indicators-wrapper">
+          <div class="carousel-indicator active"></div>
+          <div class="carousel-indicator"></div>
+          <div class="carousel-indicator"></div>
+          <div class="carousel-indicator"></div>
         </div>
-        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
-          <div class="relative aspect-video overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1512203492609-8f7f06f1f3c4?q=80&w=1400&auto=format&fit=crop" alt="專業網路廣告" class="h-full w-full object-cover opacity-80" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-          </div>
-          <div class="space-y-2 p-6">
-            <h3 class="text-xl font-semibold text-zinc-900">專業網路廣告</h3>
-            <p class="text-sm text-zinc-600">針對不同平台優化的廣告內容，提升轉換率與品牌曝光</p>
-            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
-          <div class="relative aspect-video overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1400&auto=format&fit=crop" alt="電商產品圖製作" class="h-full w-full object-cover opacity-80" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-          </div>
-          <div class="space-y-2 p-6">
-            <h3 class="text-xl font-semibold text-zinc-900">電商產品圖製作</h3>
-            <p class="text-sm text-zinc-600">高品質產品攝影與後製，突出產品特色與質感</p>
-            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-black/10 bg-white shadow-md">
-          <div class="relative aspect-video overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1505250469679-203ad9ced0cb?q=80&w=1400&auto=format&fit=crop" alt="電商海報設計" class="h-full w-full object-cover opacity-80" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50"></div>
-          </div>
-          <div class="space-y-2 p-6">
-            <h3 class="text-xl font-semibold text-zinc-900">電商海報設計</h3>
-            <p class="text-sm text-zinc-600">吸引眼球的促銷海報與橫幅設計，提升點擊率</p>
-            <a href="#contact" class="mt-3 inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a>
-          </div>
+      </div>
+    
+      <div class="mt-10 overflow-x-auto relative showreel-scroll">
+        <div class="flex gap-6 pb-4" style="min-width: max-content;">
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md flex-shrink-0" style="width: 360px;">
+            <div class="relative aspect-[3/4] w-full overflow-hidden">
+              <img src="https://LIQPICS.b-cdn.net/changedress.jpg" alt="AI電商換裝" class="h-full w-full object-contain object-center" loading="lazy" decoding="async" />
+            </div>
+            <div class="p-3">
+              <div class="flex items-center justify-between gap-3"><h3 class="text-xl font-semibold text-zinc-900">AI電商換裝</h3><a href="#contact" class="inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a></div>
+            </div>
+          </figure>
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md flex-shrink-0" style="width: 360px;">
+            <div class="relative aspect-[3/4] w-full overflow-hidden">
+              <img src="https://LIQPICS.b-cdn.net/outdoorbrand.png" alt="專業網路廣告" class="h-full w-full object-contain object-center" loading="lazy" decoding="async" />
+            </div>
+            <div class="p-3">
+              <div class="flex items-center justify-between gap-3"><h3 class="text-xl font-semibold text-zinc-900">專業網路廣告</h3><a href="#contact" class="inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a></div>
+            </div>
+          </figure>
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md flex-shrink-0" style="width: 360px;">
+            <div class="relative aspect-[3/4] w-full overflow-hidden">
+              <img src="https://LIQPICS.b-cdn.net/01e37197-77b4-4703-b538-b2537038d14f%20(1).jpeg" alt="電商產品圖製作" class="h-full w-full object-contain object-center" loading="lazy" decoding="async" />
+            </div>
+            <div class="p-3">
+              <div class="flex items-center justify-between gap-3"><h3 class="text-xl font-semibold text-zinc-900">電商產品圖製作</h3><a href="#contact" class="inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a></div>
+            </div>
+          </figure>
+          <figure class="group overflow-hidden rounded-2xl border border-black/10 bg-white shadow-md flex-shrink-0" style="width: 360px;">
+            <div class="relative aspect-[3/4] w-full overflow-hidden">
+              <img src="https://LIQPICS.b-cdn.net/product1.png" alt="電商海報設計" class="h-full w-full object-contain object-center" loading="lazy" decoding="async" />
+            </div>
+            <div class="p-3">
+              <div class="flex items-center justify-between gap-3"><h3 class="text-xl font-semibold text-zinc-900">電商海報設計</h3><a href="#contact" class="inline-flex items-center gap-2 rounded-full border border-black/20 px-4 py-2 text-xs font-semibold hover:border-black/40 hover:bg-black/5 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200">取得報價</a></div>
+            </div>
+          </figure>
         </div>
       </div>
     </div>
@@ -601,7 +596,7 @@
       <span class="close" onclick="closeModal('modal3')">&times;</span>
       <!-- Modal skeleton loading -->
       <div id="modal3-skeleton" class="modal-skeleton"></div>
-      <iframe class="w-full h-full modal-iframe" src="https://iframe.mediadelivery.net/embed/484739/2c6e025ac-4f35-4f14-99d9-5dffe3d1a5ac?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=true" loading="lazy" style="border:0;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" onload="handleModalVideoLoad('modal3', this)"></iframe>
+      <iframe class="w-full h-full modal-iframe" src="https://iframe.mediadelivery.net/embed/484739/566745f9-b089-49ad-a00e-00eea929d0e9?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=true" loading="lazy" style="border:0;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" onload="handleModalVideoLoad('modal3', this)"></iframe>
     </div>
   </div>
   <div id="modal4" class="modal">
@@ -625,9 +620,11 @@
       <span class="close" onclick="closeModal('modal6')">&times;</span>
       <!-- Modal skeleton loading -->
       <div id="modal6-skeleton" class="modal-skeleton"></div>
-      <iframe class="w-full h-full modal-iframe" src="https://iframe.mediadelivery.net/embed/484739/6d74b994-297e-49c6-8892-aee14c50f49f?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=true" loading="lazy" style="border:0;" allow="accelerometer:gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" onload="handleModalVideoLoad('modal6', this)"></iframe>
+      <iframe class="w-full h-full modal-iframe" src="https://iframe.mediadelivery.net/embed/484739/6d74b994-297e-49c6-8892-aee14c50f49f?autoplay=true&loop=true&muted=true&preload=true&responsive=true&controls=true" loading="lazy" style="border:0;" allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;" allowfullscreen="true" onload="handleModalVideoLoad('modal6', this)"></iframe>
     </div>
   </div>
+
+  <!-- Cases image modals removed per request -->
 
   <!-- 引入共用 JavaScript 功能 -->
   <script src="js/main.js"></script>

@@ -155,21 +155,30 @@ function handleHeroVideoLoad(iframe) {
   setTimeout(() => {
     iframe.style.visibility = 'visible';
     
-    // 隱藏骨架載入器
+    // GSAP loading dots timeline (gracefully end)
+    const dotsTl = gsap.timeline({ defaults: { ease: 'power1.inOut' }});
+    const dots = document.querySelectorAll('.hero-loading__dot');
+    if (dots && dots.length) {
+      dotsTl.to(dots, { y: -4, opacity: 0.9, stagger: 0.06, duration: 0.25 })
+            .to(dots, { y: 0, opacity: 1, stagger: 0.06, duration: 0.25 });
+    }
+    
+    // 隱藏骨架載入器（含 loading 動畫收尾）
     setTimeout(() => {
       if (skeleton) {
+        gsap.to('.hero-loading', { opacity: 0, y: 6, duration: 0.3, ease: 'power2.out' });
         skeleton.style.opacity = '0';
-        setTimeout(() => skeleton.style.display = 'none', 500);
+        setTimeout(() => skeleton.style.display = 'none', 350);
       }
-    }, 500);
+    }, 300);
     
     // 隱藏備用背景
     setTimeout(() => {
       if (fallback) {
         fallback.classList.add('video-fallback-fade');
       }
-    }, 1000);
-  }, 1000);
+    }, 600);
+  }, 500);
 }
 
 // ============================================================================

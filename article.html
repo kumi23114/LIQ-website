@@ -20,17 +20,13 @@
   
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Contentful API Configuration -->
+  <!-- Contentful API Configuration (Proxy) -->
   <script>
-    // Contentful API 配置
-    const CONTENTFUL_CONFIG = {
-      SPACE_ID: 'id4y90f1h82c',
-      ACCESS_TOKEN: 'vxnpypRajiFP97o7gEfMoavejunX98K8undinDWuVbY',
-      ENVIRONMENT: 'master',
-      CONTENT_TYPE: 'pageBlogPost'
-    };
-    
-    const CONTENTFUL_API_URL = `https://cdn.contentful.com/spaces/${CONTENTFUL_CONFIG.SPACE_ID}/environments/${CONTENTFUL_CONFIG.ENVIRONMENT}/entries`;
+    // 透過自家 proxy 呼叫 Contentful，避免前端暴露金鑰
+    function contentfulProxyUrl(params) {
+      const search = new URLSearchParams(params).toString();
+      return `/api/contentful?path=/entries&${search}`;
+    }
   </script>
   
   <link rel="stylesheet" href="css/style.css">
@@ -235,14 +231,15 @@
     // 獲取文章內容
     async function fetchArticle(articleId) {
       try {
-        const apiUrl = `${CONTENTFUL_API_URL}?sys.id=${articleId}&include=1`;
-        console.log(`Fetching article from: ${apiUrl}`);
-        
-        const response = await fetch(apiUrl, {
-          headers: {
-            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
-          }
+        const apiUrl = contentfulProxyUrl({ sys: { id: articleId }, include: '1' });
+        // 上一行 URLSearchParams 不能處理物件深層；改為明確 query：
+        const apiUrlFixed = contentfulProxyUrl({
+          'sys.id': articleId,
+          include: '1'
         });
+        console.log(`Fetching article from: ${apiUrlFixed}`);
+        
+        const response = await fetch(apiUrlFixed);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

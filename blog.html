@@ -20,34 +20,14 @@
   
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Contentful API Configuration -->
+  <!-- Contentful API Configuration (Proxy) -->
   <script>
-    // Contentful API 配置
-    // 請將以下值替換為您的實際 Space ID 和 Access Token
-    const CONTENTFUL_CONFIG = {
-      SPACE_ID: 'id4y90f1h82c', // 請替換為您的 Space ID
-      ACCESS_TOKEN: 'vxnpypRajiFP97o7gEfMoavejunX98K8undinDWuVbY', // 請替換為您的 Access Token
-      ENVIRONMENT: 'master', // 環境，通常是 'master'
-      CONTENT_TYPE: 'pageBlogPost' // 內容類型，請根據您的 Contentful 設定調整
-    };
-    
-    // Contentful API 端點
-    const CONTENTFUL_API_URL = `https://cdn.contentful.com/spaces/${CONTENTFUL_CONFIG.SPACE_ID}/environments/${CONTENTFUL_CONFIG.ENVIRONMENT}/entries`;
-    
-    /*
-    設置說明：
-    1. 登入您的 Contentful 帳戶
-    2. 前往 Settings > API keys
-    3. 創建新的 API key 或使用現有的
-    4. 複製 Space ID 和 Content Delivery API - access token
-    5. 將這些值替換到上面的配置中
-    
-    注意事項：
-    - 請確保您的 Contentful 內容類型名稱為 'blogPost'
-    - 如果您的內容類型名稱不同，請修改 CONTENT_TYPE 的值
-    - 建議使用 Content Delivery API token，而不是 Content Management API token
-    - 請勿將這些憑證提交到版本控制系統中
-    */
+    const CONTENTFUL_CONTENT_TYPE = 'pageBlogPost';
+    // 透過自家 proxy 呼叫 Contentful，避免前端暴露金鑰
+    function contentfulProxyUrl(params) {
+      const search = new URLSearchParams(params).toString();
+      return `/api/contentful?path=/entries&${search}`;
+    }
   </script>
   
   <link rel="stylesheet" href="css/style.css">
@@ -296,20 +276,18 @@
 
 
 
-    // Contentful API 相關函數
+    // Contentful API 相關函數（透過後端代理）
     async function fetchBlogPosts(limit = 6, skip = 0) {
       try {
-        // 檢查配置是否已設置
-        if (CONTENTFUL_CONFIG.SPACE_ID === 'YOUR_SPACE_ID_HERE' || 
-            CONTENTFUL_CONFIG.ACCESS_TOKEN === 'YOUR_ACCESS_TOKEN_HERE') {
-          throw new Error('請先設置 Contentful API 配置');
-        }
-
-        const response = await fetch(`${CONTENTFUL_API_URL}?content_type=${CONTENTFUL_CONFIG.CONTENT_TYPE}&order=-sys.createdAt&limit=${limit}&skip=${skip}&include=1`, {
-          headers: {
-            'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
-          }
+        const proxyUrl = contentfulProxyUrl({
+          content_type: CONTENTFUL_CONTENT_TYPE,
+          order: '-sys.createdAt',
+          limit: String(limit),
+          skip: String(skip),
+          include: '1'
         });
+
+        const response = await fetch(proxyUrl);
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -463,24 +441,7 @@
     }
   }
 
-  // 調試函數：檢查 Contentful 內容類型
-  async function debugContentTypes() {
-    try {
-      const response = await fetch(`${CONTENTFUL_API_URL}?limit=1`, {
-        headers: {
-          'Authorization': `Bearer ${CONTENTFUL_CONFIG.ACCESS_TOKEN}`
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Available content types:', data.items?.map(item => item.sys.contentType.sys.id) || []);
-        console.log('Sample entry fields:', data.items?.[0]?.fields || {});
-      }
-    } catch (error) {
-      console.error('Debug error:', error);
-    }
-  }
+  // （已移除）調試函數：由於改經過代理，此函數不再使用
 
   // 載入更多文章
   let currentSkip = 6;
@@ -556,39 +517,7 @@
 
     // 頁面載入完成後自動載入文章
     document.addEventListener('DOMContentLoaded', function() {
-      // 檢查 Contentful 配置
-      if (CONTENTFUL_CONFIG.SPACE_ID === 'YOUR_SPACE_ID_HERE' || 
-          CONTENTFUL_CONFIG.ACCESS_TOKEN === 'YOUR_ACCESS_TOKEN_HERE') {
-        console.warn('⚠️ 請先設置 Contentful API 配置才能載入文章');
-        // 顯示配置提醒
-        const articlesContainer = document.getElementById('articles-container');
-        if (articlesContainer) {
-          articlesContainer.innerHTML = `
-            <div class="col-span-full text-center py-12">
-              <div class="text-zinc-600">
-                <svg class="mx-auto h-16 w-16 text-zinc-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                </svg>
-                <p class="text-xl font-medium mb-2">需要設置 Contentful API</p>
-                <p class="text-sm mb-4">請在 blog.html 文件中設置您的 Space ID 和 Access Token</p>
-                <div class="bg-zinc-100 p-4 rounded-lg text-left text-sm font-mono max-w-md mx-auto">
-                  <p class="mb-2">需要設置的欄位：</p>
-                  <p>• SPACE_ID: 您的 Contentful Space ID</p>
-                  <p>• ACCESS_TOKEN: 您的 Content Delivery API Token</p>
-                </div>
-              </div>
-            </div>
-          `;
-        }
-        // 隱藏載入狀態
-        document.getElementById('loading-state')?.classList.add('hidden');
-        return;
-      }
-      
-      // 調試：檢查可用的內容類型
-      debugContentTypes();
-      
-      // 載入文章
+      // 透過代理直接載入文章
       loadBlogPosts();
     });
   </script>
